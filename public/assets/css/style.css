@@ -23,6 +23,9 @@
 .accountTypeText h3{
     font-weight: 600;
 }
+#responseMessage{
+    font-weight: bold;
+}
 #regFormUser{
     opacity: 0;
     display: none;
@@ -66,6 +69,7 @@ input[name="accountType"]{
 .ck-editor__editable[role="textbox"] {
     /* editing area */
     min-height: 200px;
+    max-width: 900px;
 }
 /*** Spinner ***/
 #spinner {

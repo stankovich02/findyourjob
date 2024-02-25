@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Http\Requests\PostJobRequest;
 use App\Models\Category;
+use App\Models\Company;
 use App\Models\Job;
+use App\Models\Seniority;
+use App\Models\Technology;
+use App\Models\Workplace;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -30,16 +35,44 @@ class JobController extends Controller
      */
     public function create()
     {
-
-        return view('pages.client.jobs.create');
+        $categories = Category::all();
+        $seniorities = Seniority::all();
+        $workplaces= Workplace::all();
+        $technologies = Technology::all();
+        $companyModel = new Company();
+        $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
+        $data = [
+            'categories' => $categories,
+            'seniorities' => $seniorities,
+            'workplaces' => $workplaces,
+            'technologies' => $technologies,
+            'companyLocations' => $companyLocations
+        ];
+        return view('pages.client.jobs.create')->with('data', $data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostJobRequest $request)
     {
-        //
+        $name = $request->input('name');
+        $category = $request->input('category');
+        $seniority = $request->input('seniority');
+        $workplace = $request->input('workplace');
+        $technologies = $request->input('technologies');
+        $description = $request->input('description');
+        $responsibilities = $request->input('responsibilities');
+        $qualifications = $request->input('qualifications');
+        $benefits = $request->input('benefits');
+        $location = $request->input('location');
+        $salary = $request->input('salary');
+        $workType = $request->input('workType');
+        $applicationDeadline = $request->input('applicationDeadline');
+
+        $jobModel = new Job();
+        $jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $qualifications, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
+        return "Job created successfully!";
     }
 
     /**
@@ -49,6 +82,12 @@ class JobController extends Controller
     {
         $jobModel = new Job();
         $job = $jobModel->getSingleJob($id);
+        if ($job == null) {
+            return redirect()->route('jobs.index');
+        }
+        if($job->status == Job::STATUS_EXPIRED || $job->status == Job::STATUS_PENDING){
+            return redirect()->route('jobs.index');
+        }
         return view('pages.client.jobs.show')->with('job', $job);
     }
 

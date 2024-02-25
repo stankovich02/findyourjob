@@ -32,6 +32,7 @@ class Job extends Model
     ];
 
     const STATUS_ACTIVE = 'active';
+    const STATUS_PENDING = 'pending';
     const STATUS_EXPIRED = 'expired';
 
     public function company() : BelongsTo
@@ -69,12 +70,33 @@ class Job extends Model
     }
     public function getAll() : Collection
     {
-       return self::with('company', 'category','city', 'seniority', 'workplace', 'technology')->get();
+       return self::with('company', 'category','city', 'seniority', 'workplace', 'technology')->where('status', self::STATUS_ACTIVE)->get();
     }
-    public function getSingleJob(int $id) : Builder|array|Collection|Model
+    public function getSingleJob(int $id)
     {
         return self::with('company', 'category','city', 'seniority', 'workplace', 'technology', 'applications')
             ->find
         ($id);
+    }
+    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $qualifications, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : void
+    {
+        $this->name = $name;
+        $this->category_id = $category;
+        $this->seniority_id = $seniority;
+        $this->workplace_id = $workplace;
+        $this->description = $description;
+        $this->responsibilities = $responsibilities;
+        $this->requirements = $qualifications;
+        $this->benefits = $benefits;
+        $this->city_id = $location;
+        if($salary !== null){
+            $this->salary = $salary;
+        }
+        $this->full_time = $workType;
+        $this->application_deadline = $applicationDeadline;
+        $this->company_id = $companyId;
+        $this->status = self::STATUS_PENDING;
+        $this->save();
+        $this->technology()->attach($technologies);
     }
 }

@@ -196,4 +196,111 @@ $(".editJob").click(function () {
     editJob(this);
 });
 
+if(window.location.pathname === "/jobs/create" || window.location.pathname === "/jobs/edit") {
+    fetch('http://127.0.0.1:8000/api/technologies')
+        .then(response => response.json())
+        .then(data => {
+            let myOptions = data.map(technology => {
+                return { label: technology.name, value: technology.id}
+            });
+            VirtualSelect.init({
+                ele: '#Technologies',
+                options: myOptions,
+                multiple: true,
+                search: true,
+                maxWidth: '50%',
+            });
+        });
+    var descriptionEditor, responsibilityEditor, qualificationsEditor, benefitsEditor;
+
+    ClassicEditor
+        .create( document.querySelector( '#descriptionEditor' ) )
+        .then( editor => {
+            descriptionEditor = editor;
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+    ClassicEditor
+        .create( document.querySelector( '#responsibilityEditor' ) )
+        .then( editor => {
+            responsibilityEditor = editor;
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+    ClassicEditor
+        .create( document.querySelector( '#qualificationsEditor' ) )
+        .then( editor => {
+            qualificationsEditor = editor;
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+    ClassicEditor
+        .create( document.querySelector( '#benefitsEditor' ) )
+        .then( editor => {
+            benefitsEditor = editor;
+        } )
+        .catch( error => {
+            console.error( error );
+        }
+    );
+        $("#PostJob").click(function (e) {
+            e.preventDefault();
+            let name = $("#jobName").val();
+            let category = $("#jobCategory").val();
+            let seniority = $("#jobSeniority").val();
+            let location = $("#jobLocation").val();
+            let salary = $("#jobSalary").val();
+            let workType = $("#jobWorkType").val();
+            let workplace = $("#jobWorkPlace").val();
+            let description = descriptionEditor.getData();
+            let responsibilities = responsibilityEditor.getData();
+            let qualifications = qualificationsEditor.getData();
+            let benefits = benefitsEditor.getData();
+            let technologies = $("#Technologies").val();
+            let applicationDeadline = $("#jobAppDeadline").val();
+            let data = {
+                name: name,
+                category: category,
+                seniority: seniority,
+                location: location,
+                salary: salary,
+                workType: workType,
+                workplace: workplace,
+                description: description,
+                responsibilities: responsibilities,
+                qualifications: qualifications,
+                benefits: benefits,
+                technologies: technologies,
+                applicationDeadline: applicationDeadline
+            };
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: 'http://127.0.0.1:8000/jobs',
+                method: 'POST',
+                data: data,
+                success: function (data) {
+                    $("#responseMessage").css('color', 'green');
+                    $("#responseMessage").html(data);
+                },
+                error: function (data) {
+                    $("#responseMessage").css('color', '#eb0202');
+                    let html = "";
+                    for (let key in data.responseJSON.errors) {
+                        html += data.responseJSON.errors[key] + "<br>";
+                    }
+                    $("#responseMessage").html(html);
+                }
+            });
+        });
+}
+
+
+
 

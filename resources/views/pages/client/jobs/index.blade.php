@@ -175,7 +175,6 @@
                 search: true,
                 maxWidth: '100%',
             });
-        }
-    );
+        });
 </script>
 @endsection

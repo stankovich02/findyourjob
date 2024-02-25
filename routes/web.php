@@ -28,11 +28,10 @@ Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, '
 
 
 Route::middleware('IsLoggedIn')->group(function (){
-    Route::get('/account/{id}', [\App\Http\Controllers\Client\AccountController::class, 'show'])->name('account.show');
-    Route::get('/account/', [\App\Http\Controllers\Client\AccountController::class, 'index'])->name('account');
+        Route::get('/account', [\App\Http\Controllers\Client\AccountController::class, 'index'])->name('account');
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application/{id}', 'index')->name('application.index');
-        Route::post('/application', 'store')->name('application.store');
+        Route::post('/application/store', 'store')->name('application.store');
     });
     Route::get('/logout', [\App\Http\Controllers\Client\Auth\AuthController::class, 'logout'])->name('logout');
 });

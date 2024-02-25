@@ -92,4 +92,8 @@ class Company extends Model
 
         return $name . '.' . $extension;
     }
+    public function getCompanyLocations(int $id) : Builder|array|Collection|Model
+    {
+        return self::with('cities')->find($id);
+    }
 }

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     @include("fixed.client.head")
+
+
 </head>
 <body>
     @include("fixed.client.header")
