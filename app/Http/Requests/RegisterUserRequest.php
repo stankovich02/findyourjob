@@ -24,7 +24,7 @@ class RegisterUserRequest extends FormRequest
         return [
             "firstName" => "required|regex:/^[A-ZČĆĐŽŠ][a-zčćđžš]{2,}(\s[A-ZČĆĐŽŠ][a-zčćđžš]{2,})*$/",
             "lastName" => "required|regex:/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/",
-            "email" => "required|email",
+            "email" => "required|email|unique:users,email",
             "password" => "required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/",
             "confirmPassword" => "required|same:password",
         ];
