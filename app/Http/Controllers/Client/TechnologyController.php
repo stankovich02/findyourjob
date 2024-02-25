@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
 use App\Models\Technology;
-use Illuminate\Http\Request;
 
 class TechnologyController extends Controller
 {

@@ -16,30 +16,30 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
+Route::get('/', [\App\Http\Controllers\Client\HomeController::class, 'index'])->name('home');
+Route::get('/about', [\App\Http\Controllers\Client\AboutController::class, 'index'])->name('about');
 
-Route::resource('jobs', \App\Http\Controllers\JobController::class);
+Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
 
-Route::resource('companies', \App\Http\Controllers\CompanyController::class);
+Route::resource('companies', \App\Http\Controllers\Client\CompanyController::class);
 
-Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, 'index'])->name('contact');
 
 
 
 Route::middleware('IsLoggedIn')->group(function (){
-    Route::get('/account/{id}', [App\Http\Controllers\AccountController::class, 'show'])->name('account.show');
-    Route::get('/account/', [App\Http\Controllers\AccountController::class, 'index'])->name('account');
-    Route::controller(\App\Http\Controllers\ApplicationController::class)->group(function (){
+    Route::get('/account/{id}', [\App\Http\Controllers\Client\AccountController::class, 'show'])->name('account.show');
+    Route::get('/account/', [\App\Http\Controllers\Client\AccountController::class, 'index'])->name('account');
+    Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application', 'index')->name('application.index');
         Route::post('/application', 'store')->name('application.store');
         Route::get('/application/{id}', 'show')->name('application.show');
     });
-    Route::get('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [\App\Http\Controllers\Client\Auth\AuthController::class, 'logout'])->name('logout');
 });
 
 Route::middleware('IsNotLoggedIn')->group(function (){
-    Route::controller(\App\Http\Controllers\Auth\AuthController::class)->group(function (){
+    Route::controller(\App\Http\Controllers\Client\Auth\AuthController::class)->group(function (){
         Route::get('/login', 'showLogin')->name('login');
         Route::post('/login', 'login')->name('login.login');
         Route::get('/register', 'showRegister')->name('register');

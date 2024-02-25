@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterCompanyRequest;
 use App\Models\Company;
 use Illuminate\Http\Request;

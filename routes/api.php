@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/cities', [App\Http\Controllers\CityController::class, 'getAll'])->name('cities');
-Route::get('/technologies', [App\Http\Controllers\TechnologyController::class, 'getAll'])->name('technologies');
+Route::get('/cities', [\App\Http\Controllers\Client\CityController::class, 'getAll'])->name('cities');
+Route::get('/technologies', [\App\Http\Controllers\Client\TechnologyController::class, 'getAll'])->name('technologies');
