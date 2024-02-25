@@ -9,7 +9,9 @@ class ApplicationController extends Controller
 {
     public function index()
     {
-        return view('pages.client.application');
+        $model = new Application();
+        $application = $model->getApplication($id);
+        return view('pages.client.application')->with('application', $application);
     }
     public function store(JobApplyRequest $request)
     {
@@ -22,10 +24,4 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Your application has been submitted successfully');
     }
 
-    public function show($id)
-    {
-        $model = new Application();
-        $application = $model->getApplication($id);
-        return view('pages.client.application')->with('application', $application);
-    }
 }

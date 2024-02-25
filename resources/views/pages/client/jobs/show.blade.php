@@ -50,7 +50,7 @@
                         @if($job->applications->where("user_id", session()->get("user")->id)->count() > 0)
                             <div class="col-3">
                                 <?php $application = $job->applications->where("user_id", session()->get("user")->id)->first(); ?>
-                                <a href="{{route("application.show", $application->id)}}" class="btn btn-primary w-100 py-2">View your application</a>
+                                <a href="{{route("application.index", $application->id)}}" class="btn btn-primary w-100 py-2">View your application</a>
                             </div>
                         @else
                         <div class="">
@@ -138,7 +138,7 @@
                                     <h5 class="ms-3 mb-0">{{$application->user->first_name . " " . $application->user->last_name}}</h5>
                                 </div>
                                 <div class="col-sm-12 col-md-6 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                    <a class="btn btn-primary" href="{{route("application.show", $application->id)}}">View application</a>
+                                    <a class="btn btn-primary" href="{{route("application.index", $application->id)}}">View application</a>
                                 </div>
                             </div>
                         </div>
