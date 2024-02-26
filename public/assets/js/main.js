@@ -163,7 +163,7 @@ function editJob(element){
     let textJob = $(element).parent().next().html();
     let editor = element.parentElement.nextElementSibling.children[0];
     let id = editor.getAttribute('id');
-    if(!(id == 'descriptionEditor' || id == 'responsiblityEditor' || id == 'qualificationEditor' || id == 'benefitEditor')) {
+    if(!(id == 'descriptionEditor' || id == 'responsiblityEditor' || id == 'requirementsEditor' || id == 'benefitEditor')) {
         let parent = $(element).parent();
         let parentID = parent.attr('id');
         $(element).parent().next().html(`<div id="${parentID}Editor" contenteditable="true">${textJob}</div>`);
@@ -196,7 +196,8 @@ $(".editJob").click(function () {
     editJob(this);
 });
 
-if(window.location.pathname === "/jobs/create" || window.location.pathname === "/jobs/edit") {
+if(window.location.pathname === "/jobs/create")
+{
     fetch('http://127.0.0.1:8000/api/technologies')
         .then(response => response.json())
         .then(data => {
@@ -211,7 +212,7 @@ if(window.location.pathname === "/jobs/create" || window.location.pathname === "
                 maxWidth: '50%',
             });
         });
-    var descriptionEditor, responsibilityEditor, qualificationsEditor, benefitsEditor;
+    var descriptionEditor, responsibilityEditor, requirementsEditor, benefitsEditor;
 
     ClassicEditor
         .create( document.querySelector( '#descriptionEditor' ) )
@@ -230,9 +231,9 @@ if(window.location.pathname === "/jobs/create" || window.location.pathname === "
             console.error( error );
         } );
     ClassicEditor
-        .create( document.querySelector( '#qualificationsEditor' ) )
+        .create( document.querySelector( '#requirementsEditor' ) )
         .then( editor => {
-            qualificationsEditor = editor;
+            requirementsEditor = editor;
         } )
         .catch( error => {
             console.error( error );
@@ -257,7 +258,7 @@ if(window.location.pathname === "/jobs/create" || window.location.pathname === "
             let workplace = $("#jobWorkPlace").val();
             let description = descriptionEditor.getData();
             let responsibilities = responsibilityEditor.getData();
-            let qualifications = qualificationsEditor.getData();
+            let requirements = requirementsEditor.getData();
             let benefits = benefitsEditor.getData();
             let technologies = $("#Technologies").val();
             let applicationDeadline = $("#jobAppDeadline").val();
@@ -271,7 +272,7 @@ if(window.location.pathname === "/jobs/create" || window.location.pathname === "
                 workplace: workplace,
                 description: description,
                 responsibilities: responsibilities,
-                qualifications: qualifications,
+                requirements: requirements,
                 benefits: benefits,
                 technologies: technologies,
                 applicationDeadline: applicationDeadline
@@ -300,6 +301,63 @@ if(window.location.pathname === "/jobs/create" || window.location.pathname === "
             });
         });
 }
+if(window.location.pathname.includes("/edit"))
+{
+    $("#EditJob").click(function (e) {
+        e.preventDefault();
+        let name = $("#jobName").val();
+        let category = $("#jobCategory").val();
+        let seniority = $("#jobSeniority").val();
+        let location = $("#jobLocation").val();
+        let salary = $("#jobSalary").val();
+        let workType = $("#jobWorkType").val();
+        let workplace = $("#jobWorkPlace").val();
+        let description = descriptionEditor.getData();
+        let responsibilities = responsibilityEditor.getData();
+        let requirements = requirementsEditor.getData();
+        let benefits = benefitsEditor.getData();
+        let technologies = $("#Technologies").val();
+        let applicationDeadline = $("#jobAppDeadline").val();
+        let data = {
+            name: name,
+            category: category,
+            seniority: seniority,
+            location: location,
+            salary: salary,
+            workType: workType,
+            workplace: workplace,
+            description: description,
+            responsibilities: responsibilities,
+            requirements: requirements,
+            benefits: benefits,
+            technologies: technologies,
+            applicationDeadline: applicationDeadline
+        };
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: 'http://127.0.0.1:8000/jobs/' + $("#jobID").val(),
+            method: 'PUT',
+            data: data,
+            success: function (data) {
+                $("#responseMessage").css('color', 'green');
+                $("#responseMessage").html(data);
+            },
+            error: function (data) {
+                $("#responseMessage").css('color', '#eb0202');
+                let html = "";
+                for (let key in data.responseJSON.errors) {
+                    html += data.responseJSON.errors[key] + "<br>";
+                }
+                $("#responseMessage").html(html);
+            }
+        });
+    });
+}
+
 
 
 

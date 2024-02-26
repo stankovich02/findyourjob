@@ -14,7 +14,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav ms-auto p-4 p-lg-0">
+        <div class="navbar-nav ms-auto p-4 p-lg-0 d-flex align-items-center">
             <a href="/" class="nav-item nav-link active">
                {{-- <i class="fa fa-home"></i>--}}
                 Home</a>
@@ -31,15 +31,16 @@
             @if(session()->has("user"))
               <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fa fa-user"></i>
                     @if(session('accountType') === 'employee')
+                        <img src="{{asset('assets/img/users/' . session()->get("user")->avatar)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
                         Welcome, {{session("user")->first_name}}
                     @else
-                        Welcome, {{session("user")->name}}
+                        <img src="{{asset('assets/img/companies/' . session()->get("user")->logo)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
+                        Welcome, {{session()->get("user")->name}}
                     @endif
                 </a>
                 <div class="dropdown-menu rounded-0 m-0">
-                    <a href="{{route('account')}}" class="dropdown-item">Acoount</a>
+                    <a href="{{route('account')}}" class="dropdown-item">Account</a>
                     <a href="{{route('logout')}}" class="dropdown-item">Logout</a>
                 </div>
             </div>

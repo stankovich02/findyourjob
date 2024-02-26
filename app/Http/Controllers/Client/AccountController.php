@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Company;
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
 

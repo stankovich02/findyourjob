@@ -3,10 +3,9 @@
 @section('description') Browse all of our products. @endsection
 @section('keywords') shop, online, products @endsection
 @section('content')
-
     <div class="container mx-auto bg-primary py-4 my-5 d-flex flex-column" id="postJobContainer">
         <h1 class="text-center text-white mb-5">Post a Job</h1>
-        <form class="d-flex flex-column align-items-center" id="postJobForm" action="#" method="GET">
+        <form class="d-flex flex-column align-items-center" id="postJobForm" action="">
             @csrf
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobName" class="form-label text-white jobSearchLabel mb-2">Job name:</label>
@@ -66,8 +65,8 @@
             </div>
 
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label class="form-label text-white jobSearchLabel mb-2">Qualifications:</label>
-                <div id="qualificationsEditor" contenteditable="true"></div>
+                <label class="form-label text-white jobSearchLabel mb-2">Requirements:</label>
+            <div id="requirementsEditor" contenteditable="true"></div>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label class="form-label text-white jobSearchLabel mb-2">Benefits:</label>
@@ -87,7 +86,4 @@
         </form>
     </div>
     <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
-    <script>
-
-    </script>
 @endsection
