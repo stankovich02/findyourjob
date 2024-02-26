@@ -83,12 +83,17 @@
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     @foreach($jobs as $job)
-                        <div class="job-item p-4 mb-4">
+                        <div class="job-item p-4 mb-4 position-relative">
+                            @if($job->company_id == session()->get("user")->id)
+                                <div class="deleteJob">
+                                    <a href="" class="btn btn-danger" data-id="{{$job->id}}">X</a>
+                                </div>
+                            @endif
                             <div class="row g-4">
                                 <div class="col-sm-12 col-md-8 d-flex align-items-center">
                                     <img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
                                     <div class="text-start ps-4">
-                                        <h5 class="mb-3">{{$job->name}}</h5>
+                                        <h5 class="mb-3 jobName">{{$job->name}}</h5>
                                         <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                         <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                         <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
@@ -146,35 +151,17 @@
     </div>
 </div>
 <!-- Jobs End -->
-<script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
-<script>
-    fetch('http://127.0.0.1:8000/api/cities')
-        .then(response => response.json())
-        .then(data => {
-            let myOptions = data.map(city => {
-                return { label: city.name, value: city.id}
-            });
-            VirtualSelect.init({
-                ele: '#Cities',
-                options: myOptions,
-                multiple: true,
-                search: true,
-                maxWidth: '100%',
-            });
-        });
-    fetch('http://127.0.0.1:8000/api/technologies')
-        .then(response => response.json())
-        .then(data => {
-            let myOptions = data.map(technology => {
-                return { label: technology.name, value: technology.id}
-            });
-            VirtualSelect.init({
-                ele: '#Technologies',
-                options: myOptions,
-                multiple: true,
-                search: true,
-                maxWidth: '100%',
-            });
-        });
-</script>
+<div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteModal" >Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

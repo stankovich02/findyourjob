@@ -71,6 +71,14 @@ input[name="accountType"]{
     min-height: 200px;
     max-width: 900px;
 }
+.deleteJob{
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    z-index: 100;
+}
 /*** Spinner ***/
 #spinner {
     opacity: 0;

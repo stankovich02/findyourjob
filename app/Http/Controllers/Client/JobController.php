@@ -155,6 +155,8 @@ class JobController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $jobModel = new Job();
+        $jobModel->deleteRow($id);
+        return "Job deleted successfully!";
     }
 }

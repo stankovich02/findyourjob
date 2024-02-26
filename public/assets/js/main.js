@@ -95,52 +95,55 @@
         }
     });
 })(jQuery);
-let accountTypes = document.querySelectorAll('.accountType');
-accountTypes.forEach((accountType) => {
-    accountType.addEventListener('click', () => {
-        if(accountType.id === "companyButton"){
-            location.href = "/companies/create";
-        }
-        $("#registerBegin").animate({
-            opacity: 0,
-        }, 700, function () {
-            $("#registerBegin").remove();
+if(window.location.pathname === "/register") {
+    let accountTypes = document.querySelectorAll('.accountType');
+    accountTypes.forEach((accountType) => {
+        accountType.addEventListener('click', () => {
+            if(accountType.id === "companyButton"){
+                location.href = "/companies/create";
+            }
+            $("#registerBegin").animate({
+                opacity: 0,
+            }, 700, function () {
+                $("#registerBegin").remove();
+
+            });
+            setTimeout(() => {
+                $("#regFormUser").css("display", "block");
+
+            }, 700);
+            setTimeout(() => {
+                $("#regFormUser").css("opacity", "1");
+
+            }, 800);
 
         });
-        setTimeout(() => {
-            $("#regFormUser").css("display", "block");
-
-        }, 700);
-        setTimeout(() => {
-            $("#regFormUser").css("opacity", "1");
-
-        }, 800);
-
     });
-});
-$(".addLink").click(function () {
-    $(this).css("display", "none");
-    $(this).parent().html(
-        ` <input type="text" class="SocialLink form-control border-0 p-0" placeholder="Type link..."/>
-        <button class="btn btn-primary btn-sm ms-2 addLink">Add</button>`
-    );
+}
+if(window.location.pathname === "/account") {
     $(".addLink").click(function () {
         $(this).css("display", "none");
-        let link = $(this).prev().val();
         $(this).parent().html(
-            `<a href="${link}">${link}</a>
-            <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>`
+            ` <input type="text" class="SocialLink form-control border-0 p-0" placeholder="Type link..."/>
+        <button class="btn btn-primary btn-sm ms-2 addLink">Add</button>`
         );
-        $(".changeLink").click(function () {
-            changeLink(this);
+        $(".addLink").click(function () {
+            $(this).css("display", "none");
+            let link = $(this).prev().val();
+            $(this).parent().html(
+                `<a href="${link}">${link}</a>
+            <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>`
+            );
+            $(".changeLink").click(function () {
+                changeLink(this);
+            });
         });
     });
-});
-function changeLink(element){
-    console.log(element)
-    $(element).css("display", "none");
+    function changeLink(element){
+        console.log(element)
+        $(element).css("display", "none");
         let link = $(element).prev().html();
-    $(element).parent().html(
+        $(element).parent().html(
             ` <input type="text" class="SocialLink form-control border-0 p-0" value="${link}"/>
         <button class="btn btn-primary btn-sm ms-2 addLink">Add</button>`
         );
@@ -155,49 +158,12 @@ function changeLink(element){
                 changeLink(this);
             });
         });
-}
-$(".changeLink").click(function () {
-    changeLink(this);
-});
-function editJob(element){
-    let textJob = $(element).parent().next().html();
-    let editor = element.parentElement.nextElementSibling.children[0];
-    let id = editor.getAttribute('id');
-    if(!(id == 'descriptionEditor' || id == 'responsiblityEditor' || id == 'requirementsEditor' || id == 'benefitEditor')) {
-        let parent = $(element).parent();
-        let parentID = parent.attr('id');
-        $(element).parent().next().html(`<div id="${parentID}Editor" contenteditable="true">${textJob}</div>`);
-        var Editor;
-        ClassicEditor
-            .create( document.querySelector( `#${parentID}Editor` ) )
-            .then( editor => {
-                Editor = editor;
-            } )
-            .catch( error => {
-                console.error( error );
-            } );
     }
-    let parent = $(element).parent();
-    $(element).css("display", "none");
-    let text = parent.html();
-    parent.html(text + `<button class="btn btn-primary btn-sm ms-2 saveJob">Save</button>`);
-    $(".saveJob").click(function () {
-        let changedText = Editor.getData();
-        let parent = $(this).parent();
-        parent.html(text + ` <i class="fas fa-edit editJob"></i>`);
-        parent.next().html(changedText);
-        $(".editJob").click(function () {
-            editJob(this);
-        });
+    $(".changeLink").click(function () {
+        changeLink(this);
     });
-
 }
-$(".editJob").click(function () {
-    editJob(this);
-});
-
-if(window.location.pathname === "/jobs/create")
-{
+if(window.location.pathname === "/jobs/create") {
     fetch('http://127.0.0.1:8000/api/technologies')
         .then(response => response.json())
         .then(data => {
@@ -301,8 +267,7 @@ if(window.location.pathname === "/jobs/create")
             });
         });
 }
-if(window.location.pathname.includes("/edit"))
-{
+if(window.location.pathname.includes("/edit")) {
     $("#EditJob").click(function (e) {
         e.preventDefault();
         let name = $("#jobName").val();
@@ -354,6 +319,77 @@ if(window.location.pathname.includes("/edit"))
                 }
                 $("#responseMessage").html(html);
             }
+        });
+    });
+}
+if (window.location.pathname === "/jobs") {
+    fetch('http://127.0.0.1:8000/api/cities')
+        .then(response => response.json())
+        .then(data => {
+            let myOptions = data.map(city => {
+                return { label: city.name, value: city.id}
+            });
+            VirtualSelect.init({
+                ele: '#Cities',
+                options: myOptions,
+                multiple: true,
+                search: true,
+                maxWidth: '100%',
+            });
+        });
+    fetch('http://127.0.0.1:8000/api/technologies')
+        .then(response => response.json())
+        .then(data => {
+            let myOptions = data.map(technology => {
+                return { label: technology.name, value: technology.id}
+            });
+            VirtualSelect.init({
+                ele: '#Technologies',
+                options: myOptions,
+                multiple: true,
+                search: true,
+                maxWidth: '100%',
+            });
+        });
+}
+if (window.location.pathname === "/jobs" || window.location.pathname === "/account") {
+    let deleteButtons = document.querySelectorAll('.deleteJob a');
+    deleteButtons.forEach((deleteButton) => {
+        deleteButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
+            $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
+            $(".modal").css("display", "block");
+            $("#closeModal").click(function () {
+                $(".modal").css("display", "none");
+            });
+            $("#deleteModal").click(function () {
+                let id = deleteButton.getAttribute('data-id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/jobs/' + id,
+                    method: 'DELETE',
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        let html = "";
+                        for (let key in data.responseJSON.errors) {
+                            html += data.responseJSON.errors[key] + "<br>";
+                        }
+                        $(".modal-body p").html(html);
+                        $(".modal-footer").css("display", "none");
+                        $(".modal").css("display", "block");
+                        setTimeout(() => {
+                            $(".modal").css("display", "none");
+                        }, 3000);
+                    }
+                });
+            });
         });
     });
 }

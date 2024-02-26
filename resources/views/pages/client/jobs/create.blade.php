@@ -85,5 +85,4 @@
             <div id="responseMessage" class="mt-3"></div>
         </form>
     </div>
-    <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
 @endsection

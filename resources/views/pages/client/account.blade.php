@@ -131,12 +131,17 @@
     @if(session()->has("user") && session("accountType") == "company")
         @foreach($company->jobs as $job)
             @if($job->status == \App\Models\Job::STATUS_ACTIVE)
-                <div class="job-item p-4 mb-4">
+                <div class="job-item p-4 mb-4 position-relative">
+                    @if($job->company_id == session()->get("user")->id)
+                        <div class="deleteJob">
+                            <a href="" class="btn btn-danger" data-id="{{$job->id}}">X</a>
+                        </div>
+                    @endif
                     <div class="row g-4">
                         <div class="col-sm-12 col-md-8 d-flex align-items-center">
                             <img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $company->logo)}}" alt="" style="width: 80px; height: 80px;">
                             <div class="text-start ps-4">
-                                <h5 class="mb-3">{{$job->name}}</h5>
+                                <h5 class="mb-3 jobName">{{$job->name}}</h5>
                                 <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                 <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                 <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
@@ -214,5 +219,17 @@
         @endforeach
     @endif
 </div>
-
+<div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteModal" >Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

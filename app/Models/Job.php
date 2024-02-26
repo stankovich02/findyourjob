@@ -124,4 +124,10 @@ class Job extends Model
         $job->save();
         $job->technology()->sync($technologies);
     }
+    public function deleteRow($jobId) : void
+    {
+        $job = self::find($jobId);
+        $job->technology()->detach();
+        $job->delete();
+    }
 }
