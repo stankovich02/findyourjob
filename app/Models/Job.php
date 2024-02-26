@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Job extends Model
 {
@@ -78,7 +79,7 @@ class Job extends Model
             ->find
         ($id);
     }
-    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $qualifications, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : void
+    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : void
     {
         $this->name = $name;
         $this->category_id = $category;
@@ -86,7 +87,7 @@ class Job extends Model
         $this->workplace_id = $workplace;
         $this->description = $description;
         $this->responsibilities = $responsibilities;
-        $this->requirements = $qualifications;
+        $this->requirements = $requirements;
         $this->benefits = $benefits;
         $this->city_id = $location;
         if($salary !== null){
@@ -98,5 +99,29 @@ class Job extends Model
         $this->status = self::STATUS_PENDING;
         $this->save();
         $this->technology()->attach($technologies);
+    }
+
+    public function updateRow($name, $category, $seniority, $workplace, $technologies, $description,
+                              $responsibilities, $requirements, $benefits, $location, $salary, $workType,
+                              $applicationDeadline, $companyId, $jobId) : void
+    {
+        $job = self::find($jobId);
+        $job->name = $name;
+        $job->category_id = $category;
+        $job->seniority_id = $seniority;
+        $job->workplace_id = $workplace;
+        $job->description = $description;
+        $job->responsibilities = $responsibilities;
+        $job->requirements = $requirements;
+        $job->benefits = $benefits;
+        $job->city_id = $location;
+        if($salary !== null){
+            $job->salary = $salary;
+        }
+        $job->full_time = $workType;
+        $job->application_deadline = $applicationDeadline;
+        $job->company_id = $companyId;
+        $job->save();
+        $job->technology()->sync($technologies);
     }
 }

@@ -37,7 +37,7 @@
                         <div class="jobDetails mb-3">
                             {!!$job->responsibilities!!}
                         </div>
-                        <h4 class="mb-3" id="Qualifications">Requirements:</h4>
+                        <h4 class="mb-3" id="Requirements">Requirements:</h4>
                         <div class="jobDetails mb-3">
                             {!!$job->requirements!!}
                         </div>

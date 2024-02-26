@@ -29,12 +29,12 @@ class PostJobRequest extends FormRequest
             'technologies' => 'required',
             'description' => 'required|string|min:50',
             'responsibilities' => 'required|string|min:50',
-            'qualifications' => 'required|string|min:50',
+            'requirements' => 'required|string|min:50',
             'benefits' => 'required|string|min:50',
             'location' => 'required',
             'salary' => 'nullable|numeric',
             'workType' => 'required',
-            'applicationDeadline' => 'required|date',
+            'applicationDeadline' => 'required|date|after:today',
 
         ];
     }
@@ -51,13 +51,14 @@ class PostJobRequest extends FormRequest
             'description.min' => 'Description must be at least 50 characters',
             'responsibilities.required' => 'Responsibilities is required',
             'responsibilities.min' => 'Responsibilities must be at least 50 characters',
-            'qualifications.required' => 'Qualifications is required',
-            'qualifications.min' => 'Qualifications must be at least 50 characters',
+            'requirements.required' => 'Requirements is required',
+            'requirements.min' => 'Requirements must be at least 50 characters',
             'benefits.required' => 'Benefits is required',
             'benefits.min' => 'Benefits must be at least 50 characters',
             'location.required' => 'Location is required',
             'applicationDeadline.required' => 'Application Deadline is required',
             'applicationDeadline.date' => 'Application Deadline must be a date',
+            'applicationDeadline.after' => 'Application Deadline cannot be in the past',
         ];
     }
 }
