@@ -19,7 +19,7 @@ class JobController extends Controller
 
     public function __construct()
     {
-        $this->middleware('IsCompany')->except('index', 'show');
+        $this->middleware('IsCompany')->except('index', 'show', 'save');
     }
     public function index()
     {
@@ -30,6 +30,12 @@ class JobController extends Controller
         return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories);
     }
 
+    public function save(int $id)
+    {
+        $userID = session()->get("user")->id;
+        $jobModel = new Job();
+        return $jobModel->saveJob($id, $userID);
+    }
     /**
      * Show the form for creating a new resource.
      */

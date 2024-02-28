@@ -84,16 +84,16 @@
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     @foreach($jobs as $job)
                         <div class="job-item p-4 mb-4 position-relative">
-                            @if((session()->has("user")) && ($job->company_id == session()->get("user")->id))
+                            @if((session()->has("user")) && (session()->get("accountType") == "company") && ($job->company_id == session()->get("user")->id))
                                 <div class="deleteJob">
                                     <a href="" class="btn btn-danger" data-id="{{$job->id}}">X</a>
                                 </div>
                             @endif
                             <div class="row g-4">
                                 <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                    <img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
+                                    <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
                                     <div class="text-start ps-4">
-                                        <h5 class="mb-3 jobName">{{$job->name}}</h5>
+                                        <a href="{{route("jobs.show", $job->id)}}"><h5 class="mb-3 jobName">{{$job->name}}</h5></a>
                                         <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                         <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                         <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
@@ -106,7 +106,11 @@
                                 <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                     <div class="d-flex mb-3">
                                         @if(session()->has("user") && session()->get("accountType") == "employee")
-                                            <a class="btn btn-light btn-square me-3" href=""><i class="far fa-heart text-primary"></i></a>
+                                            @if($job->saved_jobs->where("id", session()->get("user")->id)->first())
+                                                <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
+                                            @else
+                                                <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="far fa-heart text-primary"></i></a>
+                                            @endif
                                         @endif
                                         @if(session()->has("user") && session()->get("accountType") == "employee" && $job->applications->where("user_id", session()->get("user")->id)->first())
                                                 <a class="btn btn-muted" href="{{route("jobs.show", $job->id)}}">Applied</a>

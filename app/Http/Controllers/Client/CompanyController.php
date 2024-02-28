@@ -53,6 +53,9 @@ class CompanyController extends Controller
      */
     public function show(int $id)
     {
+        if(session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id){
+            return redirect()->route('account');
+        }
         $companyModel = new Company();
         $company = $companyModel->getCompany($id);
         return view('pages.client.companies.show')->with('company', $company);

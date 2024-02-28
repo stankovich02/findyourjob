@@ -124,11 +124,14 @@
     </div>
     <!-- Za usere "Applied jobs" , za kompanije "Posted jobs"-->
     @if(session()->has("user") && session("accountType") == "company")
-        <h3 class="font-xl pt-5 mt-5">Posted jobs</h3>
+        <h3 class="text-center pt-5 mt-5 mb-3">Posted jobs</h3>
     @else
-        <h3 class="font-xl pt-5 mt-5">Applied jobs</h3>
+        <h3 class="text-center pt-5 mt-5 mb-3">Applied jobs</h3>
     @endif
     @if(session()->has("user") && session("accountType") == "company")
+        @if($company->jobs->count() == 0)
+            <h4 class="text-center mt-5">You have not posted any jobs yet.</h4>
+        @else
         @foreach($company->jobs as $job)
             @if($job->status == \App\Models\Job::STATUS_ACTIVE)
                 <div class="job-item p-4 mb-4 position-relative">
@@ -139,9 +142,9 @@
                     @endif
                     <div class="row g-4">
                         <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                            <img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $company->logo)}}" alt="" style="width: 80px; height: 80px;">
+                            <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
                             <div class="text-start ps-4">
-                                <h5 class="mb-3 jobName">{{$job->name}}</h5>
+                                <a href="{{route("jobs.show", $job->id)}}"><h5 class="mb-3 jobName">{{$job->name}}</h5></a>
                                 <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                 <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                 <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
@@ -176,15 +179,18 @@
                 <!-- Jobs End -->
             @endif
         @endforeach
-
+        @endif
     @else
+        @if($user->applications->count() == 0)
+            <h4 class="text-center mt-5">You have not applied for any jobs yet.</h4>
+        @else
         @foreach($user->applications as $application)
             <div class="job-item p-4 mb-4">
                 <div class="row g-4">
                     <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                        <img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $application->company->logo)}}" alt="" style="width: 80px; height: 80px;">
+                        <a href="{{route("companies.show", $application->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $application->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
                         <div class="text-start ps-4">
-                            <h5 class="mb-3">{{$application->name}}</h5>
+                            <a href="{{route("jobs.show", $application->id)}}"><h5 class="mb-3 jobName">{{$application->name}}</h5></a>
                             <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$application->city->name}}</span>
                             <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$application->full_time ? "Full time" : "Part-time"}}</span>
                             <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$application->seniority->name}}</span>
@@ -196,7 +202,13 @@
                     </div>
                     <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                         <div class="d-flex mb-3">
-                                <a class="btn btn-light btn-square me-3" href=""><i class="far fa-heart text-primary"></i></a>
+                            @if(session()->has("user") && session()->get("accountType") == "employee")
+                                @if($application->saved_jobs->where("id", session()->get("user")->id)->first())
+                                    <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$application->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
+                                @else
+                                    <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$application->id}}" href=""><i class="far fa-heart text-primary"></i></a>
+                                @endif
+                            @endif
                             <a class="btn btn-muted" href="{{route("jobs.show", $application->id)}}">Applied</a>
                         </div>
                         <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{date('d/m/Y', strtotime($application->application_deadline))}}</small>
@@ -217,6 +229,63 @@
             </div>
             <!-- Jobs End -->
         @endforeach
+        @endif
+        <h3 class="text-center pt-5 mt-5 mb-3">Saved jobs</h3>
+        @if($user->saved_jobs->count() == 0)
+            <h4 class="text-center mt-5">You have not saved any jobs yet.</h4>
+        @else
+            @foreach($user->saved_jobs as $job)
+                <div class="job-item p-4 mb-4">
+                    <div class="row g-4">
+                        <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                            <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
+                            <div class="text-start ps-4">
+                                <a href="{{route("jobs.show", $job->id)}}"><h5 class="mb-3 jobName">{{$job->name}}</h5></a>
+                                <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
+                                <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
+                                <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
+
+                                @if($job->salary)
+                                    <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                            <div class="d-flex mb-3">
+                                @if(session()->has("user") && session()->get("accountType") == "employee")
+                                    @if($job->saved_jobs->where("id", session()->get("user")->id)->first())
+                                        <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
+                                    @else
+                                        <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="far fa-heart text-primary"></i></a>
+                                    @endif
+                                @endif
+                                @if(session()->has("user") && session()->get("accountType") == "employee" && $job->applications->where("user_id", session()->get("user")->id)->first())
+                                    <a class="btn btn-muted" href="{{route("jobs.show", $job->id)}}">Applied</a>
+                                @elseif(!session()->has("user") || (session()->has("user") && session()->get("accountType") == "employee"))
+                                    <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">Apply Now</a>
+                                @else
+                                    <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">View job</a>
+                                @endif
+                            </div>
+                            <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{date('d/m/Y', strtotime($application->application_deadline))}}</small>
+                        </div>
+                        <div class="col-12">
+                            <div class="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                                @if($job->technology)
+                                    @foreach($job->technology as $technology)
+                                        <span class="badge bg-primary me-2">{{$technology->name}}</span>
+                                    @endforeach
+                                    <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
+                                @else
+                                    <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Jobs End -->
+            @endforeach
+        @endif
     @endif
 </div>
 <div class="modal" tabindex="-1">

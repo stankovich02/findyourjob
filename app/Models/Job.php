@@ -65,17 +65,18 @@ class Job extends Model
         return $this->belongsToMany(Technology::class, 'jobs_technologies', 'job_id', 'technology_id');
     }
 
-    public function saved_jobs() : BelongsToMany
+    public function saved_jobs()
     {
         return $this->belongsToMany(User::class, 'saved_jobs', 'job_id', 'user_id');
     }
     public function getAll() : Collection
     {
-       return self::with('company', 'category','city', 'seniority', 'workplace', 'technology')->where('status', self::STATUS_ACTIVE)->get();
+       return self::with('company', 'category','city', 'seniority', 'workplace', 'technology','saved_jobs')->where('status',
+           self::STATUS_ACTIVE)->get();
     }
     public function getSingleJob(int $id)
     {
-        return self::with('company', 'category','city', 'seniority', 'workplace', 'technology', 'applications')
+        return self::with('company', 'category','city', 'seniority', 'workplace', 'saved_jobs','technology', 'applications',)
             ->find
         ($id);
     }
@@ -129,5 +130,20 @@ class Job extends Model
         $job = self::find($jobId);
         $job->technology()->detach();
         $job->delete();
+    }
+
+    public function saveJob($jobId, $userId) : string
+    {
+        try {
+            $job = self::find($jobId);
+            if($job->saved_jobs()->where('user_id', $userId)->exists()){
+               $job->saved_jobs()->detach($userId);
+                  return "Job unsaved successfully!";
+            }
+            $job->saved_jobs()->attach($userId);
+            return "Job saved successfully!";
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

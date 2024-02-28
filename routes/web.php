@@ -29,6 +29,7 @@ Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, '
 
 Route::middleware('IsLoggedIn')->group(function (){
         Route::get('/account', [\App\Http\Controllers\Client\AccountController::class, 'index'])->name('account');
+        Route::post('/jobs/save/{id}', [\App\Http\Controllers\Client\JobController::class, 'save'])->name('jobs.save');
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application/{id}', 'index')->name('application.index');
         Route::post('/application/store', 'store')->name('application.store');
