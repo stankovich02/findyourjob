@@ -84,7 +84,7 @@
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     @foreach($jobs as $job)
                         <div class="job-item p-4 mb-4 position-relative">
-                            @if($job->company_id == session()->get("user")->id)
+                            @if((session()->has("user")) && ($job->company_id == session()->get("user")->id))
                                 <div class="deleteJob">
                                     <a href="" class="btn btn-danger" data-id="{{$job->id}}">X</a>
                                 </div>

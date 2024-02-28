@@ -7,7 +7,7 @@ use App\Models\Application;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(int $id)
     {
         $model = new Application();
         $application = $model->getApplication($id);
