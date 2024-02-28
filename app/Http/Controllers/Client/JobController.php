@@ -9,7 +9,6 @@ use App\Models\Job;
 use App\Models\Seniority;
 use App\Models\Technology;
 use App\Models\Workplace;
-use Illuminate\Http\Request;
 
 class JobController extends Controller
 {

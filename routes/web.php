@@ -25,6 +25,8 @@ Route::resource('companies', \App\Http\Controllers\Client\CompanyController::cla
 
 Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, 'index'])->name('contact');
 
+Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
+
 
 
 Route::middleware('IsLoggedIn')->group(function (){

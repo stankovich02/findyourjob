@@ -445,6 +445,35 @@ function showModal(data) {
     }, 3000);
 }
 
+$("#newsletterButton").click(function (e) {
+    e.preventDefault();
+    let email = $("#newsletterEmail").val();
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: 'http://127.0.0.1:8000/newsletter',
+        method: 'POST',
+        data: {
+            email: email
+        },
+        success: function (data) {
+            $("#newsletterMsg").css('color', 'green');
+            $("#newsletterMsg").html(data.message);
+            setTimeout(() => {
+                $("#newsletterMsg").html("");
+                $("#newsletterEmail").val("");
+            },2000);
+        },
+        error: function (data) {
+            $("#newsletterMsg").css('color', '#eb0202');
+            $("#newsletterMsg").html(data.responseJSON.message);
+        }
+    });
+});
+
 
 
 
