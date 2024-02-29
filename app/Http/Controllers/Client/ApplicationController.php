@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Client;
 use App\Http\Requests\JobApplyRequest;
 use App\Models\Application;
 
-class ApplicationController extends Controller
+class ApplicationController extends DefaultController
 {
     public function index(int $id)
     {
+        parent::__construct();
         $model = new Application();
         $application = $model->getApplication($id);
-        return view('pages.client.application')->with('application', $application);
+        return view('pages.client.application')->with('application', $application)->with('data', $this->data);
     }
     public function store(JobApplyRequest $request)
     {

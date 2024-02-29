@@ -6,14 +6,14 @@ use App\Http\Requests\RegisterCompanyRequest;
 use App\Models\Company;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+class CompanyController extends DefaultController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(int $id)
     {
-
+        parent::__construct();
     }
 
     /**

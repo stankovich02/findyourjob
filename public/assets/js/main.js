@@ -152,7 +152,8 @@ if(window.location.pathname === "/account") {
             });
         });
     });
-    function changeLink(element){
+
+    function changeLink(element) {
         let social = $(element).attr('data-social');
         $(element).css("display", "none");
         let link = $(element).prev().html();
@@ -184,9 +185,36 @@ if(window.location.pathname === "/account") {
             });
         });
     }
+
     $(".changeLink").click(function () {
         changeLink(this);
     });
+    /*$("#fileInput").change(function () {
+        let file = this.files[0];
+        let url = $('#imageUpload').attr('data-action');
+        let formData = new FormData();
+        formData.append('picture', file);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: url,
+            method: 'PUT',
+            data: formData,
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                location.reload();
+            },
+            error: function (data) {
+                $("#pictureError").css('color', 'red');
+                $("#pictureError").html(data.responseJSON.errors.picture[0]);
+            }
+        });
+    });*/
 }
 if(window.location.pathname === "/jobs/create") {
     fetch('http://127.0.0.1:8000/api/technologies')

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\City;
 
-class CityController extends Controller
+class CityController extends DefaultController
 {
     public function getAll() : \Illuminate\Http\JsonResponse
     {

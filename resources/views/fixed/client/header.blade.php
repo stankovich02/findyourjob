@@ -32,11 +32,11 @@
               <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     @if(session('accountType') === 'employee')
-                        <img src="{{asset('assets/img/users/' . session()->get("user")->avatar)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
-                        Welcome, {{session("user")->first_name}}
+                        <img src="{{asset('assets/img/users/' . $data['user']->avatar)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
+                        Welcome, {{$data['user']->first_name}}
                     @else
-                        <img src="{{asset('assets/img/companies/' . session()->get("user")->logo)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
-                        Welcome, {{session()->get("user")->name}}
+                        <img src="{{asset('assets/img/companies/' . $data['user']->logo)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
+                        Welcome, {{$data['user']->name}}
                     @endif
                 </a>
                 <div class="dropdown-menu rounded-0 m-0">

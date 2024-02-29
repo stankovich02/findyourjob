@@ -6,6 +6,7 @@ class HomeController extends DefaultController
 {
     public function index()
     {
-        return view('pages.client.home');
+        parent::__construct();
+        return view('pages.client.home')->with('data', $this->data);
     }
 }

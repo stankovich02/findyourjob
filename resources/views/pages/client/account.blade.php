@@ -17,10 +17,21 @@
                     <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
                     @endif
                         <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+
+                    <br/>
                     <!-- Profile picture upload button-->
-                    <button class="btn btn-primary" type="button">Upload new image</button>
+                    <form action="{{route('account.picture')}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
+                        @csrf
+                        @method('PUT')
+                        <input id="fileInput" type="file" class="mt-3" name="picture">
+                        <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload new picture</button>
+                    </form>
                 </div>
+                <p id="pictureError" class="text-center text-danger">
+                    @if($errors->has('picture'))
+                    {{$errors->first('picture')}}
+                    @endif
+                </p>
             </div>
             @if(session('accountType') === 'employee')
             <div id="profileLinks" class="mt-4">

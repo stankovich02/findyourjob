@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -99,6 +100,51 @@ class User extends Model
         } catch (\Exception $e) {
             return response()->json(["message" => "An error occurred."], 500);
         }
+    }
+    public function updatePicture(int $userID, $picture,$accType) : RedirectResponse
+    {
+        try {
+            if ($accType == 'company') {
+                $company = Company::find($userID);
+                $company->logo = $picture->store('logos', 'public');
+                $company->save();
+                return redirect()->route('account');
+            }
+            $user = User::find($userID);
+            $imageName = $this->resizeAndUploadImage($picture, 150, 150);
+            if($user->avatar != 'user.jpg'){
+                unlink(public_path('assets/img/users/' . $user->avatar));
+            }
+            $user->avatar = $imageName;
+            session()->get('user')->avatar = $imageName;
+            $user->save();
+            return redirect()->route('account');
+        } catch (\Exception $e) {
+            return redirect()->route('account')->with('error', 'An error occurred.');
+        }
+    }
+    public function resizeAndUploadImage($imageFromArray, int $width, int $height) : string
+    {
+        $tmpPath = $imageFromArray->getPathname();
+        $type = $imageFromArray->getMimeType();
+        $extension = $imageFromArray->getClientOriginalExtension();
+        list($imgWidth, $imgHeight) = getimagesize($tmpPath);
+        if ($type == "image/jpeg") {
+            $originalImage = imagecreatefromjpeg($tmpPath);
+        } elseif ($type == "image/png") {
+            $originalImage = imagecreatefrompng($tmpPath);
+        }
+        $imageName = time() . '.' . $extension;
+        $resizeImagePath = public_path("assets/img/users/") . $imageName;
+
+        $resizedImage = imagecreatetruecolor($width, $height);
+        imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $width, $height, $imgWidth, $imgHeight);
+        move_uploaded_file($tmpPath, $resizeImagePath);
+        if($type=='image/jpeg') imagejpeg($resizedImage,  $resizeImagePath );
+        if($type=='image/png') imagepng($resizedImage,  $resizeImagePath);
+
+
+        return $imageName;
     }
 
 

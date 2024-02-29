@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Models\Newsletter;
 use Illuminate\Http\Request;
 
-class NewsletterController extends Controller
+class NewsletterController extends DefaultController
 {
     public function store(Request $request)
     {

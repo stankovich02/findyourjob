@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Client;
 
-class AboutController extends Controller
+class AboutController extends DefaultController
 {
     public function index()
     {
-        return view('pages.client.about');
+        parent::__construct();
+        return view('pages.client.about')->with('data', $this->data);
     }
 }

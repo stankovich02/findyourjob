@@ -28,7 +28,7 @@ class RegisterCompanyRequest extends FormRequest
             "phone" => "required|regex:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/",
             "email" => "required|email|unique:companies,email",
             "password" => "required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/",
-            "confirmPassword" => "required|same:password",gour
+            "confirmPassword" => "required|same:password",
         ];
     }
     public function messages() : array

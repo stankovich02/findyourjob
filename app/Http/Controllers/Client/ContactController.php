@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Client;
 
-class ContactController extends Controller
+class ContactController extends DefaultController
 {
     public function index()
     {
-        return view('pages.client.contact');
+        parent::__construct();
+        return view('pages.client.contact')->with('data', $this->data);
     }
 }

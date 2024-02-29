@@ -10,7 +10,7 @@ use App\Models\Seniority;
 use App\Models\Technology;
 use App\Models\Workplace;
 
-class JobController extends Controller
+class JobController extends DefaultController
 {
     /**
      * Display a listing of the resource.
@@ -18,15 +18,17 @@ class JobController extends Controller
 
     public function __construct()
     {
+
         $this->middleware('IsCompany')->except('index', 'show', 'save');
     }
     public function index()
     {
+        parent::__construct();
         $jobModel = new Job();
         $jobs = $jobModel->getAll();
         $categoryModel = new Category();
         $categories = $categoryModel->getAll();
-        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories);
+        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
     }
 
     public function save(int $id)
