@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\RegisterCompanyRequest;
+use App\Http\Requests\UpdateComapnyDetailsRequest;
 use App\Models\Company;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CompanyController extends DefaultController
@@ -72,9 +74,11 @@ class CompanyController extends DefaultController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateComapnyDetailsRequest $request, int $id) : RedirectResponse
     {
-        //
+        $companyModel = new Company();
+        return $companyModel->updateCompany($id, $request->input('companyName'), $request->input('description'),
+        $request->input('email'), $request->input('website'), $request->input('phone'));
     }
 
     /**
@@ -82,6 +86,7 @@ class CompanyController extends DefaultController
      */
     public function destroy(string $id)
     {
-        //
+
+
     }
 }

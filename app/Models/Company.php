@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -95,5 +96,34 @@ class Company extends Model
     public function getCompanyLocations(int $id) : Builder|array|Collection|Model
     {
         return self::with('cities')->find($id);
+    }
+
+    public function updateCompany($id,$name,$description,$email,$website,$phone) : RedirectResponse
+    {
+        try {
+            $company = self::find($id);
+            if ($company == null) {
+                return redirect()->route('home');
+            }
+            if ($company->name != $name) {
+                $company->name = $name;
+            }
+            if ($company->description != $description) {
+                $company->description = $description;
+            }
+            if ($company->email != $email) {
+                $company->email = $email;
+            }
+            if ($company->website != $website) {
+                $company->website = $website;
+            }
+            if ($company->phone != $phone) {
+                $company->phone = $phone;
+            }
+            $company->save();
+            return redirect()->route('account')->with('success', 'You have successfully updated company info.');
+        } catch (\Exception $e) {
+            return redirect()->route('account')->with('error', 'An error occurred.');
+        }
     }
 }

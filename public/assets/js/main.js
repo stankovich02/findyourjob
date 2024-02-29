@@ -126,7 +126,7 @@ if(window.location.pathname === "/account") {
         $(this).css("display", "none");
         $(this).parent().html(
             ` <input type="text" class="SocialLink form-control border-0 py-2" placeholder="Type link..."/>
-        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Add</button>`
+        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Update</button>`
         );
         $(".addLink").click(function () {
             let link = $(this).prev().val();
@@ -159,7 +159,7 @@ if(window.location.pathname === "/account") {
         let link = $(element).prev().html();
         $(element).parent().html(
             ` <input type="text" class="SocialLink form-control border-0 py-2" value="${link}"/>
-        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Add</button>`
+        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Update</button>`
         );
         $(".addLink").click(function () {
             let link = $(this).prev().val();
@@ -215,6 +215,17 @@ if(window.location.pathname === "/account") {
             }
         });
     });*/
+
+    $("#btnEdit").click(function () {
+        $("#accountDetails input").removeAttr('disabled');
+        if($("#accountDetails textarea")){
+            $("#accountDetails textarea").removeAttr('disabled');
+        }
+        $(this).parent().html(`
+            <button class="btn btn-primary" id="btnSave" type="submit">Save</button>
+        `);
+        $(this).remove();
+    });
 }
 if(window.location.pathname === "/jobs/create") {
     fetch('http://127.0.0.1:8000/api/technologies')

@@ -27,12 +27,13 @@ Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, '
 
 Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
 
-
+Route::get('/verification/{token}', [App\Http\Controllers\Client\Auth\AuthController::class, 'verify'])->name('verify');
 
 Route::middleware('IsLoggedIn')->group(function (){
         Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
             Route::get('/account','index')->name('account');
             Route::put('/account/socials', 'socials')->name('account.socials');
+            Route::put('/account/info', 'info')->name('account.info');
             /*Route::put('/account/password', 'password')->name('account.password');*/
             Route::put('/account/picture', 'picture')->name('account.picture');
         });
@@ -50,6 +51,5 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::post('/login', 'login')->name('login.login');
         Route::get('/register', 'showRegister')->name('register');
         Route::post('/register', 'register')->name('register.register');
-        Route::get('/verification/{token}', 'verify')->name('verify');
     });
 });

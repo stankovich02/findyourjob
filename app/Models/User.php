@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class User extends Model
@@ -119,6 +120,38 @@ class User extends Model
             session()->get('user')->avatar = $imageName;
             $user->save();
             return redirect()->route('account');
+        } catch (\Exception $e) {
+            return redirect()->route('account')->with('error', 'An error occurred.');
+        }
+    }
+
+    public function updateInfo(int $userID, string $firstName, string $lastName,string $email) : RedirectResponse
+    {
+        try {
+            $user = User::find($userID);
+            if ($user->email != $email) {
+                $user->is_active = 0;
+                $token = Str::random(20);
+                $exists = User::where('token', $token)->first();
+                while ($exists) {
+                    $token = Str::random(20);
+                    $exists = User::where('token', $token)->first();
+                }
+                $user->token = $token;
+                Mail::to($email)->send(new \App\Mail\EmailVerification($token));
+            }
+            if ($user->first_name != $firstName){
+                $user->first_name = $firstName;
+            }
+            if ($user->last_name != $lastName){
+                $user->last_name = $lastName;
+            }
+            $user->save();
+            if ($user->email != $email) {
+                $user->email = $email;
+                return redirect()->route('account')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
+            }
+            return redirect()->route('account')->with('success', 'You have successfully updated your info.');
         } catch (\Exception $e) {
             return redirect()->route('account')->with('error', 'An error occurred.');
         }

@@ -87,6 +87,7 @@ class JobController extends DefaultController
      */
     public function show(int $id)
     {
+        parent::__construct();
         $jobModel = new Job();
         $job = $jobModel->getSingleJob($id);
         if ($job == null) {
@@ -95,7 +96,7 @@ class JobController extends DefaultController
         if($job->status == Job::STATUS_EXPIRED || $job->status == Job::STATUS_PENDING){
             return redirect()->route('jobs.index');
         }
-        return view('pages.client.jobs.show')->with('job', $job);
+        return view('pages.client.jobs.show')->with('job', $job)->with('data', $this->data);
     }
 
     /**

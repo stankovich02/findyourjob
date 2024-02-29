@@ -84,15 +84,21 @@
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    <form>
+                    @if(session('accountType') == "employee")
+                        <form id="accountDetails" action="{{route("account.info")}}" method="POST">
+                    @else
+                        <form id="accountDetails" action="{{route("companies.update", session()->get("user")->id)}}" method="POST">
+                    @endif
+                        @csrf
+                        @method('PUT')
                        @if(session('accountType') === 'company')
                         <div class="mb-3">
                             <label class="small mb-1" for="companyName">Company name</label>
-                            <input class="form-control" id="companyName" type="text" disabled value="{{$company->name}}">
+                            <input class="form-control" name="companyName" id="companyName" type="text" disabled value="{{$company->name}}">
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputBio">Company description</label>
-                            <textarea id="inputBio" cols="10" rows="10" disabled class="form-control">{{$company->description}}</textarea>
+                            <textarea id="inputBio" name="description" cols="10" rows="10" disabled class="form-control">{{$company->description}}</textarea>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -128,12 +134,35 @@
                             </div>
                         </div>
                         @endif
+                       <div id="buttonsChange">
+                           <button class="btn btn-primary" type="button" id="btnEdit">Edit</button>
+                       </div>
+                        </form>
+                        </form>
+                    <p class="text-danger">
+                        @if($errors->has('companyName'))
+                            {{$errors->first('companyName')}}
+                        @endif
+                        @if($errors->has('description'))
+                            {{$errors->first('description')}}
+                        @endif
+                        @if($errors->has('website'))
+                            {{$errors->first('website')}}
+                        @endif
+                        @if($errors->has('phone'))
+                            {{$errors->first('phone')}}
+                        @endif
+                        @if($errors->has('email'))
+                            {{$errors->first('email')}}
+                        @endif
 
 
-
-                        <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Save changes</button>
-                    </form>
+                    </p>
+                    <p class="text-success">
+                        @if(session()->has('success'))
+                            {{session('success')}}
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>

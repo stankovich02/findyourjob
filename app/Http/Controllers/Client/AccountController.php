@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\UpdateAccountPictureRequest;
+use App\Http\Requests\UpdateUserDetailsRequest;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -38,5 +39,12 @@ class AccountController extends DefaultController
         $accType = $request->session()->get('accountType');
         $userModel = new User();
         return $userModel->updatePicture($userID, $request->picture, $accType);
+    }
+
+    public function info(UpdateUserDetailsRequest $request) : RedirectResponse
+    {
+        $userID = $request->session()->get('user')->id;
+        $userModel = new User();
+        return $userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
     }
 }
