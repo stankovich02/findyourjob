@@ -15,19 +15,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0 d-flex align-items-center">
-            <a href="/" class="nav-item nav-link active">
-               {{-- <i class="fa fa-home"></i>--}}
-                Home</a>
-            <a href="/about" class="nav-item nav-link">
-               {{-- <i class="fa fa-address-card"></i>--}}
-                About</a>
-            <a href="{{route('jobs.index')}}" class="nav-item nav-link">
-                {{--  <i class="fa fa-address-card"></i>--}}
-                Jobs</a>
-
-            <a href="/contact" class="nav-item nav-link">
-              {{--  <i class="fa fa-address-card"></i>--}}
-                Contact</a>
+            @foreach($data['nav'] as $nav)
+                <a href="{{route($nav->route)}}" class="nav-item nav-link {{$data['active'] == $nav->route ? 'active' : ''}}">
+                    {{$nav->name}}
+                </a>
+            @endforeach
             @if(session()->has("user"))
               <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">

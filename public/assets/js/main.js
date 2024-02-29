@@ -415,6 +415,15 @@ if (window.location.pathname === "/jobs") {
                 maxWidth: '100%',
             });
         });
+
+    $(window).on('load', function () {
+        if(localStorage.getItem('category')){
+            let category = localStorage.getItem('category');
+            $("#jobCategory").val(category);
+            localStorage.removeItem('category');
+            filterJobs(1);
+        }
+    });
     $("#filterJobs").click(function (e) {
         e.preventDefault();
         filterJobs(1);
@@ -447,6 +456,7 @@ if (window.location.pathname === "/jobs") {
         let workplace = $("#workPlace").val();
         let technologies = $("#Technologies").val();
         let salary = $('#jobSalary').is(":checked");
+        let latestJobs = $('#latestJobs').is(":checked");
         let data = {
             keyword: keyword,
             category: category,
@@ -456,6 +466,7 @@ if (window.location.pathname === "/jobs") {
             workplace: workplace,
             workType: workType,
             salary: salary,
+            latestJobs: latestJobs,
             page: page
         };
         $.ajax({
@@ -497,8 +508,6 @@ if (window.location.pathname === "/jobs") {
 
     }
 }
-
-
 if (window.location.pathname === "/jobs" || window.location.pathname === "/account") {
     let deleteButtons = document.querySelectorAll('.deleteJob a');
     deleteButtons.forEach((deleteButton) => {
@@ -619,7 +628,12 @@ $("#newsletterButton").click(function (e) {
         }
     });
 });
-
-
+if(window.location.pathname === "/") {
+    $(".categorySingle").click(function () {
+        let category = $(this).attr('data-id');
+        localStorage.setItem('category', category);
+        window.location.href = "/jobs";
+    });
+}
 
 

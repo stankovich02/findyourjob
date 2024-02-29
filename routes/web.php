@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\Client\HomeController::class, 'index'])->name('home');
 Route::get('/about', [\App\Http\Controllers\Client\AboutController::class, 'index'])->name('about');
 Route::get('/jobs/filter', [\App\Http\Controllers\Client\JobController::class, 'filter'])->name('jobs.filter');
+Route::view('/author', 'client.author')->name('author');
 
 Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
 

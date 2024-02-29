@@ -48,8 +48,12 @@ class JobController extends DefaultController
         $array['workplace'] = $request->input('workplace');
         $array['salary'] = $request->input('salary');
         $array['workType'] = $request->input('workType');
-
-        $jobs = $this->jobModel->getAll($array);
+        if($request->input('latestJobs') == "true"){
+            $jobs = $this->jobModel->getAll(true,$array);
+        }
+        else{
+            $jobs = $this->jobModel->getAll(false,$array);
+        }
 
         $clientResponse = [
             'jobs' => $jobs,

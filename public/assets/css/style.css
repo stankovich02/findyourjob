@@ -31,6 +31,9 @@
     display: none;
     transition: all 0.5s ease-in-out;
 }
+.categorySingle{
+    cursor: pointer;
+}
 input[name="accountType"]{
     background-color: white!important;
     appearance: auto;
@@ -40,7 +43,7 @@ input[name="accountType"]{
     padding: 0;
 
 }
-#jobSalary{
+#jobSalary,#latestJobs{
     background-color: white!important;
     appearance: auto;
     width: 20px;

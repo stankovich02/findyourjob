@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Company;
+use App\Models\Nav;
 use App\Models\User;
+use Request;
 
 class DefaultController extends Controller
 {
@@ -19,5 +21,29 @@ class DefaultController extends Controller
         else {
             $this->data['user'] = null;
         }
+        $navModel = new Nav();
+        $route = Request::route()->getName();
+        switch ($route){
+            case 'home':
+                $this->data['active'] = 'home';
+                break;
+            case 'jobs.index':
+                $this->data['active'] = 'jobs.index';
+                break;
+            case 'about':
+                $this->data['active'] = 'about';
+                break;
+            case 'contact':
+                $this->data['active'] = 'contact';
+                break;
+            case 'author':
+                $this->data['active'] = 'author';
+                break;
+            default:
+                $this->data['active'] = '';
+
+        }
+        $this->data['nav'] = $navModel->getNav();
+
     }
 }

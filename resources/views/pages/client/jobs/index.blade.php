@@ -71,6 +71,12 @@
                                         <input type="checkbox" class="form-control font-small" id="jobSalary" name="jobSalary" />
                                     </div>
                                 </div>
+                                <div class="col-md-4 d-flex align-items-center  justify-content-center">
+                                    <div id="newJobsDiv" class="d-flex align-items-center">
+                                        <label for="latestJobs" class="form-label text-white jobSearchLabel me-3">Latest jobs:</label>
+                                        <input type="checkbox" class="form-control font-small" id="latestJobs" name="latestJobs" />
+                                    </div>
+                                </div>
 
                             </div>
                             </form>
