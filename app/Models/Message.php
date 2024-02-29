@@ -7,7 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $fillable = ['subject', 'email', 'message'];
+    protected $fillable = ['name', 'subject', 'email', 'message'];
 
     protected $table = 'messages';
+
+    public function contact($email, $name, $subject, $message)
+    {
+        try {
+            $this->email = $email;
+            $this->name = $name;
+            $this->subject = $subject;
+            $this->message = $message;
+            $this->save();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+
+        }
+    }
 }

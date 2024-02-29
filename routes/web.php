@@ -24,7 +24,11 @@ Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
 
 Route::resource('companies', \App\Http\Controllers\Client\CompanyController::class);
 
-Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, 'index'])->name('contact');
+Route::controller(\App\Http\Controllers\Client\ContactController::class)->group(function (){
+    Route::get('/contact', 'index')->name('contact');
+    Route::post('/contact', 'store')->name('contact.store');
+});
+
 
 Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
 
