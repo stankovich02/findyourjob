@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class CompanyController extends DefaultController
 {
+    private Company $companyModel;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->companyModel = new Company();
+    }
     /**
      * Display a listing of the resource.
      */
@@ -31,7 +37,6 @@ class CompanyController extends DefaultController
      */
     public function store(RegisterCompanyRequest $request)
     {
-        $companyModel = new Company();
         $array = [
             'name' => $request->input('companyName'),
             'email' => $request->input('email'),
@@ -46,7 +51,7 @@ class CompanyController extends DefaultController
         if ($request->input('phone')) {
             $array['phone'] = $request->input('phone');
         }
-        $companyModel->insert($array);
+        $this->companyModel->insert($array);
         return redirect()->back()->with('success', 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.');
     }
 
@@ -58,8 +63,7 @@ class CompanyController extends DefaultController
         if(session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id){
             return redirect()->route('account');
         }
-        $companyModel = new Company();
-        $company = $companyModel->getCompany($id);
+        $company = $this->companyModel->getCompany($id);
         return view('pages.client.companies.show')->with('company', $company);
     }
 
@@ -76,8 +80,7 @@ class CompanyController extends DefaultController
      */
     public function update(UpdateComapnyDetailsRequest $request, int $id) : RedirectResponse
     {
-        $companyModel = new Company();
-        return $companyModel->updateCompany($id, $request->input('companyName'), $request->input('description'),
+        return $this->companyModel->updateCompany($id, $request->input('companyName'), $request->input('description'),
         $request->input('email'), $request->input('website'), $request->input('phone'));
     }
 

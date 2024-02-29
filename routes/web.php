@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\Client\HomeController::class, 'index'])->name('home');
 Route::get('/about', [\App\Http\Controllers\Client\AboutController::class, 'index'])->name('about');
+Route::get('/jobs/filter', [\App\Http\Controllers\Client\JobController::class, 'filter'])->name('jobs.filter');
 
 Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
 
@@ -28,6 +29,8 @@ Route::get('/contact', [\App\Http\Controllers\Client\ContactController::class, '
 Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
 
 Route::get('/verification/{token}', [App\Http\Controllers\Client\Auth\AuthController::class, 'verify'])->name('verify');
+
+
 
 Route::middleware('IsLoggedIn')->group(function (){
         Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){

@@ -40,6 +40,14 @@ input[name="accountType"]{
     padding: 0;
 
 }
+#jobSalary{
+    background-color: white!important;
+    appearance: auto;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    padding: 0;
+}
 #verifiedAccount{
     background-color: #000000;
     color: #FFFFFF;

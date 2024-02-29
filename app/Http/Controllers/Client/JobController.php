@@ -9,33 +9,62 @@ use App\Models\Job;
 use App\Models\Seniority;
 use App\Models\Technology;
 use App\Models\Workplace;
+use Illuminate\Http\Request;
 
 class JobController extends DefaultController
 {
+    private Job $jobModel;
     /**
      * Display a listing of the resource.
      */
 
     public function __construct()
     {
-
-        $this->middleware('IsCompany')->except('index', 'show', 'save');
+        parent::__construct();
+        $this->jobModel = new Job();
+        $this->middleware('IsCompany')->except('index', 'show', 'save', 'filter');
     }
     public function index()
     {
         parent::__construct();
-        $jobModel = new Job();
-        $jobs = $jobModel->getAll();
+        $jobs = $this->jobModel->getAll();
         $categoryModel = new Category();
         $categories = $categoryModel->getAll();
         return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
     }
 
+    public function filter(Request $request)
+    {
+        $array = [];
+        $array['keyword'] = $request->input('keyword');
+        if($request->has('cities')){
+            $array['cities'] = $request->input('cities');
+        }
+        if($request->has('technologies')){
+            $array['technologies'] = $request->input('technologies');
+        }
+        $array['category'] = $request->input('category');
+        $array['seniority'] = $request->input('seniority');
+        $array['workplace'] = $request->input('workplace');
+        $array['salary'] = $request->input('salary');
+        $array['workType'] = $request->input('workType');
+
+        $jobs = $this->jobModel->getAll($array);
+
+        $clientResponse = [
+            'jobs' => $jobs,
+            'html' => []
+        ];
+        foreach ($jobs as $job){
+            $clientResponse['html'][] = view('pages.client.jobs.partials.job', ['job' => $job])->render();
+        }
+        return response()->json($clientResponse);
+    }
+
     public function save(int $id)
     {
         $userID = session()->get("user")->id;
-        $jobModel = new Job();
-        return $jobModel->saveJob($id, $userID);
+        return $this->jobModel->saveJob($id, $userID);
     }
     /**
      * Show the form for creating a new resource.
@@ -76,9 +105,7 @@ class JobController extends DefaultController
         $salary = $request->input('salary');
         $workType = $request->input('workType');
         $applicationDeadline = $request->input('applicationDeadline');
-
-        $jobModel = new Job();
-        $jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
+        $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
         return "Job created successfully!";
     }
 
@@ -167,4 +194,6 @@ class JobController extends DefaultController
         $jobModel->deleteRow($id);
         return "Job deleted successfully!";
     }
+
+
 }

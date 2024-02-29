@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 
 class Job extends Model
@@ -65,16 +66,52 @@ class Job extends Model
         return $this->belongsToMany(Technology::class, 'jobs_technologies', 'job_id', 'technology_id');
     }
 
-    public function saved_jobs()
+    public function saved_jobs() : BelongsToMany
     {
         return $this->belongsToMany(User::class, 'saved_jobs', 'job_id', 'user_id');
     }
-    public function getAll() : Collection
+    public function getAll($array = []) : Collection|LengthAwarePaginator
     {
-       return self::with('company', 'category','city', 'seniority', 'workplace', 'technology','saved_jobs')->where('status',
-           self::STATUS_ACTIVE)->get();
+        $query = self::with('company', 'category','city', 'seniority', 'workplace', 'technology','saved_jobs')
+            ->where('status',
+                self::STATUS_ACTIVE);
+        if($array){
+            if($array['keyword']){
+                $query->where('name', 'like', '%'.$array['keyword'].'%');
+            }
+            if($array['category']){
+                $query->where('category_id', $array['category']);
+            }
+            if(isset($array['cities'])){
+                $query->whereIn('city_id', $array['cities']);
+            }
+            if($array['seniority']){
+                $query->where('seniority_id', $array['seniority']);
+            }
+            if($array['workplace']){
+                $query->where('workplace_id', $array['workplace']);
+            }
+            if($array['salary'] == "true")
+            {
+                $query->whereNotNull('salary');
+            }
+            if($array['workType'] !== "both")
+            {
+                $query->where('full_time', $array['workType'] === "1" ? 1 : 0);
+            }
+            if(isset($array['technologies'])){
+                $technologyIds = $array['technologies'];
+                $query->whereHas('technology', function($query) use ($technologyIds) {
+                    $query->whereIn('technology_id', $technologyIds);
+                });
+            }
+
+        }
+
+
+        return $query->paginate(5);
     }
-    public function getSingleJob(int $id)
+    public function getSingleJob(int $id) : Model|null
     {
         return self::with('company', 'category','city', 'seniority', 'workplace', 'saved_jobs','technology', 'applications',)
             ->find

@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 
 class AccountController extends DefaultController
 {
+    private User $userModel;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userModel = new User();
+    }
     public function index(Request $request) : \Illuminate\View\View
     {
         parent::__construct();
@@ -27,24 +33,20 @@ class AccountController extends DefaultController
 
     public function socials(Request $request) : JsonResponse
     {
-        dd($request->all());
         $userID = $request->session()->get('user')->id;
-        $userModel = new User();
-        return $userModel->updateSocials($userID, $request->social, $request->link);
+        return $this->userModel->updateSocials($userID, $request->social, $request->link);
     }
 
     public function picture(UpdateAccountPictureRequest $request) : RedirectResponse
     {
         $userID = $request->session()->get('user')->id;
         $accType = $request->session()->get('accountType');
-        $userModel = new User();
-        return $userModel->updatePicture($userID, $request->picture, $accType);
+        return $this->userModel->updatePicture($userID, $request->picture, $accType);
     }
 
     public function info(UpdateUserDetailsRequest $request) : RedirectResponse
     {
         $userID = $request->session()->get('user')->id;
-        $userModel = new User();
-        return $userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
+        return $this->userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
     }
 }

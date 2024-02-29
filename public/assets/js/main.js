@@ -415,7 +415,90 @@ if (window.location.pathname === "/jobs") {
                 maxWidth: '100%',
             });
         });
+    $("#filterJobs").click(function (e) {
+        e.preventDefault();
+        filterJobs(1);
+
+    });
+    function printJobs(data) {
+        let html = "";
+        data.forEach(job => {
+            html += job;
+        });
+        html += `<nav aria-label="..." class="d-flex justify-content-center mt-5">
+                        <ul class="pagination pagination-sm">
+                        </ul>
+                    </nav>`;
+        $("#allJobs").html(html);
+
+    }
+
+    $(".pageLink").click(function (e) {
+        e.preventDefault();
+        let page = $(this).html();
+        filterJobs(page);
+    });
+    function filterJobs(page) {
+        let keyword = $("#jobKeyword").val().trim();
+        let category = $("#jobCategory").val();
+        let seniority = $("#jobSeniority").val();
+        let cities = $("#Cities").val();
+        let workType = $("#workType").val();
+        let workplace = $("#workPlace").val();
+        let technologies = $("#Technologies").val();
+        let salary = $('#jobSalary').is(":checked");
+        let data = {
+            keyword: keyword,
+            category: category,
+            seniority: seniority,
+            cities: cities,
+            technologies: technologies,
+            workplace: workplace,
+            workType: workType,
+            salary: salary,
+            page: page
+        };
+        $.ajax({
+            url: 'http://127.0.0.1:8000/jobs/filter',
+            method: 'GET',
+            data: data,
+            success: function (data) {
+                printJobs(data.html);
+                makePagination(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function makePagination(data){
+        let currentPage = data.jobs.current_page;
+        let lastPage = data.jobs.last_page;
+        let html = "";
+        if(lastPage > 1) {
+            for (let i = 1; i <= lastPage; i++) {
+                if (i === currentPage) {
+                    html += `
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link px-3 py-2">${i}</span>
+                    </li>`;
+                } else {
+                    html += `<li class="page-item"><a class="page-link px-3 py-2 pageLink" href="">${i}</a></li>`;
+                }
+            }
+        }
+        $(".pagination").html(html);
+        $(".pageLink").click(function (e) {
+            e.preventDefault();
+            let page = $(this).html();
+            filterJobs(page);
+        });
+
+    }
 }
+
+
 if (window.location.pathname === "/jobs" || window.location.pathname === "/account") {
     let deleteButtons = document.querySelectorAll('.deleteJob a');
     deleteButtons.forEach((deleteButton) => {
@@ -508,7 +591,6 @@ function showModal(data) {
         $(".modal").css("display", "none");
     }, 3000);
 }
-
 $("#newsletterButton").click(function (e) {
     e.preventDefault();
     let email = $("#newsletterEmail").val();

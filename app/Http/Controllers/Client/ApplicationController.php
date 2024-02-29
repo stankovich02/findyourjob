@@ -7,21 +7,26 @@ use App\Models\Application;
 
 class ApplicationController extends DefaultController
 {
+    private Application $applicationModel;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applicationModel = new Application();
+    }
     public function index(int $id)
     {
         parent::__construct();
-        $model = new Application();
-        $application = $model->getApplication($id);
+        $application = $this->applicationModel ->getApplication($id);
         return view('pages.client.application')->with('application', $application)->with('data', $this->data);
     }
     public function store(JobApplyRequest $request)
     {
-        $model = new Application();
         $file = $request->file('uploadedFile');
         $coverLetter = $request->input('coverLetter');
         $jobID = $request->input('jobID');
         $userID = $request->session()->get('user')->id;
-        $model->store($file,$coverLetter,$jobID,$userID);
+        $this->applicationModel->store($file,$coverLetter,$jobID,$userID);
         return redirect()->back()->with('success', 'Your application has been submitted successfully');
     }
 
