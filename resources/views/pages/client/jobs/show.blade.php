@@ -121,11 +121,17 @@
             <!-- Applied users -->
             <div class="row d-flex">
                 <div class="col-12">
-                    <h2 class="my-4 text-center">Applied Users</h2>
+                    <h2 class="my-4 text-center">Applied Users
+                        @if($job->applications->count() > 0)
+                            (
+                            {{$job->applications->count()}}
+                            )
+                        @endif
+                        </h2>
                 </div>
                 @if($job->applications->count() == 0)
                     <div class="col-12">
-                        <p class="text-center">No users have applied for this job yet.</p>
+                        <h4 class="text-center mt-5">You have not applied for any jobs yet.</h4>
                     </div>
                 @else
                 @endif

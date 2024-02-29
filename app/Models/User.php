@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -80,6 +81,23 @@ class User extends Model
             return false;
         } catch (\Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    public function updateSocials(int $userID, string $social, string $link) : JsonResponse
+    {
+        try {
+            $user = User::find($userID);
+            if ($social == 'github') {
+                $user->github = $link;
+            } else {
+                $user->linkedin = $link;
+            }
+            $user->save();
+            $socialMessage = $social == 'github' ? 'Github' : 'LinkedIn';
+            return response()->json(["message" => "$socialMessage link updated."], 204);
+        } catch (\Exception $e) {
+            return response()->json(["message" => "An error occurred."], 500);
         }
     }
 

@@ -12,9 +12,9 @@
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
                     @if(session('accountType') === 'employee')
-                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . session('user')->avatar)}}" alt="">
+                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
                     @else
-                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . session('user')->logo)}}" alt="">
+                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
                     @endif
                         <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
@@ -25,14 +25,14 @@
             @if(session('accountType') === 'employee')
             <div id="profileLinks" class="mt-4">
                 <h5 class="font-xl">Profile Links:</h5>
-                @if(session('user')->github)
+                @if($user->github)
                 <div class="d-flex align-items-center mb-2 justify-content-start">
                     <div class="iconDiv d-flex justify-content-center">
                         <i class="fab fa-github fa-2x"></i>
                     </div>
                     <div class="linkDiv d-flex justify-content-between justify-content-between w-100 ms-3 align-items-center">
-                        <a href="{{session('user')->github}}">{{session('user')->github}}</a>
-                        <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>
+                        <a href="{{$user->github}}">{{$user->github}}</a>
+                        <button class="btn btn-primary ms-2 changeLink" data-social="github">Change</button>
                     </div>
                 </div>
                 @else
@@ -41,18 +41,18 @@
                         <i class="fab fa-github fa-2x"></i>
                     </div>
                     <div class="linkDiv d-flex justify-content-between w-100 ms-3 align-items-center">
-                        <button class="btn btn-primary addLink" type="button">Add link</button>
+                        <button class="btn btn-primary addLink" type="button" data-social="github">Add link</button>
                     </div>
                 </div>
                 @endif
-                @if(session('user')->linkedin)
+                @if($user->linkedin)
                 <div class="d-flex align-items-center justify-content-start">
                     <div class="iconDiv d-flex justify-content-center">
                         <i class="fab fa-linkedin fa-2x"></i>
                     </div>
                     <div class="linkDiv d-flex justify-content-between justify-content-between w-100 ms-3 align-items-center">
-                        <a href="{{session('user')->linkedin}}">{{session('user')->linkedin}}</a>
-                        <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>
+                        <a href="{{$user->linkedin}}">{{$user->linkedin}}</a>
+                        <button class="btn btn-primary ms-2 changeLink" data-social="linkedin">Change</button>
                     </div>
                 </div>
                 @else
@@ -61,10 +61,8 @@
                             <i class="fab fa-linkedin fa-2x"></i>
                         </div>
                         <div class="linkDiv d-flex justify-content-between w-100 ms-3 align-items-center">
-                            <button class="btn btn-primary addLink" type="button">Add link</button>
+                            <button class="btn btn-primary addLink" type="button" data-social="linkedin">Add link</button>
                         </div>
-                        {{-- <input type="text" id="linkedin" class="form-control border-0"/>--}}
-                        {{--<button class="btn btn-primary" type="button">Save</button>--}}
                     </div>
                 @endif
             </div>
@@ -79,40 +77,47 @@
                        @if(session('accountType') === 'company')
                         <div class="mb-3">
                             <label class="small mb-1" for="companyName">Company name</label>
-                            <input class="form-control" id="companyName" type="text" disabled value="{{session('user')->name}}">
+                            <input class="form-control" id="companyName" type="text" disabled value="{{$company->name}}">
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputBio">Company description</label>
-                            <textarea id="inputBio" cols="10" rows="10" disabled class="form-control">{{session('user')->description}}</textarea>
+                            <textarea id="inputBio" cols="10" rows="10" disabled class="form-control">{{$company->description}}</textarea>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="website">Website</label>
-                                <input class="form-control" id="website" name="website" type="text" disabled value="{{session('user')->website}}">
+                                <input class="form-control" id="website" name="website" type="text" disabled value="{{$company->website}}">
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-companyName1" for="phone">Phone</label>
-                                <input class="form-control" id="phone" name="phone" type="text" disabled value="{{session('user')->phone}}">
+                                <input class="form-control" id="phone" name="phone" type="text" disabled value="{{$company->phone}}">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="email">Email</label>
+                                <input class="form-control" id="email" name="email" type="text" disabled value="{{$company->email}}">
                             </div>
                         </div>
                         @else
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="firstName">First name</label>
-                                <input class="form-control" id="firstName" name="firstName" type="text" disabled value="{{session('user')->first_name}}">
+                                <input class="form-control" id="firstName" name="firstName" type="text" disabled value="{{$user->first_name}}">
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-companyName1" for="lastName">Last name</label>
-                                <input class="form-control" id="lastName" name="lastName" type="text" disabled value="{{session('user')->last_name}}">
+                                <input class="form-control" id="lastName" name="lastName" type="text" disabled value="{{$user->last_name}}">
                             </div>
                         </div>
-                        @endif
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="email">Email</label>
-                                <input class="form-control" id="email" name="email" type="text" disabled value="{{session('user')->email}}">
+                                <input class="form-control" id="email" name="email" type="text" disabled value="{{$user->email}}">
                             </div>
                         </div>
+                        @endif
+
 
 
                         <!-- Save changes button-->

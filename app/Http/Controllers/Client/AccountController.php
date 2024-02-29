@@ -19,4 +19,15 @@ class AccountController extends Controller
             return view('pages.client.account')->with('company', $user);
 
     }
+
+    public function socials(Request $request)
+    {
+        $request->validate([
+            'link' => 'required|url',
+            'social' => 'required|in:github,linkedin'
+        ]);
+        $userID = $request->session()->get('user')->id;
+        $userModel = new User();
+        return $userModel->updateSocials($userID, $request->social, $request->link);
+    }
 }

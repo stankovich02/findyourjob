@@ -122,40 +122,65 @@ if(window.location.pathname === "/register") {
 }
 if(window.location.pathname === "/account") {
     $(".addLink").click(function () {
+        let social = $(this).attr('data-social');
         $(this).css("display", "none");
         $(this).parent().html(
-            ` <input type="text" class="SocialLink form-control border-0 p-0" placeholder="Type link..."/>
-        <button class="btn btn-primary btn-sm ms-2 addLink">Add</button>`
+            ` <input type="text" class="SocialLink form-control border-0 py-2" placeholder="Type link..."/>
+        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Add</button>`
         );
         $(".addLink").click(function () {
-            $(this).css("display", "none");
             let link = $(this).prev().val();
-            $(this).parent().html(
-                `<a href="${link}">${link}</a>
-            <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>`
-            );
-            $(".changeLink").click(function () {
-                changeLink(this);
+            let social = $(this).attr('data-social');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: 'http://127.0.0.1:8000/account/socials',
+                method: 'PUT',
+                data: {
+                    social: social,
+                    link: link
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data.responseJSON.errors.link[0])
+                }
             });
         });
     });
     function changeLink(element){
-        console.log(element)
+        let social = $(element).attr('data-social');
         $(element).css("display", "none");
         let link = $(element).prev().html();
         $(element).parent().html(
-            ` <input type="text" class="SocialLink form-control border-0 p-0" value="${link}"/>
-        <button class="btn btn-primary btn-sm ms-2 addLink">Add</button>`
+            ` <input type="text" class="SocialLink form-control border-0 py-2" value="${link}"/>
+        <button class="btn btn-primary ms-2 addLink" data-social="${social}">Add</button>`
         );
         $(".addLink").click(function () {
-            $(this).css("display", "none");
             let link = $(this).prev().val();
-            $(this).parent().html(
-                `<a href="${link}">${link}</a>
-            <button class="btn btn-primary btn-sm ms-2 changeLink">Change</button>`
-            );
-            $(".changeLink").click(function () {
-                changeLink(this);
+            let social = $(this).attr('data-social');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: 'http://127.0.0.1:8000/account/socials',
+                method: 'PUT',
+                data: {
+                    social: social,
+                    link: link
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data.responseJSON.errors.link[0])
+                }
             });
         });
     }
