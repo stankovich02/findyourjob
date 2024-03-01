@@ -93,7 +93,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        fetch('http://127.0.0.1:8000/api/technologies')
+        fetch('/api/technologies')
             .then(response => response.json())
             .then(data => {
                 let myOptions = data.map(technology => {
@@ -173,7 +173,7 @@
                 applicationDeadline: applicationDeadline
             };
             $.ajax({
-                url: 'http://127.0.0.1:8000/jobs',
+                url: '/jobs',
                 method: 'POST',
                 data: data,
                 success: function (data) {

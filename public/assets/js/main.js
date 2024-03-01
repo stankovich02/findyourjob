@@ -93,7 +93,7 @@ $("#newsletterButton").click(function (e) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/newsletter',
+        url: '/newsletter',
         method: 'POST',
         data: {
             email: email

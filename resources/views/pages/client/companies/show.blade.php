@@ -91,7 +91,7 @@
             let id = $(this).attr('data-id');
             let icon = this.querySelector('i');
             $.ajax({
-                url: 'http://127.0.0.1:8000/jobs/save/' + id,
+                url: '/jobs/save/' + id,
                 method: 'POST',
                 data: {
                     jobID: id

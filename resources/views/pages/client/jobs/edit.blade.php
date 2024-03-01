@@ -107,7 +107,7 @@
     @endphp
     <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
     <script>
-        fetch('http://127.0.0.1:8000/api/technologies')
+        fetch('/api/technologies')
             .then(response => response.json())
             .then(data => {
                 let myOptions = data.map(technology => {
@@ -202,7 +202,7 @@
                 applicationDeadline: applicationDeadline
             };
             $.ajax({
-                url: 'http://127.0.0.1:8000/jobs/' + $("#jobID").val(),
+                url: '/jobs/' + $("#jobID").val(),
                 method: 'PUT',
                 data: data,
                 success: function (data) {

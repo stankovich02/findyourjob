@@ -14,7 +14,7 @@ $(".addLink").click(function () {
         let link = $(this).prev().val();
         let social = $(this).attr('data-social');
         $.ajax({
-            url: 'http://127.0.0.1:8000/account/socials',
+            url: '/account/socials',
             method: 'PUT',
             data: {
                 social: social,
@@ -42,7 +42,7 @@ function changeLink(element) {
         let link = $(this).prev().val();
         let social = $(this).attr('data-social');
         $.ajax({
-            url: 'http://127.0.0.1:8000/account/socials',
+            url: '/account/socials',
             method: 'PUT',
             data: {
                 social: social,
@@ -111,7 +111,7 @@ deleteButtons.forEach((deleteButton) => {
         $("#deleteModal").click(function () {
             let id = deleteButton.getAttribute('data-id');
             $.ajax({
-                url: 'http://127.0.0.1:8000/jobs/' + id,
+                url: '/jobs/' + id,
                 method: 'DELETE',
                 success: function () {
                     location.reload();
@@ -137,7 +137,7 @@ $(".saveJob").click(function (e) {
     let id = $(this).attr('data-id');
     let icon = this.querySelector('i');
     $.ajax({
-        url: 'http://127.0.0.1:8000/jobs/save/' + id,
+        url: '/jobs/save/' + id,
         method: 'POST',
         data: {
             jobID: id

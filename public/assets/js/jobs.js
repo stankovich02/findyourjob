@@ -3,7 +3,7 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-fetch('http://127.0.0.1:8000/api/cities')
+fetch('/api/cities')
     .then(response => response.json())
     .then(data => {
         let myOptions = data.map(city => {
@@ -17,7 +17,7 @@ fetch('http://127.0.0.1:8000/api/cities')
             maxWidth: '100%',
         });
     });
-fetch('http://127.0.0.1:8000/api/technologies')
+fetch('/api/technologies')
     .then(response => response.json())
     .then(data => {
         let myOptions = data.map(technology => {
@@ -86,7 +86,7 @@ function filterJobs(page) {
         page: page
     };
     $.ajax({
-        url: 'http://127.0.0.1:8000/jobs/filter',
+        url: '/jobs/filter',
         method: 'GET',
         data: data,
         success: function (data) {
@@ -136,7 +136,7 @@ deleteButtons.forEach((deleteButton) => {
         $("#deleteModal").click(function () {
             let id = deleteButton.getAttribute('data-id');
             $.ajax({
-                url: 'http://127.0.0.1:8000/jobs/' + id,
+                url: '/jobs/' + id,
                 method: 'DELETE',
                 success: function () {
                     location.reload();
@@ -162,7 +162,7 @@ $(".saveJob").click(function (e) {
     let id = $(this).attr('data-id');
     let icon = this.querySelector('i');
     $.ajax({
-        url: 'http://127.0.0.1:8000/jobs/save/' + id,
+        url: '/jobs/save/' + id,
         method: 'POST',
         data: {
             jobID: id
