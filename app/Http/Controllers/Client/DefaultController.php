@@ -23,26 +23,14 @@ class DefaultController extends Controller
         }
         $navModel = new Nav();
         $route = Request::route()->getName();
-        switch ($route){
-            case 'home':
-                $this->data['active'] = 'home';
-                break;
-            case 'jobs.index':
-                $this->data['active'] = 'jobs.index';
-                break;
-            case 'about':
-                $this->data['active'] = 'about';
-                break;
-            case 'contact':
-                $this->data['active'] = 'contact';
-                break;
-            case 'author':
-                $this->data['active'] = 'author';
-                break;
-            default:
-                $this->data['active'] = '';
-
-        }
+        $this->data['active'] = match ($route) {
+            'home' => 'home',
+            'jobs.index' => 'jobs.index',
+            'about' => 'about',
+            'contact' => 'contact',
+            'author' => 'author',
+            default => '',
+        };
         $this->data['nav'] = $navModel->getNav();
 
     }

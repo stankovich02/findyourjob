@@ -51,6 +51,9 @@ input[name="accountType"]{
     cursor: pointer;
     padding: 0;
 }
+.postJobSalary{
+    padding: 15px!important;
+}
 #verifiedAccount{
     background-color: #000000;
     color: #FFFFFF;

@@ -164,4 +164,61 @@
 
     </script>
 @endsection
+@section('scripts')
+    <script>
+        $("#EditJob").click(function (e) {
+            e.preventDefault();
+            let name = $("#jobName").val();
+            let category = $("#jobCategory").val();
+            let seniority = $("#jobSeniority").val();
+            let location = $("#jobLocation").val();
+            let salary = $("#jobSalary").val();
+            let workType = $("#jobWorkType").val();
+            let workplace = $("#jobWorkPlace").val();
+            let description = descriptionEditor.getData();
+            let responsibilities = responsibilityEditor.getData();
+            let requirements = requirementsEditor.getData();
+            let benefits = benefitsEditor.getData();
+            let technologies = $("#Technologies").val();
+            let applicationDeadline = $("#jobAppDeadline").val();
+            let data = {
+                name: name,
+                category: category,
+                seniority: seniority,
+                location: location,
+                salary: salary,
+                workType: workType,
+                workplace: workplace,
+                description: description,
+                responsibilities: responsibilities,
+                requirements: requirements,
+                benefits: benefits,
+                technologies: technologies,
+                applicationDeadline: applicationDeadline
+            };
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: 'http://127.0.0.1:8000/jobs/' + $("#jobID").val(),
+                method: 'PUT',
+                data: data,
+                success: function (data) {
+                    $("#responseMessage").css('color', 'green');
+                    $("#responseMessage").html(data);
+                },
+                error: function (data) {
+                    $("#responseMessage").css('color', '#eb0202');
+                    let html = "";
+                    for (let key in data.responseJSON.errors) {
+                        html += data.responseJSON.errors[key] + "<br>";
+                    }
+                    $("#responseMessage").html(html);
+                }
+            });
+        });
+    </script>
+@endsection
 

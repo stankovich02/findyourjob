@@ -79,3 +79,48 @@
 
     </div>
 @endsection
+@section('scripts')
+    <script>
+        $(".saveJob").click(function (e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            let icon = this.querySelector('i');
+            $.ajax({
+                url: 'http://127.0.0.1:8000/jobs/save/' + id,
+                method: 'POST',
+                data: {
+                    jobID: id
+                },
+                success: function (data) {
+                    /*showModal(data);*/
+
+                    if(icon.className === "far fa-heart text-primary")
+                        setTimeout(() => {
+                            icon.className = "fas fa-heart text-primary";
+                        }, 1000);
+                    else
+                        setTimeout(() => {
+                            icon.className = "far fa-heart text-primary";
+                        }, 1000);
+                    if(window.location.pathname === "/account"){
+                        location.reload();
+                    }
+
+                },
+                error: function (data) {
+                    let html = "";
+                    for (let key in data.responseJSON.errors) {
+                        html += data.responseJSON.errors[key] + "<br>";
+                    }
+                    showModal(html);
+
+                }
+            });
+        });
+    </script>
+@endsection

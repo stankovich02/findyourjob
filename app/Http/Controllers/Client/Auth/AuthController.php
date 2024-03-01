@@ -3,20 +3,27 @@
 namespace App\Http\Controllers\Client\Auth;
 
 use App\Http\Controllers\Client\Controller;
+use App\Http\Controllers\Client\DefaultController;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
-class AuthController extends Controller
+class AuthController extends DefaultController
 {
-    public function showRegister()
+    public function __construct()
     {
-        return view('pages.client.register');
+        parent::__construct();
     }
-    public function register(RegisterUserRequest $request)
+    public function showRegister() : View
+    {
+        return view('pages.client.register')->with('data', $this->data);
+    }
+    public function register(RegisterUserRequest $request) : RedirectResponse
     {
 
         $userModel = new User();
@@ -30,7 +37,7 @@ class AuthController extends Controller
         Mail::to($request->input('email'))->send(new \App\Mail\EmailVerification($token));
         return redirect()->back()->with('success', 'You have successfully registered! Please check your email to verify your account.');
     }
-    public function verify($token)
+    public function verify($token) : View|RedirectResponse
     {
         $userModel = new User();
         $verified = $userModel->verify($token);
@@ -40,12 +47,12 @@ class AuthController extends Controller
         return view('mail.verified')->with('message', 'Your account could not be verified!');
 
     }
-    public function showLogin()
+    public function showLogin() : View
     {
-        return view('pages.client.login');
+        return view('pages.client.login')->with('data', $this->data);
     }
 
-    public function login(LoginUserRequest $request)
+    public function login(LoginUserRequest $request) : RedirectResponse
     {
         try{
             $email = $request->input('email');
@@ -72,7 +79,7 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request) : RedirectResponse
     {
         try {
             $request->session()->forget('user');

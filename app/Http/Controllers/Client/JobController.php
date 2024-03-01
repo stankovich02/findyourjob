@@ -9,7 +9,10 @@ use App\Models\Job;
 use App\Models\Seniority;
 use App\Models\Technology;
 use App\Models\Workplace;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class JobController extends DefaultController
 {
@@ -24,7 +27,7 @@ class JobController extends DefaultController
         $this->jobModel = new Job();
         $this->middleware('IsCompany')->except('index', 'show', 'save', 'filter');
     }
-    public function index()
+    public function index() : View
     {
         parent::__construct();
         $jobs = $this->jobModel->getAll();
@@ -33,7 +36,7 @@ class JobController extends DefaultController
         return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
     }
 
-    public function filter(Request $request)
+    public function filter(Request $request) : JsonResponse
     {
         $array = [];
         $array['keyword'] = $request->input('keyword');
@@ -65,7 +68,7 @@ class JobController extends DefaultController
         return response()->json($clientResponse);
     }
 
-    public function save(int $id)
+    public function save(int $id) : string
     {
         $userID = session()->get("user")->id;
         return $this->jobModel->saveJob($id, $userID);
@@ -73,28 +76,29 @@ class JobController extends DefaultController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
+        parent::__construct();
         $categories = Category::all();
         $seniorities = Seniority::all();
         $workplaces= Workplace::all();
         $technologies = Technology::all();
         $companyModel = new Company();
         $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
-        $data = [
+        $array = [
             'categories' => $categories,
             'seniorities' => $seniorities,
             'workplaces' => $workplaces,
             'technologies' => $technologies,
             'companyLocations' => $companyLocations
         ];
-        return view('pages.client.jobs.create')->with('data', $data);
+        return view('pages.client.jobs.create')->with('array', $array)->with('data', $this->data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostJobRequest $request)
+    public function store(PostJobRequest $request) : string
     {
         $name = $request->input('name');
         $category = $request->input('category');
@@ -116,7 +120,7 @@ class JobController extends DefaultController
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id) : View|RedirectResponse
     {
         parent::__construct();
         $jobModel = new Job();
@@ -133,7 +137,7 @@ class JobController extends DefaultController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(int $id) : View|RedirectResponse
     {
         $jobModel = new Job();
         $job = $jobModel->getSingleJob($id);
@@ -166,7 +170,7 @@ class JobController extends DefaultController
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostJobRequest $request, int $id)
+    public function update(PostJobRequest $request, int $id) : string
     {
         $name = $request->input('name');
         $category = $request->input('category');
@@ -192,7 +196,7 @@ class JobController extends DefaultController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id) : string
     {
         $jobModel = new Job();
         $jobModel->deleteRow($id);

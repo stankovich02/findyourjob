@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateComapnyDetailsRequest;
 use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CompanyController extends DefaultController
 {
@@ -21,21 +22,20 @@ class CompanyController extends DefaultController
      */
     public function index(int $id)
     {
-        parent::__construct();
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        return view('pages.client.companies.create');
+        return view('pages.client.companies.create')->with('data', $this->data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterCompanyRequest $request)
+    public function store(RegisterCompanyRequest $request) : RedirectResponse
     {
         $array = [
             'name' => $request->input('companyName'),
@@ -58,13 +58,14 @@ class CompanyController extends DefaultController
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id) : View|RedirectResponse
     {
+        parent::__construct();
         if(session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id){
             return redirect()->route('account');
         }
         $company = $this->companyModel->getCompany($id);
-        return view('pages.client.companies.show')->with('company', $company);
+        return view('pages.client.companies.show')->with('company', $company)->with('data', $this->data);
     }
 
     /**

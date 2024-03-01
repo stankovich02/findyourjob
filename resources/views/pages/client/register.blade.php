@@ -85,3 +85,6 @@
     @endif
 
 @endsection
+@section('scripts')
+    <script src="{{asset('assets/js/register.js')}}"></script>
+@endsection

@@ -14,7 +14,7 @@
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobCategory" class="form-label text-white jobSearchLabel mb-2">Job Category:</label>
                 <select class="form-select border-0" id="jobCategory" name="jobCategory">
-                    @foreach($data['categories'] as $category)
+                    @foreach($array['categories'] as $category)
                         <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
@@ -22,14 +22,14 @@
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobSeniority" class="form-label text-white jobSearchLabel mb-2">Seniority:</label>
                 <select class="form-select border-0" id="jobSeniority" name="jobSeniority">
-                    @foreach($data['seniorities'] as $seniority)
+                    @foreach($array['seniorities'] as $seniority)
                         <option value="{{$seniority->id}}">{{$seniority->name}}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobSalary" class="form-label text-white jobSearchLabel mb-2">Salary:</label>
-                <input type="number" id="jobSalary" class="form-control border-0" name="jobSalary"/>
+                <input type="number" id="jobSalary" class="form-control border-0 postJobSalary" name="jobSalary"/>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobWorkType" class="form-label text-white jobSearchLabel">Work type:</label>
@@ -41,7 +41,7 @@
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobWorkPlace" class="form-label text-white jobSearchLabel">Workplace:</label>
                 <select class="form-select border-0" id="jobWorkPlace" name="jobWorkPlace">
-                    @foreach($data['workplaces'] as $workplace)
+                    @foreach($array['workplaces'] as $workplace)
                         <option value="{{$workplace->id}}">{{$workplace->name}}</option>
                     @endforeach
                 </select>
@@ -49,7 +49,7 @@
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobLocation" class="form-label text-white jobSearchLabel">Location:</label>
                 <select class="form-select border-0" id="jobLocation" name="jobLocation">
-                    @foreach($data['companyLocations']->cities as $companyLocation)
+                    @foreach($array['companyLocations']->cities as $companyLocation)
                         <option value="{{$companyLocation->id}}">{{$companyLocation->name}}</option>
                     @endforeach
                 </select>
@@ -85,4 +85,110 @@
             <div id="responseMessage" class="mt-3"></div>
         </form>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        fetch('http://127.0.0.1:8000/api/technologies')
+            .then(response => response.json())
+            .then(data => {
+                let myOptions = data.map(technology => {
+                    return { label: technology.name, value: technology.id}
+                });
+                VirtualSelect.init({
+                    ele: '#Technologies',
+                    options: myOptions,
+                    multiple: true,
+                    search: true,
+                    maxWidth: '50%',
+                });
+            });
+        var descriptionEditor, responsibilityEditor, requirementsEditor, benefitsEditor;
+
+        ClassicEditor
+            .create( document.querySelector( '#descriptionEditor' ) )
+            .then( editor => {
+                descriptionEditor = editor;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#responsibilityEditor' ) )
+            .then( editor => {
+                responsibilityEditor = editor;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#requirementsEditor' ) )
+            .then( editor => {
+                requirementsEditor = editor;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#benefitsEditor' ) )
+            .then( editor => {
+                benefitsEditor = editor;
+            } )
+            .catch( error => {
+                    console.error( error );
+                }
+            );
+        $("#PostJob").click(function (e) {
+            e.preventDefault();
+            let name = $("#jobName").val();
+            let category = $("#jobCategory").val();
+            let seniority = $("#jobSeniority").val();
+            let location = $("#jobLocation").val();
+            let salary = $("#jobSalary").val();
+            let workType = $("#jobWorkType").val();
+            let workplace = $("#jobWorkPlace").val();
+            let description = descriptionEditor.getData();
+            let responsibilities = responsibilityEditor.getData();
+            let requirements = requirementsEditor.getData();
+            let benefits = benefitsEditor.getData();
+            let technologies = $("#Technologies").val();
+            let applicationDeadline = $("#jobAppDeadline").val();
+            let data = {
+                name: name,
+                category: category,
+                seniority: seniority,
+                location: location,
+                salary: salary,
+                workType: workType,
+                workplace: workplace,
+                description: description,
+                responsibilities: responsibilities,
+                requirements: requirements,
+                benefits: benefits,
+                technologies: technologies,
+                applicationDeadline: applicationDeadline
+            };
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: 'http://127.0.0.1:8000/jobs',
+                method: 'POST',
+                data: data,
+                success: function (data) {
+                    $("#responseMessage").css('color', 'green');
+                    $("#responseMessage").html(data);
+                },
+                error: function (data) {
+                    $("#responseMessage").css('color', '#eb0202');
+                    let html = "";
+                    for (let key in data.responseJSON.errors) {
+                        html += data.responseJSON.errors[key] + "<br>";
+                    }
+                    $("#responseMessage").html(html);
+                }
+            });
+        });
+    </script>
 @endsection

@@ -62,3 +62,4 @@
 <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
 <!-- Template Javascript -->
 <script src="{{asset('assets/js/main.js')}}"></script>
+@yield('scripts')
