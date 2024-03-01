@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Hash;
  */
 class Company extends Model
 {
+    const STATUS_ACTIVE = 'active';
+    const STATUS_PENDING = 'pending';
+
     protected $fillable = [
         'name',
         'email',
@@ -54,19 +57,22 @@ class Company extends Model
     public function insert(array $array) : string
     {
         try {
-            if (isset($array['logo'])) {
-
-                $imageName = $this->resizeAndUploadImage($array['logo'], 150, 150, $array['name']);
-                $array['logo'] = $imageName;
-            }
             $array['password'] = Hash::make($array['password'] . env('CUSTOM_STRING_FOR_HASH'));
-            $this->fill($array);
+            $this->name = $array['name'];
+            $this->email = $array['email'];
+            $this->password = $array['password'];
+            $this->logo = null;
+            $this->website = $array['website'];
+            $this->phone = $array['phone'];
+            $this->description = null;
             $this->save();
-            return true;
+            $this->cities()->attach($array['cities'], ['created_at' => now(), 'updated_at' => now()]);
+
+            return 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.';
         } catch (\Exception $e) {
-            if(File::exists(public_path('/assets/img/products/' . $imageName))){
+            /*if(File::exists(public_path('/assets/img/products/' . $imageName))){
                 File::delete(public_path('/assets/img/products/' . $imageName));
-            }
+            }*/
             return redirect()->back()->with('error', $e->getMessage());
         }
 

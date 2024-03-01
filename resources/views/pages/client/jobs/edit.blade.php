@@ -105,6 +105,9 @@
         }
         $array = json_encode($array);
     @endphp
+
+@endsection
+@section('scripts')
     <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
     <script>
         fetch('/api/technologies')
@@ -161,11 +164,6 @@
                     console.error( error );
                 }
             );
-
-    </script>
-@endsection
-@section('scripts')
-    <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

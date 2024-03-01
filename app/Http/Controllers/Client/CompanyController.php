@@ -35,24 +35,21 @@ class CompanyController extends DefaultController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterCompanyRequest $request) : RedirectResponse
+    public function store(RegisterCompanyRequest $request) : string
     {
         $array = [
             'name' => $request->input('companyName'),
+            'cities' => $request->input('cities'),
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
-        if ($request->hasFile('logo')) {
-            $array['logo'] = $request->file('logo');
-        }
         if ($request->input('website')) {
             $array['website'] = $request->input('website');
         }
         if ($request->input('phone')) {
             $array['phone'] = $request->input('phone');
         }
-        $this->companyModel->insert($array);
-        return redirect()->back()->with('success', 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.');
+        return $this->companyModel->insert($array);
     }
 
     /**

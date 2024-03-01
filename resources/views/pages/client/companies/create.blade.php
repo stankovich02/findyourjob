@@ -20,11 +20,6 @@
                 {{--<span class="font-small error-message">Jhon</span>--}}
             </div>
             <div class="my-4">
-                <label for="logo" class="font-small">Company logo</label>
-                <input type="file" class="form-control font-small" id="logo" name="logo" value="{{old("logo")}}"/>
-                {{--<span class="font-small error-message">Jhon</span>--}}
-            </div>
-            <div class="my-4">
                 <label for="website" class="font-small">Company website</label>
                 <input type="text" class="form-control font-small" id="website" name="website" value="{{old("website")}}"/>
                 {{--<span class="font-small error-message">Jhon</span>--}}
@@ -34,6 +29,11 @@
                 <input type="text" class="form-control font-small" id="phone" name="phone" value="{{old("phone")}}"/>
                 {{--<span class="font-small error-message">Jhon</span>--}}
             </div>
+            <div class="">
+                <label for="Technologies" class="font-small">Company locations:</label>
+                <div id="Technologies"></div>
+            </div>
+            <div id="Cities"></div>
             <div class="my-4">
                 <label for="email" class="font-small">Email</label>
                 <input type="text" class="form-control font-small" id="email" name="email" value="{{old("email")}}"/>
@@ -67,4 +67,59 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        fetch('/api/cities')
+            .then(response => response.json())
+            .then(data => {
+                let myOptions = data.map(city => {
+                    return { label: city.name, value: city.id}
+                });
+                VirtualSelect.init({
+                    ele: '#Cities',
+                    options: myOptions,
+                    multiple: true,
+                    search: true,
+                    maxWidth: '100%',
+                });
+            });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $("#btnRegister").click(function (e){
+            e.preventDefault();
+            $.ajax({
+                url: "/companies",
+                type: "POST",
+                data: {
+                    companyName: $("#companyName").val(),
+                    website: $("#website").val(),
+                    phone: $("#phone").val(),
+                    cities: $("#Cities").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    confirmPassword: $("#confirmPassword").val(),
+                },
+                success: function (response) {
+                    if(response.success){
+                        $("#responseMessage").html("<p class='text-center text-success'>"+response.success+"</p>");
+                    }
+                },
+                error: function (response){
+                    if(response.responseJSON.errors){
+                        let errors = response.responseJSON.errors;
+                        let errorsHtml = "<ul>";
+                        for (let key in errors){
+                            errorsHtml += "<li>"+errors[key]+"</li>";
+                        }
+                        errorsHtml += "</ul>";
+                        $("#responseMessage").html(errorsHtml);
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

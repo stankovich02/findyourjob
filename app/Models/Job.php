@@ -137,7 +137,7 @@ class Job extends Model
         $this->company_id = $companyId;
         $this->status = self::STATUS_PENDING;
         $this->save();
-        $this->technology()->attach($technologies);
+        $this->technology()->attach($technologies, ['created_at' => now(), 'updated_at' => now()]);
     }
 
     public function updateRow($name, $category, $seniority, $workplace, $technologies, $description,
