@@ -88,6 +88,11 @@
 @endsection
 @section('scripts')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         fetch('http://127.0.0.1:8000/api/technologies')
             .then(response => response.json())
             .then(data => {
@@ -167,11 +172,6 @@
                 technologies: technologies,
                 applicationDeadline: applicationDeadline
             };
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
                 url: 'http://127.0.0.1:8000/jobs',
                 method: 'POST',

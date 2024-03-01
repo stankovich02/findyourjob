@@ -166,6 +166,11 @@
 @endsection
 @section('scripts')
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $("#EditJob").click(function (e) {
             e.preventDefault();
             let name = $("#jobName").val();
@@ -196,11 +201,6 @@
                 technologies: technologies,
                 applicationDeadline: applicationDeadline
             };
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
                 url: 'http://127.0.0.1:8000/jobs/' + $("#jobID").val(),
                 method: 'PUT',

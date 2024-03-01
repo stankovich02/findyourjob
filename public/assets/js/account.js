@@ -1,3 +1,8 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 $(".addLink").click(function () {
     let social = $(this).attr('data-social');
     $(this).css("display", "none");
@@ -8,11 +13,6 @@ $(".addLink").click(function () {
     $(".addLink").click(function () {
         let link = $(this).prev().val();
         let social = $(this).attr('data-social');
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             url: 'http://127.0.0.1:8000/account/socials',
             method: 'PUT',
@@ -41,11 +41,6 @@ function changeLink(element) {
     $(".addLink").click(function () {
         let link = $(this).prev().val();
         let social = $(this).attr('data-social');
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             url: 'http://127.0.0.1:8000/account/socials',
             method: 'PUT',
@@ -115,11 +110,6 @@ deleteButtons.forEach((deleteButton) => {
         });
         $("#deleteModal").click(function () {
             let id = deleteButton.getAttribute('data-id');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
                 url: 'http://127.0.0.1:8000/jobs/' + id,
                 method: 'DELETE',
@@ -145,11 +135,6 @@ deleteButtons.forEach((deleteButton) => {
 $(".saveJob").click(function (e) {
     e.preventDefault();
     let id = $(this).attr('data-id');
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
     let icon = this.querySelector('i');
     $.ajax({
         url: 'http://127.0.0.1:8000/jobs/save/' + id,

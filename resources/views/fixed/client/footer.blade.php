@@ -60,6 +60,7 @@
 <script src="{{asset('assets/lib/waypoints/waypoints.min.js')}}"></script>
 <script src="{{asset('assets/lib/owlcarousel/owl.carousel.min.js')}}"></script>
 <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
-<!-- Template Javascript -->
-<script src="{{asset('assets/js/main.js')}}"></script>
+
+
+<script src="{{asset('assets/js/main.min.js')}}"></script>
 @yield('scripts')

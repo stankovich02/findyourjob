@@ -86,5 +86,5 @@
 
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/register.js')}}"></script>
+    <script src="{{asset('assets/js/register.min.js')}}"></script>
 @endsection

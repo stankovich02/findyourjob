@@ -178,7 +178,7 @@ class Job extends Model
                $job->saved_jobs()->detach($userId);
                   return "Job unsaved successfully!";
             }
-            $job->saved_jobs()->attach($userId);
+            $job->saved_jobs()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
             return "Job saved successfully!";
         } catch (\Exception $e) {
             return $e->getMessage();

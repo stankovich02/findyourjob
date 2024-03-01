@@ -127,5 +127,5 @@
 </div>
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/jobs.js')}}"></script>
+    <script src="{{asset('assets/js/jobs.min.js')}}"></script>
 @endsection

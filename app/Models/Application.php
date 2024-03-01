@@ -15,7 +15,6 @@ class Application extends Model
         'job_id',
         'user_id',
         'uploaded_file',
-        'cover_letter'
     ];
 
     public function job() : BelongsTo
