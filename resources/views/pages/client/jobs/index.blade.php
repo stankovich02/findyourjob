@@ -94,7 +94,13 @@
                         @include("pages.client.jobs.partials.job")
                     @endforeach
                     <nav aria-label="..." class="d-flex justify-content-center mt-5">
-                        <ul class="pagination pagination-sm">
+                        <ul class="pagination pagination-md">
+                            <li class="page-item disabled" id="previousPage">
+                                <a class="page-link px-3 py-2" href="" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
                             @for ($i = 1; $i <= count($jobs); $i++)
                                 @if ($i === 1)
                                 <li class="page-item active" aria-current="page">
@@ -104,6 +110,12 @@
                                 <li class="page-item"><a class="page-link px-3 py-2 pageLink" href="">{{$i}}</a></li>
                                 @endif
                             @endfor
+                            <li class="page-item" id="nextPage">
+                                <a class="page-link px-3 py-2" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

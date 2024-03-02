@@ -120,6 +120,7 @@ class User extends Model
         $user->avatar = $imageName;
         session()->get('user')->avatar = $imageName;
         $user->save();
+        return redirect()->route('account');
     }
 
     public function updateInfo(int $userID, string $firstName, string $lastName,string $email) : RedirectResponse
@@ -168,7 +169,6 @@ class User extends Model
         move_uploaded_file($tmpPath, $resizeImagePath);
         if($type=='image/jpeg') imagejpeg($resizedImage,  $resizeImagePath );
         if($type=='image/png') imagepng($resizedImage,  $resizeImagePath);
-
 
         return $imageName;
     }

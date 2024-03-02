@@ -51,7 +51,7 @@ function printJobs(data) {
         html += job;
     });
     html += `<nav aria-label="..." class="d-flex justify-content-center mt-5">
-                        <ul class="pagination pagination-sm">
+                        <ul class="pagination pagination-md">
                         </ul>
                     </nav>`;
     $("#allJobs").html(html);
@@ -111,6 +111,12 @@ function makePagination(data){
     let lastPage = data.jobs.last_page;
     let html = "";
     if(lastPage > 1) {
+        html += `<li class="page-item ${parseInt(currentPage) === 1  ? "disabled" : ""}">
+                    <a class="page-link px-3 py-2" id="previousPage" href=""  aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>`;
         for (let i = 1; i <= lastPage; i++) {
             if (i === currentPage) {
                 html += `
@@ -121,8 +127,32 @@ function makePagination(data){
                 html += `<li class="page-item"><a class="page-link px-3 py-2 pageLink" href="">${i}</a></li>`;
             }
         }
+        html += `<li class="page-item ${currentPage === lastPage ? "disabled" : ""}" id="nextPage">
+            <a class="page-link px-3 py-2" href="" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>`;
     }
     $(".pagination").html(html);
+    if(currentPage < lastPage){
+        $("#nextPage").click(function (e) {
+            e.preventDefault();
+            let nextPage = $(".page-item.active").next();
+            nextPage.className = "page-item active";
+            let page = $(nextPage).children().text();
+            filterJobs(page);
+        });
+    }
+    if (currentPage > 1){
+        $("#previousPage").click(function (e) {
+            e.preventDefault();
+            let previousPage = $(".page-item.active").prev();
+            previousPage.className = "page-item active";
+            let page = $(previousPage).children().text();
+            filterJobs(page);
+        });
+    }
     $(".pageLink").click(function (e) {
         e.preventDefault();
         let page = $(this).html();
@@ -130,6 +160,21 @@ function makePagination(data){
     });
 
 }
+
+$("#nextPage").click(function (e) {
+    e.preventDefault();
+    let nextPage = $(".page-item.active").next();
+    nextPage.className = "page-item active";
+    let page = $(nextPage).children().text();
+    filterJobs(page);
+});
+$("#previousPage").click(function (e) {
+    e.preventDefault();
+    let previousPage = $(".page-item.active").prev();
+    previousPage.className = "page-item active";
+    let page = $(previousPage).children().text();
+    filterJobs(page);
+});
 let deleteButtons = document.querySelectorAll('.deleteJob a');
 deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener('click', (e) => {
