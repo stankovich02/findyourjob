@@ -104,20 +104,13 @@
                     confirmPassword: $("#confirmPassword").val(),
                 },
                 success: function (response) {
-                    if(response.success){
+                   /* if(response.success){
                         $("#responseMessage").html("<p class='text-center text-success'>"+response.success+"</p>");
-                    }
+                    }*/
+                    //toastr
                 },
                 error: function (response){
-                    if(response.responseJSON.errors){
-                        let errors = response.responseJSON.errors;
-                        let errorsHtml = "<ul>";
-                        for (let key in errors){
-                            errorsHtml += "<li>"+errors[key]+"</li>";
-                        }
-                        errorsHtml += "</ul>";
-                        $("#responseMessage").html(errorsHtml);
-                    }
+                    //response.message toastr
                 }
             });
         });

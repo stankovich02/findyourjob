@@ -12,7 +12,10 @@ use App\Models\Workplace;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class JobController extends DefaultController
 {
@@ -68,10 +71,17 @@ class JobController extends DefaultController
         return response()->json($clientResponse);
     }
 
-    public function save(int $id) : string
+    public function save(int $id) : JsonResponse
     {
-        $userID = session()->get("user")->id;
-        return $this->jobModel->saveJob($id, $userID);
+        try {
+            $userID = session()->get("user")->id;
+            return $this->jobModel->saveJob($id, $userID);
+        }
+        catch (\Exception $e){
+            return response()->json(['error' => 'An error occurred! Please try again later!'],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
     /**
      * Show the form for creating a new resource.
@@ -100,21 +110,32 @@ class JobController extends DefaultController
      */
     public function store(PostJobRequest $request) : string
     {
-        $name = $request->input('name');
-        $category = $request->input('category');
-        $seniority = $request->input('seniority');
-        $workplace = $request->input('workplace');
-        $technologies = $request->input('technologies');
-        $description = $request->input('description');
-        $responsibilities = $request->input('responsibilities');
-        $requirements = $request->input('requirements');
-        $benefits = $request->input('benefits');
-        $location = $request->input('location');
-        $salary = $request->input('salary');
-        $workType = $request->input('workType');
-        $applicationDeadline = $request->input('applicationDeadline');
-        $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
-        return "Job created successfully!";
+        try {
+            DB::beginTransaction();
+            $name = $request->input('name');
+            $category = $request->input('category');
+            $seniority = $request->input('seniority');
+            $workplace = $request->input('workplace');
+            $technologies = $request->input('technologies');
+            $description = $request->input('description');
+            $responsibilities = $request->input('responsibilities');
+            $requirements = $request->input('requirements');
+            $benefits = $request->input('benefits');
+            $location = $request->input('location');
+            $salary = $request->input('salary');
+            $workType = $request->input('workType');
+            $applicationDeadline = $request->input('applicationDeadline');
+            $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
+            DB::commit();
+            return response()->json(['message' => 'Job created successfully! Please wait for the admin to approve it!'], ResponseAlias::HTTP_CREATED);
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred! Please try again later!'],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
@@ -139,6 +160,7 @@ class JobController extends DefaultController
      */
     public function edit(int $id) : View|RedirectResponse
     {
+        parent::__construct();
         $jobModel = new Job();
         $job = $jobModel->getSingleJob($id);
         if ($job == null) {
@@ -156,7 +178,7 @@ class JobController extends DefaultController
         $technologies = Technology::all();
         $companyModel = new Company();
         $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
-        $data = [
+        $array = [
             'job' => $job,
             'categories' => $categories,
             'seniorities' => $seniorities,
@@ -164,43 +186,62 @@ class JobController extends DefaultController
             'technologies' => $technologies,
             'companyLocations' => $companyLocations
         ];
-        return view('pages.client.jobs.edit')->with('data', $data);
+        return view('pages.client.jobs.edit')->with('array', $array)->with('data', $this->data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostJobRequest $request, int $id) : string
+    public function update(PostJobRequest $request, int $id) : JsonResponse
     {
-        $name = $request->input('name');
-        $category = $request->input('category');
-        $seniority = $request->input('seniority');
-        $workplace = $request->input('workplace');
-        $technologies = $request->input('technologies');
-        $description = $request->input('description');
-        $responsibilities = $request->input('responsibilities');
-        $requirements = $request->input('requirements');
-        $benefits = $request->input('benefits');
-        $location = $request->input('location');
-        $salary = $request->input('salary');
-        $workType = $request->input('workType');
-        $applicationDeadline = $request->input('applicationDeadline');
+        try {
+            DB::beginTransaction();
+            $name = $request->input('name');
+            $category = $request->input('category');
+            $seniority = $request->input('seniority');
+            $workplace = $request->input('workplace');
+            $technologies = $request->input('technologies');
+            $description = $request->input('description');
+            $responsibilities = $request->input('responsibilities');
+            $requirements = $request->input('requirements');
+            $benefits = $request->input('benefits');
+            $location = $request->input('location');
+            $salary = $request->input('salary');
+            $workType = $request->input('workType');
+            $applicationDeadline = $request->input('applicationDeadline');
 
-        $jobModel = new Job();
-        $jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
-            $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
-                ->id, $id);
-        return "Job updated successfully!";
+            $jobModel = new Job();
+            $jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
+                $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
+                    ->id, $id);
+            DB::commit();
+            return response()->json(['message' => 'Job updated successfully!'], ResponseAlias::HTTP_NO_CONTENT);
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred! Please try again later!'],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) : string
+    public function destroy(string $id) : JsonResponse|Response
     {
-        $jobModel = new Job();
-        $jobModel->deleteRow($id);
-        return "Job deleted successfully!";
+        try {
+            DB::beginTransaction();
+            $this->jobModel->deleteRow($id);
+            DB::commit();
+            return response(null, ResponseAlias::HTTP_NO_CONTENT);
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred! Please try again later!'],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 

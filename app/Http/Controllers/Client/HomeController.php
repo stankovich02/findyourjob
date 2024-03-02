@@ -7,7 +7,7 @@ use App\Models\Job;
 
 class HomeController extends DefaultController
 {
-    public function index()
+    public function index() : \Illuminate\View\View
     {
         parent::__construct();
         $catModel = new Category();

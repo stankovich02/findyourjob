@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -54,9 +56,8 @@ class Company extends Model
         return self::with('jobs','cities')->find($id);
     }
 
-    public function insert(array $array) : string
+    public function insert(array $array) : void
     {
-        try {
             $array['password'] = Hash::make($array['password'] . env('CUSTOM_STRING_FOR_HASH'));
             $this->name = $array['name'];
             $this->email = $array['email'];
@@ -67,15 +68,6 @@ class Company extends Model
             $this->description = null;
             $this->save();
             $this->cities()->attach($array['cities'], ['created_at' => now(), 'updated_at' => now()]);
-
-            return 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.';
-        } catch (\Exception $e) {
-            /*if(File::exists(public_path('/assets/img/products/' . $imageName))){
-                File::delete(public_path('/assets/img/products/' . $imageName));
-            }*/
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-
     }
     public function resizeAndUploadImage($imageFromArray, int $width, int $height, string $name) : string
     {
@@ -104,32 +96,28 @@ class Company extends Model
         return self::with('cities')->find($id);
     }
 
-    public function updateCompany($id,$name,$description,$email,$website,$phone) : RedirectResponse
+    public function updateCompany($id,$name,$description,$email,$website,$phone) : RedirectResponse|Response
     {
-        try {
-            $company = self::find($id);
-            if ($company == null) {
-                return redirect()->route('home');
-            }
-            if ($company->name != $name) {
-                $company->name = $name;
-            }
-            if ($company->description != $description) {
-                $company->description = $description;
-            }
-            if ($company->email != $email) {
-                $company->email = $email;
-            }
-            if ($company->website != $website) {
-                $company->website = $website;
-            }
-            if ($company->phone != $phone) {
-                $company->phone = $phone;
-            }
-            $company->save();
-            return redirect()->route('account')->with('success', 'You have successfully updated company info.');
-        } catch (\Exception $e) {
-            return redirect()->route('account')->with('error', 'An error occurred.');
+        $company = self::find($id);
+        if ($company == null) {
+            return response(null, 404);
         }
+        if ($company->name != $name) {
+            $company->name = $name;
+        }
+        if ($company->description != $description) {
+            $company->description = $description;
+        }
+        if ($company->email != $email) {
+            $company->email = $email;
+        }
+        if ($company->website != $website) {
+            $company->website = $website;
+        }
+        if ($company->phone != $phone) {
+            $company->phone = $phone;
+        }
+        $company->save();
+        return redirect()->route('account')->with('success', 'You have successfully updated company info.');
     }
 }

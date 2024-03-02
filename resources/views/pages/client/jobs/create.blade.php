@@ -177,16 +177,10 @@
                 method: 'POST',
                 data: data,
                 success: function (data) {
-                    $("#responseMessage").css('color', 'green');
-                    $("#responseMessage").html(data);
+                   //toastr data.message
                 },
                 error: function (data) {
-                    $("#responseMessage").css('color', '#eb0202');
-                    let html = "";
-                    for (let key in data.responseJSON.errors) {
-                        html += data.responseJSON.errors[key] + "<br>";
-                    }
-                    $("#responseMessage").html(html);
+                   //toastr data.error
                 }
             });
         });

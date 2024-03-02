@@ -9,8 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class Job extends Model
 {
@@ -170,18 +173,14 @@ class Job extends Model
         $job->delete();
     }
 
-    public function saveJob($jobId, $userId) : string
+    public function saveJob($jobId, $userId) : JsonResponse
     {
-        try {
-            $job = self::find($jobId);
-            if($job->saved_jobs()->where('user_id', $userId)->exists()){
-               $job->saved_jobs()->detach($userId);
-                  return "Job unsaved successfully!";
-            }
-            $job->saved_jobs()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
-            return "Job saved successfully!";
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        $job = self::find($jobId);
+        if($job->saved_jobs()->where('user_id', $userId)->exists()){
+           $job->saved_jobs()->detach($userId);
+              return response()->json(['message' => 'Job unsaved successfully!'], ResponseAlias::HTTP_OK);
         }
+        $job->saved_jobs()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
+        return response()->json(['message' => 'Job saved successfully!'], ResponseAlias::HTTP_CREATED);
     }
 }

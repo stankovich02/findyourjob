@@ -48,7 +48,7 @@ function changeLink(element) {
                 social: social,
                 link: link
             },
-            success: function (data) {
+            success: function () {
                 location.reload();
             },
             error: function (data) {
@@ -117,16 +117,7 @@ deleteButtons.forEach((deleteButton) => {
                     location.reload();
                 },
                 error: function (data) {
-                    let html = "";
-                    for (let key in data.responseJSON.errors) {
-                        html += data.responseJSON.errors[key] + "<br>";
-                    }
-                    $(".modal-body p").html(html);
-                    $(".modal-footer").css("display", "none");
-                    $(".modal").css("display", "block");
-                    setTimeout(() => {
-                        $(".modal").css("display", "none");
-                    }, 3000);
+                   //toastr data.error
                 }
             });
         });
@@ -153,18 +144,11 @@ $(".saveJob").click(function (e) {
                 setTimeout(() => {
                     icon.className = "far fa-heart text-primary";
                 }, 1000);
-            if(window.location.pathname === "/account"){
                 location.reload();
-            }
-
         },
         error: function (data) {
-            let html = "";
-            for (let key in data.responseJSON.errors) {
-                html += data.responseJSON.errors[key] + "<br>";
-            }
-            showModal(html);
-
+           /* showModal(data.responseJSON.error);*/
+            //toastr
         }
     });
 });

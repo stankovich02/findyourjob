@@ -27,11 +27,14 @@
                         <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload new picture</button>
                     </form>
                 </div>
+                @if($errors->has('picture'))
                 <p id="pictureError" class="text-center text-danger">
-                    @if($errors->has('picture'))
                     {{$errors->first('picture')}}
-                    @endif
                 </p>
+                @endif
+                @if(session()->has('error'))
+                    <p class="text-danger">{{session('error')}}</p>
+                @endif
             </div>
             @if(session('accountType') === 'employee')
             <div id="profileLinks" class="mt-4">
@@ -95,25 +98,55 @@
                         <div class="mb-3">
                             <label class="small mb-1" for="companyName">Company name</label>
                             <input class="form-control" name="companyName" id="companyName" type="text" disabled value="{{$company->name}}">
+                            @if($errors->has('companyName'))
+                                <p class="text-danger">
+                                    {{$errors->first('companyName')}}
+                                </p>
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputBio">Company description</label>
                             <textarea id="inputBio" name="description" cols="10" rows="10" disabled class="form-control">{{$company->description}}</textarea>
+                            @if($errors->has('description'))
+                                <p class="text-danger">
+                                    {{$errors->first('description')}}
+                                </p>
+                            @endif
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="website">Website</label>
                                 <input class="form-control" id="website" name="website" type="text" disabled value="{{$company->website}}">
+                                @if($errors->has('website'))
+                                    <p class="text-danger">
+                                    {{$errors->first('website')}}
+                                    </p>
+                                @endif
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-companyName1" for="phone">Phone</label>
                                 <input class="form-control" id="phone" name="phone" type="text" disabled value="{{$company->phone}}">
+                                @if($errors->has('phone'))
+                                    <p class="text-danger">
+                                    {{$errors->first('phone')}}
+                                    </p>
+                                @endif
                             </div>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="email">Email</label>
                                 <input class="form-control" id="email" name="email" type="text" disabled value="{{$company->email}}">
+                                @if($errors->has('email'))
+                                    <p class="text-danger">
+                                    {{$errors->first('email')}}
+                                    </p>
+                                @endif
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1">Password</label>
+                                <br/>
+                                <a href="" class="btn btn-primary" id="btnChangePassword">Change password</a>
                             </div>
                         </div>
                         @else
@@ -132,6 +165,11 @@
                                 <label class="small mb-1" for="email">Email</label>
                                 <input class="form-control" id="email" name="email" type="text" disabled value="{{$user->email}}">
                             </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1">Password</label>
+                                <br/>
+                                <a href="" class="btn btn-primary" id="btnChangePassword">Change password</a>
+                            </div>
                         </div>
                         @endif
                        <div id="buttonsChange">
@@ -139,30 +177,12 @@
                        </div>
                         </form>
                         </form>
-                    <p class="text-danger">
-                        @if($errors->has('companyName'))
-                            {{$errors->first('companyName')}}
-                        @endif
-                        @if($errors->has('description'))
-                            {{$errors->first('description')}}
-                        @endif
-                        @if($errors->has('website'))
-                            {{$errors->first('website')}}
-                        @endif
-                        @if($errors->has('phone'))
-                            {{$errors->first('phone')}}
-                        @endif
-                        @if($errors->has('email'))
-                            {{$errors->first('email')}}
-                        @endif
-
-
-                    </p>
-                    <p class="text-success">
-                        @if(session()->has('success'))
-                            {{session('success')}}
-                        @endif
-                    </p>
+                    @if(session()->has('success'))
+                        <p class="text-success">{{session('success')}}</p>
+                    @endif
+                    @if(session()->has('error'))
+                        <p class="text-danger">{{session('error')}}</p>
+                    @endif
                 </div>
             </div>
         </div>

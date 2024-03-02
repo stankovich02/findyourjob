@@ -104,30 +104,24 @@ class User extends Model
     }
     public function updatePicture(int $userID, $picture,$accType) : RedirectResponse
     {
-        try {
-            if ($accType == 'company') {
-                $company = Company::find($userID);
-                $company->logo = $picture->store('logos', 'public');
-                $company->save();
-                return redirect()->route('account');
-            }
-            $user = User::find($userID);
-            $imageName = $this->resizeAndUploadImage($picture, 150, 150);
-            if($user->avatar != 'user.jpg'){
-                unlink(public_path('assets/img/users/' . $user->avatar));
-            }
-            $user->avatar = $imageName;
-            session()->get('user')->avatar = $imageName;
-            $user->save();
+        if ($accType == 'company') {
+            $company = Company::find($userID);
+            $company->logo = $picture->store('logos', 'public');
+            $company->save();
             return redirect()->route('account');
-        } catch (\Exception $e) {
-            return redirect()->route('account')->with('error', 'An error occurred.');
         }
+        $user = User::find($userID);
+        $imageName = $this->resizeAndUploadImage($picture, 150, 150);
+        if($user->avatar != 'user.jpg'){
+            unlink(public_path('assets/img/users/' . $user->avatar));
+        }
+        $user->avatar = $imageName;
+        session()->get('user')->avatar = $imageName;
+        $user->save();
     }
 
     public function updateInfo(int $userID, string $firstName, string $lastName,string $email) : RedirectResponse
     {
-        try {
             $user = User::find($userID);
             if ($user->email != $email) {
                 $user->is_active = 0;
@@ -152,9 +146,6 @@ class User extends Model
                 return redirect()->route('account')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
             }
             return redirect()->route('account')->with('success', 'You have successfully updated your info.');
-        } catch (\Exception $e) {
-            return redirect()->route('account')->with('error', 'An error occurred.');
-        }
     }
     public function resizeAndUploadImage($imageFromArray, int $width, int $height) : string
     {

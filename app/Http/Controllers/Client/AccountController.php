@@ -9,6 +9,9 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AccountController extends DefaultController
 {
@@ -18,7 +21,7 @@ class AccountController extends DefaultController
         parent::__construct();
         $this->userModel = new User();
     }
-    public function index(Request $request) : \Illuminate\View\View
+    public function index(Request $request) : View
     {
         parent::__construct();
         $userID = $request->session()->get('user')->id;
@@ -31,22 +34,41 @@ class AccountController extends DefaultController
 
     }
 
-    public function socials(Request $request) : JsonResponse
+    public function updateSocials(Request $request) : JsonResponse
     {
-        $userID = $request->session()->get('user')->id;
-        return $this->userModel->updateSocials($userID, $request->social, $request->link);
+        try {
+            $userID = $request->session()->get('user')->id;
+            $this->userModel->updateSocials($userID, $request->social, $request->link);
+            return  response()->json(null, ResponseAlias::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => "An error occurred while updating socials"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public function picture(UpdateAccountPictureRequest $request) : RedirectResponse
     {
-        $userID = $request->session()->get('user')->id;
-        $accType = $request->session()->get('accountType');
-        return $this->userModel->updatePicture($userID, $request->picture, $accType);
+        try {
+            $userID = $request->session()->get('user')->id;
+            $accType = $request->session()->get('accountType');
+            $this->userModel->updatePicture($userID, $request->picture, $accType);
+            return redirect()->route('account');
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while updating picture');
+        }
+
     }
 
     public function info(UpdateUserDetailsRequest $request) : RedirectResponse
     {
-        $userID = $request->session()->get('user')->id;
-        return $this->userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
+        try {
+            $userID = $request->session()->get('user')->id;
+            return $this->userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while updating info');
+        }
+
     }
 }

@@ -46,54 +46,57 @@
                             {!!$job->benefits!!}
                         </div>
                     </div>
-                    @if(session()->has("user") && session("accountType") == "employee")
-                        @if($job->applications->where("user_id", session()->get("user")->id)->count() > 0)
-                            <div class="col-3">
-                                <?php $application = $job->applications->where("user_id", session()->get("user")->id)->first(); ?>
-                                <a href="{{route("application.index", $application->id)}}" class="btn btn-primary w-100 py-2">View your application</a>
-                            </div>
-                        @else
-                        <div class="">
-                            <h4 class="mb-4">Apply For The Job</h4>
-                            <div class="row g-3">
-                                @if( session()->has("user") && session("accountType") == "employee")
-                                    <form action="{{route("application.store")}}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="jobID" value="{{$job->id}}">
-                                        <div class="col-12 col-sm-6 mb-3">
-                                            <input type="file" class="form-control bg-white" name="uploadedFile">
-                                        </div>
-                                        <div class="col-12 mb-3">
-                                            <textarea class="form-control" rows="5" name="coverLetter" placeholder="Cover Letter"></textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-primary w-100">Apply Now</button>
-                                        </div>
-                                    </form>
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                    @if (session("success"))
-                                        <div class="alert alert-success">
-                                            {{session("success")}}
-                                        </div>
-                                    @endif
-                                @endif
-                                {{-- <button class="btn btn-primary w-100" type="submit">Apply Now</button>--}}
-                            </div>
-
-                        </div>
-                        @endif
-                    @elseif(!session()->has("user"))
+                    @if(!session()->has("user"))
                     <div class="col-3">
                         <a href="{{route("login")}}" class="btn btn-primary w-100 py-2">Login to apply</a>
                     </div>
+                    @elseif(session()->has("user") && session("accountType") == "employee")
+                        @if($job->applications->where("user_id", session()->get("user")->id)->count() > 0)
+                            <div class="col-3">
+                                    <?php $application = $job->applications->where("user_id", session()->get("user")->id)->first(); ?>
+                                <a href="{{route("application.index", $application->id)}}" class="btn btn-primary w-100 py-2">View your application</a>
+                            </div>
+                        @else
+                            <div class="">
+                                <h4 class="mb-4">Apply For The Job</h4>
+                                <div class="row g-3">
+                                    @if( session()->has("user") && session("accountType") == "employee")
+                                        <form action="{{route("application.store")}}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="jobID" value="{{$job->id}}">
+                                            <div class="col-12 col-sm-6 mb-3">
+                                                <input type="file" class="form-control bg-white" name="uploadedFile">
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <textarea class="form-control" rows="5" name="coverLetter" placeholder="Cover Letter"></textarea>
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="btn btn-primary w-100">Apply Now</button>
+                                            </div>
+                                        </form>
+                                        @if ($errors->any())
+                                            @foreach ($errors->all() as $error)
+                                                <p class="text-danger mb-0">
+                                                    {{$error}}
+                                                </p>
+                                            @endforeach
+                                        @endif
+                                        @if (session("error"))
+                                            <p class="text-danger mt-3">
+                                                {{session("error")}}
+                                            </p>
+                                        @endif
+                                        @if (session("success"))
+                                            <p class="text-success mt-3">
+                                                {{session("success")}}
+                                            </p>
+                                        @endif
+                                    @endif
+                                    {{-- <button class="btn btn-primary w-100" type="submit">Apply Now</button>--}}
+                                </div>
+
+                            </div>
+                        @endif
                     @endif
 
                 </div>
@@ -131,7 +134,7 @@
                 </div>
                 @if($job->applications->count() == 0)
                     <div class="col-12">
-                        <h4 class="text-center mt-5">You have not applied for any jobs yet.</h4>
+                        <h4 class="text-center mt-5">No applications yet.</h4>
                     </div>
                 @else
                 @endif

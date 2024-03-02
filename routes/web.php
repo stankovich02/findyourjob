@@ -40,7 +40,7 @@ Route::get('/verification/{token}', [App\Http\Controllers\Client\Auth\AuthContro
 Route::middleware('IsLoggedIn')->group(function (){
         Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
             Route::get('/account','index')->name('account');
-            Route::put('/account/socials', 'socials')->name('account.socials');
+            Route::put('/account/socials', 'updateSocials')->name('account.socials');
             Route::put('/account/info', 'info')->name('account.info');
             /*Route::put('/account/password', 'password')->name('account.password');*/
             Route::put('/account/picture', 'picture')->name('account.picture');
