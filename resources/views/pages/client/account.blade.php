@@ -213,7 +213,7 @@
                                 <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                 <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                 <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
-
+                                <span class="text-truncate me-3"><i class="fas fa-briefcase text-primary me-2"></i>{{$job->workplace->name}}</span>
                                 @if($job->salary)
                                     <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
                                 @endif
@@ -259,7 +259,7 @@
                             <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$application->city->name}}</span>
                             <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$application->full_time ? "Full time" : "Part-time"}}</span>
                             <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$application->seniority->name}}</span>
-
+                            <span class="text-truncate me-3"><i class="fas fa-briefcase text-primary me-2"></i>{{$application->workplace->name}}</span>
                             @if($application->salary)
                                 <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
                             @endif
@@ -309,7 +309,7 @@
                                 <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
                                 <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
                                 <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
-
+                                <span class="text-truncate me-3"><i class="fas fa-briefcase text-primary me-2"></i>{{$job->workplace->name}}</span>
                                 @if($job->salary)
                                     <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
                                 @endif

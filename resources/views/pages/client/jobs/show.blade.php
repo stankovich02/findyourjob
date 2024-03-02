@@ -24,7 +24,8 @@
                                 <span class="text-truncate me-3"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
                             @endif
 
-                            <span class="text-truncate me-0"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
+                            <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
+                            <span class="text-truncate me-0"><i class="fas fa-briefcase text-primary me-2"></i>{{$job->workplace->name}}</span>
                         </div>
                     </div>
                     <div class="mb-5">

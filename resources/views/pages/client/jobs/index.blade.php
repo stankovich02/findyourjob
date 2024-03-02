@@ -60,9 +60,10 @@
                                     <label for="workPlace" class="form-label text-white jobSearchLabel">Workplace:</label>
                                     <select class="form-select border-0" id="workPlace">
                                         <option value="0">All</option>
-                                        <option value="1">Hybrid</option>
-                                        <option value="2">Office</option>
-                                        <option value="3">Remote</option>
+                                        <option value="1">Office</option>
+                                        <option value="2">Remote</option>
+                                        <option value="3">Hybrid</option>
+
                                     </select>
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center  justify-content-center">
