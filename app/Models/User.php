@@ -101,7 +101,7 @@ class User extends Model
             $socialMessage = $social == 'github' ? 'Github' : 'LinkedIn';
             return response()->json(["message" => "$socialMessage link updated."], ResponseAlias::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(["message" => "An error occurred."], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(["error" => "An error occurred."], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function updatePicture(int $userID, $picture,$accType) : RedirectResponse
