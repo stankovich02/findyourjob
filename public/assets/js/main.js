@@ -108,10 +108,31 @@ $("#newsletterButton").click(function (e) {
         },
         error: function (data) {
             $("#newsletterMsg").css('color', '#eb0202');
+            if(data.responseJSON.errors){
+                $("#newsletterMsg").html(data.responseJSON.errors.email[0]);
+            }
             $("#newsletterMsg").html(data.responseJSON.message);
         }
     });
 });
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+};
+
 
 
 

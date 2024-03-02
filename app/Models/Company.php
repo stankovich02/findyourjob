@@ -63,7 +63,10 @@ class Company extends Model
             $this->email = $array['email'];
             $this->password = $array['password'];
             $this->logo = null;
-            $this->website = $array['website'];
+            if (isset($array['website']))
+            {
+                $this->website = $array['website'];
+            }
             $this->phone = $array['phone'];
             $this->description = null;
             $this->save();

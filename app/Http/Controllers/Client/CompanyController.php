@@ -64,7 +64,7 @@ class CompanyController extends DefaultController
                File::delete(public_path('/assets/img/products/' . $imageName));
            }*/
             DB::rollBack();
-            return response()->json(['message' => 'An error occurred.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => 'An error occurred.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 }
 

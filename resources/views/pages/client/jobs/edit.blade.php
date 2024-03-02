@@ -9,11 +9,12 @@
             @csrf
             <input type="hidden" id="jobID" value="{{$array['job']->id}}"/>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobName" class="form-label text-white jobSearchLabel mb-2">Job name:</label>
+                <label for="jobName" class="form-label text-white jobSearchLabel">Job name:</label>
                 <input type="text" id="jobName" class="form-control border-0" name="jobName" value="{{$array['job']->name}}"/>
+                <p id="nameError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobCategory" class="form-label text-white jobSearchLabel mb-2">Job Category:</label>
+                <label for="jobCategory" class="form-label text-white jobSearchLabel">Job Category:</label>
                 <select class="form-select border-0" id="jobCategory" name="jobCategory">
                     @foreach($array['categories'] as $category)
                         @if($array['job']->category_id === $category->id)
@@ -23,9 +24,10 @@
                         @endif
                     @endforeach
                 </select>
+                <p id="categoryError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobSeniority" class="form-label text-white jobSearchLabel mb-2">Seniority:</label>
+                <label for="jobSeniority" class="form-label text-white jobSearchLabel">Seniority:</label>
                 <select class="form-select border-0" id="jobSeniority" name="jobSeniority">
                     @foreach($array['seniorities'] as $seniority)
                         @if($array['job']->seniority_id === $seniority->id)
@@ -35,10 +37,12 @@
                         @endif
                     @endforeach
                 </select>
+                <p id="seniorityError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobSalary" class="form-label text-white jobSearchLabel mb-2">Salary:</label>
+                <label for="jobSalary" class="form-label text-white jobSearchLabel">Salary:</label>
                 <input type="number" id="jobSalary" class="form-control border-0 postJobSalary" name="jobSalary" value="{{$array['job']->salary}}"/>
+                <p id="salaryError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobWorkType" class="form-label text-white jobSearchLabel">Work type:</label>
@@ -46,6 +50,7 @@
                     <option value="0" @if(!$array['job']->full_time) {{"selected"}} @endif>Part Time</option>
                     <option value="1" @if($array['job']->full_time) {{"selected"}} @endif>Full Time</option>
                 </select>
+                <p id="workTypeError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobWorkPlace" class="form-label text-white jobSearchLabel">Workplace:</label>
@@ -54,6 +59,7 @@
                         <option value="{{$workplace->id}}">{{$workplace->name}}</option>
                     @endforeach
                 </select>
+                <p id="workplaceError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
                 <label for="jobLocation" class="form-label text-white jobSearchLabel">Location:</label>
@@ -66,36 +72,41 @@
                         @endif
                     @endforeach
                 </select>
+                <p id="locationError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label class="form-label text-white jobSearchLabel mb-2">Description:</label>
-                <div id="descriptionEditor">
-                </div>
+                <label class="form-label text-white jobSearchLabel">Description:</label>
+                <div id="descriptionEditor"></div>
+                <p id="descriptionError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label class="form-label text-white jobSearchLabel mb-2">Responsibility:</label>
+                <label class="form-label text-white jobSearchLabel">Responsibility:</label>
                 <div id="responsibilityEditor" contenteditable="true"></div>
+                <p id="responsibilitiesError" class="text-danger"></p>
             </div>
 
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label class="form-label text-white jobSearchLabel mb-2">Requirements:</label>
+                <label class="form-label text-white jobSearchLabel">Requirements:</label>
                 <div id="requirementsEditor" contenteditable="true"></div>
+                <p id="requirementsError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label class="form-label text-white jobSearchLabel mb-2">Benefits:</label>
+                <label class="form-label text-white jobSearchLabel">Benefits:</label>
                 <div id="benefitsEditor" contenteditable="true"></div>
+                <p id="benefitsError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobTechnologies" class="form-label text-white jobSearchLabel mb-2">Job technologies:</label>
+                <label for="jobTechnologies" class="form-label text-white jobSearchLabel">Job technologies:</label>
                 <div id="Technologies"></div>
+                <p id="technologiesError" class="text-danger"></p>
             </div>
             <div class="col-md-10 d-flex flex-column align-items-center mb-3">
-                <label for="jobAppDeadline" class="form-label text-white jobSearchLabel mb-2">Application deadline:</label>
+                <label for="jobAppDeadline" class="form-label text-white jobSearchLabel">Application deadline:</label>
                 <input type="date" id="jobAppDeadline" class="form-control border-0" name="jobAppDeadline" value="{{date($array['job']->application_deadline)}}"/>
+                <p id="applicationDeadlineError" class="text-danger"></p>
             </div>
 
             <button type="submit" class="btn btn-dark mt-5 px-4 py-2" id="EditJob">EDIT JOB</button>
-            <div id="responseMessage" class="mt-3"></div>
         </form>
     </div>
     @php
@@ -203,11 +214,20 @@
                 url: '/jobs/' + $("#jobID").val(),
                 method: 'PUT',
                 data: data,
-                success: function (data) {
-                    //toastr data.message
+                success: function () {
+                    $("form p").text("");
+                    toastr.success("Job edited successfully");
                 },
                 error: function (data) {
-                   //toastr data.error
+                    $("form p").text("");
+                    if(data.responseJSON.errors){
+                        for (let key in data.responseJSON.errors) {
+                            $("#" + key + "Error").text(data.responseJSON.errors[key][0]);
+                        }
+                    }
+                    if(data.responseJSON.error){
+                        toastr.error(data.responseJSON.error);
+                    }
                 }
             });
         });

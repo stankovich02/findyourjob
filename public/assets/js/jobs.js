@@ -94,7 +94,14 @@ function filterJobs(page) {
             makePagination(data);
         },
         error: function (data) {
-            console.log(data);
+            if(data.responseJSON.errors){
+                for (let key in data.responseJSON.errors) {
+                  toastr.error(data.responseJSON.errors[key][0]);
+                }
+            }
+            if(data.responseJSON.error){
+                toastr.error(data.responseJSON.error);
+            }
         }
     });
 }
@@ -142,7 +149,7 @@ deleteButtons.forEach((deleteButton) => {
                     location.reload();
                 },
                 error: function (data) {
-                   //toastr data.error
+                  toastr.error(data.message);
                 }
             });
         });
@@ -159,8 +166,6 @@ $(".saveJob").click(function (e) {
             jobID: id
         },
         success: function (data) {
-            /*showModal(data);*/
-
             if(icon.className === "far fa-heart text-primary")
                 setTimeout(() => {
                     icon.className = "fas fa-heart text-primary";
@@ -169,15 +174,20 @@ $(".saveJob").click(function (e) {
                 setTimeout(() => {
                     icon.className = "far fa-heart text-primary";
                 }, 1000);
-           //data.message toastr
+            setTimeout(() => {
+                toastr.success(data.message);
+            }, 1000);
 
         },
         error: function (data) {
-            let html = "";
-            for (let key in data.responseJSON.errors) {
-                html += data.responseJSON.errors[key] + "<br>";
+            if(data.responseJSON.errors){
+                for (let key in data.responseJSON.errors) {
+                    toastr.error(data.responseJSON.errors[key][0]);
+                }
             }
-            showModal(html);
+            if(data.responseJSON.error){
+                toastr.error(data.responseJSON.error);
+            }
 
         }
     });

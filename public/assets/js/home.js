@@ -22,3 +22,4 @@ $(".categorySingle").click(function () {
     localStorage.setItem('category', category);
     window.location.href = "/jobs";
 });
+

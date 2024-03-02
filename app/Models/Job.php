@@ -176,6 +176,12 @@ class Job extends Model
     public function saveJob($jobId, $userId) : JsonResponse
     {
         $job = self::find($jobId);
+        if($job == null){
+            return response()->json(['error' => 'Job not found!'], ResponseAlias::HTTP_NOT_FOUND);
+        }
+        if($job->status == self::STATUS_EXPIRED || $job->status == self::STATUS_PENDING){
+            return response()->json(['error' => 'Job is not active!'], ResponseAlias::HTTP_BAD_REQUEST);
+        }
         if($job->saved_jobs()->where('user_id', $userId)->exists()){
            $job->saved_jobs()->detach($userId);
               return response()->json(['message' => 'Job unsaved successfully!'], ResponseAlias::HTTP_OK);

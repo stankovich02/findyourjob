@@ -77,9 +77,6 @@ input[name="accountType"]{
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
-.editJob:hover{
-    color: #ff2929;
-}
 .ck-editor__editable[role="textbox"] {
     /* editing area */
     min-height: 200px;
@@ -92,6 +89,10 @@ input[name="accountType"]{
     right: -20px;
     top: -20px;
     z-index: 100;
+}
+.toast {
+    opacity: 1 !important;
+    width: 400px!important;
 }
 /*** Spinner ***/
 #spinner {

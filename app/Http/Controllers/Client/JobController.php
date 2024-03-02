@@ -192,10 +192,9 @@ class JobController extends DefaultController
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostJobRequest $request, int $id) : JsonResponse
+    public function update(PostJobRequest $request, int $id) : JsonResponse|Response
     {
         try {
-            DB::beginTransaction();
             $name = $request->input('name');
             $category = $request->input('category');
             $seniority = $request->input('seniority');
@@ -209,16 +208,12 @@ class JobController extends DefaultController
             $salary = $request->input('salary');
             $workType = $request->input('workType');
             $applicationDeadline = $request->input('applicationDeadline');
-
-            $jobModel = new Job();
-            $jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
+            $this->jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
                 $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
                     ->id, $id);
-            DB::commit();
-            return response()->json(['message' => 'Job updated successfully!'], ResponseAlias::HTTP_NO_CONTENT);
+            return response(null,ResponseAlias::HTTP_OK);
         }
         catch (\Exception $e){
-            DB::rollBack();
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }

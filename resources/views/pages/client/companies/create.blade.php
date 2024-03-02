@@ -17,37 +17,37 @@
             <div class="my-4">
                 <label for="companyName" class="font-small">Company name</label>
                 <input type="text" class="form-control font-small" id="companyName" name="companyName" value="{{old("companyName")}}"/>
-                {{--<span class="font-small error-message">Jhon</span>--}}
+                <p id="companyNameError" class="text-danger">
             </div>
             <div class="my-4">
                 <label for="website" class="font-small">Company website</label>
                 <input type="text" class="form-control font-small" id="website" name="website" value="{{old("website")}}"/>
-                {{--<span class="font-small error-message">Jhon</span>--}}
+                <p id="websiteError" class="text-danger">
             </div>
             <div class="my-4">
                 <label for="phone" class="font-small">Company phone</label>
                 <input type="text" class="form-control font-small" id="phone" name="phone" value="{{old("phone")}}"/>
-                {{--<span class="font-small error-message">Jhon</span>--}}
+                <p id="phoneError" class="text-danger">
             </div>
             <div class="">
-                <label for="Technologies" class="font-small">Company locations:</label>
-                <div id="Technologies"></div>
+                <label for="Cities" class="font-small">Company locations:</label>
+                <div id="Cities"></div>
+                <p id="citiesError" class="text-danger">
             </div>
-            <div id="Cities"></div>
             <div class="my-4">
                 <label for="email" class="font-small">Email</label>
                 <input type="text" class="form-control font-small" id="email" name="email" value="{{old("email")}}"/>
-                {{--<span class="font-small error-message">name@example.com</span>--}}
+                <p id="emailError" class="text-danger">
             </div>
             <div class="my-4">
                 <label for="password" class="font-small">Password</label>
                 <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
-                {{--  <span class="font-small error-message">Your password needs to be at least 8 characters long and contain at least one letter and one number</span>--}}
+                <p id="passwordError" class="text-danger">
             </div>
             <div class="my-4">
                 <label for="confirmPassword" class="font-small">Confirm password</label>
                 <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("confirmPassword")}}"/>
-                {{--<span class="font-small error-message">Your password needs to be at least 8 characters long and contain at least one letter and one number</span>--}}
+                <p id="confirmPasswordError" class="text-danger">
             </div>
             <button id="btnRegister" class="btn btn-primary text-center d-block mx-auto px-4">
                 Register
@@ -103,14 +103,20 @@
                     password: $("#password").val(),
                     confirmPassword: $("#confirmPassword").val(),
                 },
-                success: function (response) {
-                   /* if(response.success){
-                        $("#responseMessage").html("<p class='text-center text-success'>"+response.success+"</p>");
-                    }*/
-                    //toastr
+                success: function (data) {
+                    $("form p").text("");
+                    toastr.success(data.message);
                 },
-                error: function (response){
-                    //response.message toastr
+                error: function (data){
+                    $("form p").text("");
+                    if(data.responseJSON.errors){
+                        for (let key in data.responseJSON.errors) {
+                            $("#" + key + "Error").text(data.responseJSON.errors[key][0]);
+                        }
+                    }
+                    if(data.responseJSON.error){
+                        toastr.error(data.responseJSON.error);
+                    }
                 }
             });
         });

@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class User extends Model
 {
@@ -97,9 +99,9 @@ class User extends Model
             }
             $user->save();
             $socialMessage = $social == 'github' ? 'Github' : 'LinkedIn';
-            return response()->json(["message" => "$socialMessage link updated."], 204);
+            return response()->json(["message" => "$socialMessage link updated."], ResponseAlias::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(["message" => "An error occurred."], 500);
+            return response()->json(["message" => "An error occurred."], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function updatePicture(int $userID, $picture,$accType) : RedirectResponse

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class Newsletter extends Model
 {
@@ -19,10 +21,10 @@ class Newsletter extends Model
     {
         $exists = self::where('email', $email)->first();
         if($exists){
-            return response()->json(["message" => "You are already subscribed to our newsletter."], 400);
+            return response()->json(["message" => "You are already subscribed to our newsletter."], ResponseAlias::HTTP_BAD_REQUEST);
         }
         $this->email = $email;
         $this->save();
-        return response()->json(["message" => "You have been subscribed to our newsletter!"]);
+        return response()->json(["message" => "You have been subscribed to our newsletter!"], ResponseAlias::HTTP_CREATED);
     }
 }

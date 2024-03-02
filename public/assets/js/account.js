@@ -117,7 +117,17 @@ deleteButtons.forEach((deleteButton) => {
                     location.reload();
                 },
                 error: function (data) {
-                   //toastr data.error
+                    if(data.responseJSON.errors){
+                        for (let key in data.responseJSON.errors) {
+                           toastr.error(data.responseJSON.errors[key][0]);
+                        }
+                    }
+                    if(data.responseJSON.error)
+                    {
+                        toastr.error(data.responseJSON.error);
+                    }
+
+
                 }
             });
         });
@@ -133,9 +143,7 @@ $(".saveJob").click(function (e) {
         data: {
             jobID: id
         },
-        success: function (data) {
-            /*showModal(data);*/
-
+        success: function () {
             if(icon.className === "far fa-heart text-primary")
                 setTimeout(() => {
                     icon.className = "fas fa-heart text-primary";
@@ -147,8 +155,7 @@ $(".saveJob").click(function (e) {
                 location.reload();
         },
         error: function (data) {
-           /* showModal(data.responseJSON.error);*/
-            //toastr
+            toastr.error(data.responseJSON.error);
         }
     });
 });
