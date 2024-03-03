@@ -9,6 +9,9 @@
         <img src="{{asset('assets/img/verified.png')}}" alt="Verified">
     </div>
     @endif
+    @if(session('companyError'))
+        <p id="companyError">{{session('companyError')}}</p>
+    @endif
     <!-- Carousel Start -->
     <div class="container-fluid p-0">
         <div class="owl-carousel header-carousel position-relative">

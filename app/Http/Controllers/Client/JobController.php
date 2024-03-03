@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class JobController extends DefaultController
 {
     private Job $jobModel;
+    private Company $companyModel;
     /**
      * Display a listing of the resource.
      */
@@ -27,6 +28,7 @@ class JobController extends DefaultController
     public function __construct()
     {
         parent::__construct();
+        $this->companyModel = new Company();
         $this->jobModel = new Job();
         $this->middleware('IsCompany')->except('index', 'show', 'save', 'filter');
     }
@@ -86,9 +88,15 @@ class JobController extends DefaultController
     /**
      * Show the form for creating a new resource.
      */
-    public function create() : View
+    public function create() : View|RedirectResponse
     {
         parent::__construct();
+        $company = $this->companyModel->getCompany(session()->get("user")->id);
+        if($company->logo == 'user.jpg')
+        {
+            return redirect()->route('home')->with('companyError', 'Please upload a logo before creating a job!');
+        }
+
         $categories = Category::all();
         $seniorities = Seniority::all();
         $workplaces= Workplace::all();

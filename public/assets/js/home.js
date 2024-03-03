@@ -17,6 +17,12 @@ if($("#verifiedAccount")){
     }, 8000);
 
 }
+if($("#companyError") && $("#companyError").text() != ""){
+    console.log($("#companyError"))
+    let text = $("#companyError").text();
+    $("#companyError").text("");
+    toastr.info(text);
+}
 $(".categorySingle").click(function () {
     let category = $(this).attr('data-id');
     localStorage.setItem('category', category);

@@ -12,10 +12,17 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" class="form-control font-small" id="email" name="email" value="{{old('email')}}"/>
+                        @if($errors->has('email'))
+                            <p class="text-danger">{{$errors->first('email')}}</p>
+                        @endif
+
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control font-small" id="password" name="password" />
+                        @if($errors->has('password'))
+                            <p class="text-danger">{{$errors->first('password')}}</p>
+                        @endif
                     </div>
                     <div class="mb-3 d-flex align-items-center">
                         <p class="my-0">Select your account type:</p>
@@ -28,15 +35,14 @@
                         Log in
                     </button>
                     <br/>
+                    @if(session()->has('error'))
+                        <p class="text-danger">{{session('error')}}</p>
+                    @endif
+                    <br/>
                     <a href="{{route("register")}}" class="signInFormLink font-small">Don't have an account? Register instead.</a>
+
                 </form>
-                @if(session('error'))
-                    <div class="container py-0 mt-5" >
-                            <div class="alert alert-danger">
-                                {{session('error')}}
-                            </div>
-                    </div>
-                @endif
+
             </div>
         </div>
 

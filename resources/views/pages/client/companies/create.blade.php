@@ -29,11 +29,17 @@
                 <input type="text" class="form-control font-small" id="phone" name="phone" value="{{old("phone")}}"/>
                 <p id="phoneError" class="text-danger">
             </div>
-            <div class="">
+            <div class="my-4">
                 <label for="Cities" class="font-small">Company locations:</label>
                 <div id="Cities"></div>
                 <p id="citiesError" class="text-danger">
             </div>
+            <div class="my-4">
+                <label for="description">Description:</label>
+                <textarea class="form-control" name="description" id="description" style="height: 150px"></textarea>
+                <p id="descriptionError" class="text-danger">
+            </div>
+
             <div class="my-4">
                 <label for="email" class="font-small">Email</label>
                 <input type="text" class="form-control font-small" id="email" name="email" value="{{old("email")}}"/>
@@ -55,15 +61,6 @@
             <br/>
             <a href="{{route("login")}}" class="signInFormLink" class="font-small">Already have an account? Log in instead.</a>
         </form>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
             </div>
         </div>
     </div>
@@ -99,12 +96,16 @@
                     website: $("#website").val(),
                     phone: $("#phone").val(),
                     cities: $("#Cities").val(),
+                    description: $("#description").val(),
                     email: $("#email").val(),
                     password: $("#password").val(),
                     confirmPassword: $("#confirmPassword").val(),
                 },
                 success: function (data) {
                     $("form p").text("");
+                    $("form input").val("");
+                    $("form textarea").val("");
+                    document.querySelector('#Cities').reset();
                     toastr.success(data.message);
                 },
                 error: function (data){

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\RegisterCompanyRequest;
+use App\Http\Requests\UpdateAccountPictureRequest;
 use App\Http\Requests\UpdateComapnyDetailsRequest;
+use App\Http\Requests\UpdateCompanyLogoRequest;
 use App\Models\Company;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -46,14 +48,13 @@ class CompanyController extends DefaultController
             $array = [
                 'name' => $request->input('companyName'),
                 'cities' => $request->input('cities'),
+                'description' => $request->input('description'),
+                'phone' => $request->input('phone'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
             ];
             if ($request->input('website')) {
                 $array['website'] = $request->input('website');
-            }
-            if ($request->input('phone')) {
-                $array['phone'] = $request->input('phone');
             }
             $this->companyModel->insert($array);
             DB::commit();
@@ -78,6 +79,12 @@ class CompanyController extends DefaultController
             return redirect()->route('account');
         }
         $company = $this->companyModel->getCompany($id);
+        if($company == null){
+            return redirect()->route('home');
+        }
+        if($company->status == Company::STATUS_PENDING){
+            return redirect()->route('home');
+        }
         return view('pages.client.companies.show')->with('company', $company)->with('data', $this->data);
     }
 
@@ -101,6 +108,18 @@ class CompanyController extends DefaultController
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred.');
         }
+    }
+
+    public function logo(UpdateCompanyLogoRequest $request, int $id) : RedirectResponse
+    {
+        try {
+            $this->companyModel->updateLogo($id, $request->picture);
+            return redirect()->route('account');
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while updating picture');
+        }
+
     }
 
     /**

@@ -14,6 +14,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\ImageUpload;
 
 /**
  * Company
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class Company extends Model
 {
+    use ImageUpload;
     const STATUS_ACTIVE = 'active';
     const STATUS_PENDING = 'pending';
 
@@ -41,6 +43,7 @@ class Company extends Model
     protected $hidden = [
         'password'
     ];
+
 
     public function jobs() : HasMany
     {
@@ -62,38 +65,17 @@ class Company extends Model
             $this->name = $array['name'];
             $this->email = $array['email'];
             $this->password = $array['password'];
-            $this->logo = null;
+            $this->logo = 'user.jpg';
             if (isset($array['website']))
             {
                 $this->website = $array['website'];
             }
             $this->phone = $array['phone'];
-            $this->description = null;
+            $this->description = $array['description'];
             $this->save();
             $this->cities()->attach($array['cities'], ['created_at' => now(), 'updated_at' => now()]);
     }
-    public function resizeAndUploadImage($imageFromArray, int $width, int $height, string $name) : string
-    {
-            $tmpPath = $imageFromArray->getPathname();
-            $type = $imageFromArray->getMimeType();
-            $extension = $imageFromArray->getClientOriginalExtension();
-            list($imgWidth, $imgHeight) = getimagesize($tmpPath);
-            if ($type == "image/jpeg") {
-                $originalImage = imagecreatefromjpeg($tmpPath);
-            } elseif ($type == "image/png") {
-                $originalImage = imagecreatefrompng($tmpPath);
-            }
-            $resizeImagePath = public_path("assets/img/companies/") . $name . '.' . $extension;
 
-            $resizedImage = imagecreatetruecolor($width, $height);
-            imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $width, $height, $imgWidth, $imgHeight);
-            move_uploaded_file($tmpPath, $resizeImagePath);
-            if($type=='image/jpeg') imagejpeg($resizedImage,  $resizeImagePath );
-            if($type=='image/png') imagepng($resizedImage,  $resizeImagePath);
-
-
-        return $name . '.' . $extension;
-    }
     public function getCompanyLocations(int $id) : Builder|array|Collection|Model
     {
         return self::with('cities')->find($id);
@@ -122,5 +104,16 @@ class Company extends Model
         }
         $company->save();
         return redirect()->route('account')->with('success', 'You have successfully updated company info.');
+    }
+    public function updateLogo($companyID, $logo) : void
+    {
+        $company = self::find($companyID);
+        $imageName = $this->resizeAndUploadImage($logo, 'assets/img/companies/', 150, 150);
+        if($company->logo != 'user.jpg'){
+            unlink(public_path('assets/img/companies/' . $company->logo));
+        }
+        $company->logo = $imageName;
+        session()->get('user')->logo = $imageName;
+        $company->save();
     }
 }
