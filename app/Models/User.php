@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use App\Traits\ImageUpload;
 
 class User extends Model
 {
+    use ImageUpload;
     protected $table = 'users';
 
     protected $fillable = [
@@ -104,16 +106,10 @@ class User extends Model
             return response()->json(["error" => "An error occurred."], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    public function updatePicture(int $userID, $picture,$accType) : RedirectResponse
+    public function updatePicture(int $userID, $picture) : RedirectResponse
     {
-        if ($accType == 'company') {
-            $company = Company::find($userID);
-            $company->logo = $picture->store('logos', 'public');
-            $company->save();
-            return redirect()->route('account');
-        }
-        $user = User::find($userID);
-        $imageName = $this->resizeAndUploadImage($picture, 150, 150);
+        $user = self::find($userID);
+        $imageName = $this->resizeAndUploadImage($picture, 'assets/img/users/',  150, 150);
         if($user->avatar != 'user.jpg'){
             unlink(public_path('assets/img/users/' . $user->avatar));
         }
@@ -149,28 +145,6 @@ class User extends Model
                 return redirect()->route('account')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
             }
             return redirect()->route('account')->with('success', 'You have successfully updated your info.');
-    }
-    public function resizeAndUploadImage($imageFromArray, int $width, int $height) : string
-    {
-        $tmpPath = $imageFromArray->getPathname();
-        $type = $imageFromArray->getMimeType();
-        $extension = $imageFromArray->getClientOriginalExtension();
-        list($imgWidth, $imgHeight) = getimagesize($tmpPath);
-        if ($type == "image/jpeg") {
-            $originalImage = imagecreatefromjpeg($tmpPath);
-        } elseif ($type == "image/png") {
-            $originalImage = imagecreatefrompng($tmpPath);
-        }
-        $imageName = time() . '.' . $extension;
-        $resizeImagePath = public_path("assets/img/users/") . $imageName;
-
-        $resizedImage = imagecreatetruecolor($width, $height);
-        imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $width, $height, $imgWidth, $imgHeight);
-        move_uploaded_file($tmpPath, $resizeImagePath);
-        if($type=='image/jpeg') imagejpeg($resizedImage,  $resizeImagePath );
-        if($type=='image/png') imagepng($resizedImage,  $resizeImagePath);
-
-        return $imageName;
     }
 
 

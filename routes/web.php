@@ -45,6 +45,7 @@ Route::middleware('IsLoggedIn')->group(function (){
             /*Route::put('/account/password', 'password')->name('account.password');*/
             Route::put('/account/picture', 'picture')->name('account.picture');
         });
+        Route::put('/companies/logo/{id}', [\App\Http\Controllers\Client\CompanyController::class, 'logo'])->name('companies.logo');
         Route::post('/jobs/save/{id}', [\App\Http\Controllers\Client\JobController::class, 'save'])->name('jobs.save');
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application/{id}', 'index')->name('application.index');

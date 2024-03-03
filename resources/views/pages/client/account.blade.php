@@ -20,7 +20,7 @@
 
                     <br/>
                     <!-- Profile picture upload button-->
-                    <form action="{{route('account.picture')}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
+                    <form action="{{session('accountType') == 'employee' ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
                         @csrf
                         @method('PUT')
                         <input id="fileInput" type="file" class="mt-3" name="picture">

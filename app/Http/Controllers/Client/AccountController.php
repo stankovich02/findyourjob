@@ -50,8 +50,7 @@ class AccountController extends DefaultController
     {
         try {
             $userID = $request->session()->get('user')->id;
-            $accType = $request->session()->get('accountType');
-            $this->userModel->updatePicture($userID, $request->picture, $accType);
+            $this->userModel->updatePicture($userID, $request->picture);
             return redirect()->route('account');
         }
         catch (\Exception $e) {

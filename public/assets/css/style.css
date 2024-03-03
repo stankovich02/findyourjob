@@ -82,6 +82,9 @@ input[name="accountType"]{
     min-height: 200px;
     max-width: 900px;
 }
+#companyError{
+    position: absolute;
+}
 .deleteJob{
     cursor: pointer;
     transition: all 0.2s ease-in-out;
