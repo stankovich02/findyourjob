@@ -80,7 +80,11 @@ class Job extends Model
                 self::STATUS_ACTIVE);
         if($array){
             if($array['keyword']){
-                $query->where('name', 'like', '%'.$array['keyword'].'%');
+                $keyword = $array['keyword'];
+                $query->where('name', 'like', '%'.$array['keyword'].'%')
+                    ->orWhereHas('company', function($query) use ($keyword) {
+                        $query->where('name', 'like', '%'.$keyword.'%');
+                    });
             }
             if($array['category']){
                 $query->where('category_id', $array['category']);
