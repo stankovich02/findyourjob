@@ -16,18 +16,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-      /*  $schedule->call(function () {
+        $schedule->call(function () {
             Job::where('status', 'active')
                 ->where('application_deadline', '=', now('Europe/Belgrade')->format('Y-m-d'))
                 ->update(['status' => Job::STATUS_EXPIRED]);
-        });*/
+        })->dailyAt('00:00')->timezone('Europe/Belgrade');
         $schedule->call(function () {
            $jobs = Job::where('status', 'active')->latest('id')->limit(5)->get();
            $subscribers = Newsletter::all();
             foreach ($subscribers as $subscriber) {
                 Mail::to($subscriber->email)->send(new NewJobsNewsletter($subscriber->email,$jobs));
             }
-        });
+        })->dailyAt('19:00')->timezone('Europe/Belgrade');
     }
 
     /**

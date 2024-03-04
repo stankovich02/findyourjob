@@ -92,7 +92,7 @@
             <div class="tab-content">
                 <div id="allJobs" class="tab-pane fade show p-0 active">
                     @foreach($jobs as $job)
-                        @include("pages.client.jobs.partials.job")
+                      @include('pages.client.jobs.partials.job')
                     @endforeach
                     <nav aria-label="..." class="d-flex justify-content-center mt-5">
                         <ul class="pagination pagination-md">

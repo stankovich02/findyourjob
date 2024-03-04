@@ -38,10 +38,11 @@ $(window).on('load', function () {
         $("#jobCategory").val(category);
         localStorage.removeItem('category');
         filterJobs(1);
+
     }
-    if($("#jobKeyword").val() || $("#jobCategory").val() || $("#jobSeniority").val() || $("#workType").val() || $("#workPlace").val() || $('#jobSalary').is(":checked") || $('#latestJobs').is(":checked")){
+   /* if($("#jobKeyword").val() || $("#jobCategory").val() || $("#jobSeniority").val() || $("#workType").val() !== 'both' || $("#workPlace").val() || $('#jobSalary').is(":checked") || $('#latestJobs').is(":checked")){
         filterJobs(1);
-    }
+    }*/
     });
 $("#filterJobs").click(function (e) {
     e.preventDefault();
@@ -61,6 +62,34 @@ function printJobs(data) {
 
 }
 
+let deleteButtons = document.querySelectorAll('.deleteJob a');
+
+deleteButtons.forEach((deleteButton) => {
+    deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('clicked')
+        let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
+        $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
+        $(".modal").css("display", "block");
+        $("#closeModal").click(function (e) {
+            e.preventDefault(); // Spriječava podrazumijevano ponašanje dugmeta "x"
+            $(".modal").css("display", "none");
+        });
+        /*    $("#deleteModal").click(function () {
+                let id = deleteButton.getAttribute('data-id');
+                $.ajax({
+                    url: '/jobs/' + id,
+                    method: 'DELETE',
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (data) {
+                      toastr.error(data.message);
+                    }
+                });
+            });*/
+    });
+});
 $(".pageLink").click(function (e) {
     e.preventDefault();
     let page = $(this).html();
@@ -95,6 +124,30 @@ function filterJobs(page) {
         success: function (data) {
             printJobs(data.html);
             makePagination(data);
+            $(document).on('click', '.deleteJob a', function (e) {
+                e.preventDefault();
+                console.log('clicked')
+                let jobName = this.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
+                $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
+                $(".modal").css("display", "block");
+                $("#closeModal").click(function (e) {
+                    e.preventDefault();
+                    $(".modal").css("display", "none");
+                });
+                $("#deleteModal").click(function () {
+                    let id = deleteButton.getAttribute('data-id');
+                    $.ajax({
+                        url: '/jobs/' + id,
+                        method: 'DELETE',
+                        success: function () {
+                            location.reload();
+                        },
+                        error: function (data) {
+                          toastr.error(data.message);
+                        }
+                    });
+                });
+            });
         },
         error: function (data) {
             if(data.responseJSON.errors){
@@ -178,31 +231,8 @@ $("#previousPage").click(function (e) {
     let page = $(previousPage).children().text();
     filterJobs(page);
 });
-let deleteButtons = document.querySelectorAll('.deleteJob a');
-deleteButtons.forEach((deleteButton) => {
-    deleteButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
-        $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
-        $(".modal").css("display", "block");
-        $("#closeModal").click(function () {
-            $(".modal").css("display", "none");
-        });
-        $("#deleteModal").click(function () {
-            let id = deleteButton.getAttribute('data-id');
-            $.ajax({
-                url: '/jobs/' + id,
-                method: 'DELETE',
-                success: function () {
-                    location.reload();
-                },
-                error: function (data) {
-                  toastr.error(data.message);
-                }
-            });
-        });
-    });
-});
+
+
 $(".saveJob").click(function (e) {
     e.preventDefault();
     let id = $(this).attr('data-id');
