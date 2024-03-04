@@ -116,7 +116,7 @@ class JobController extends DefaultController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostJobRequest $request) : string
+    public function store(PostJobRequest $request) : JsonResponse
     {
         try {
             DB::beginTransaction();

@@ -21,4 +21,5 @@ class NewsletterController extends DefaultController
             return response()->json(['error' => 'An error occurred.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

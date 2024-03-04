@@ -34,7 +34,7 @@ class PostJobRequest extends FormRequest
             'location' => 'required',
             'salary' => 'nullable|numeric',
             'workType' => 'required',
-            'applicationDeadline' => 'required|date|after:today',
+            'applicationDeadline' => 'required|date|after:today'
 
         ];
     }

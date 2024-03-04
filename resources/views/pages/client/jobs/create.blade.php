@@ -183,14 +183,22 @@
                 technologies: technologies,
                 applicationDeadline: applicationDeadline
             };
-            let fieldsIds = ['jobName', 'jobCategory', 'jobSeniority', 'jobLocation', 'jobSalary', 'jobWorkType', 'jobWorkPlace', 'jobAppDeadline'];
             $.ajax({
                 url: '/jobs',
                 method: 'POST',
                 data: data,
                 success: function (data) {
                     $("form p").text("");
+                    console.log(data.message);
                    toastr.success(data.message);
+                    $("#jobName").val("");
+                    $("#jobSalary").val("");
+                    descriptionEditor.setData(``);
+                    responsibilityEditor.setData(``);
+                    requirementsEditor.setData(``);
+                    benefitsEditor.setData(``);
+                    document.querySelector('#Technologies').setValue([]);
+                    $("#jobAppDeadline").val("");
                 },
                 error: function (data) {
                     $("form p").text("");
@@ -198,6 +206,7 @@
                         for (let key in data.responseJSON.errors) {
                             $("#" + key + "Error").text(data.responseJSON.errors[key][0]);
                         }
+                        window.scrollTo(0, 0);
                     }
                     if(data.responseJSON.error){
                         toastr.error(data.responseJSON.error);

@@ -27,4 +27,9 @@ class Newsletter extends Model
         $this->save();
         return response()->json(["message" => "You have been subscribed to our newsletter!"], ResponseAlias::HTTP_CREATED);
     }
+
+    public function getAll() : \Illuminate\Database\Eloquent\Collection
+    {
+        return self::all();
+    }
 }

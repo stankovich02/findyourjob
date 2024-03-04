@@ -54,23 +54,20 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
-            'ignore_exceptions' => false,
+            'channels' => ['daily'],
         ],
 
         'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
+                'driver' => 'single',
+                'path' => storage_path('logs/laravel.log'),
+                'level' => 'debug',
         ],
 
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
             'days' => 14,
-            'replace_placeholders' => true,
         ],
 
         'slack' => [
@@ -80,6 +77,7 @@ return [
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
+            'encoding' => 'utf-8',
         ],
 
         'papertrail' => [
@@ -92,6 +90,7 @@ return [
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
+            'encoding' => 'utf-8',
         ],
 
         'stderr' => [
@@ -103,6 +102,7 @@ return [
                 'stream' => 'php://stderr',
             ],
             'processors' => [PsrLogMessageProcessor::class],
+            'encoding' => 'utf-8',
         ],
 
         'syslog' => [
@@ -110,17 +110,20 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'facility' => LOG_USER,
             'replace_placeholders' => true,
+            'encoding' => 'utf-8',
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+            'encoding' => 'utf-8',
         ],
 
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
+            'encoding' => 'utf-8',
         ],
 
         'emergency' => [

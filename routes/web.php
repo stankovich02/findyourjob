@@ -62,3 +62,4 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::post('/register', 'register')->name('register.register');
     });
 });
+Route::view('/jobsnews', 'mail.new-jobs-newsletter')->name('jobsnews');
