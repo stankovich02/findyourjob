@@ -11,21 +11,20 @@
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    @if(session('accountType') === 'employee')
-                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
-                    @else
-                    <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
-                    @endif
-                        <!-- Profile picture help block-->
-
-                    <br/>
-                    <!-- Profile picture upload button-->
-                    <form action="{{session('accountType') == 'employee' ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
-                        @csrf
-                        @method('PUT')
-                        <input id="fileInput" type="file" class="mt-3" name="picture">
-                        <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload new picture</button>
-                    </form>
+                        @if(session('accountType') === 'employee')
+                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
+                        @else
+                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
+                        @endif
+                            <!-- Profile picture help block-->
+                        <br/>
+                        <!-- Profile picture upload button-->
+                        <form action="{{session('accountType') == 'employee' ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
+                            @csrf
+                            @method('PUT')
+                            <input id="fileInput" type="file" class="mt-3" name="picture">
+                            <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload new picture</button>
+                        </form>
                 </div>
                 @if($errors->has('picture'))
                 <p id="pictureError" class="text-center text-danger">
@@ -368,5 +367,5 @@
 </div>
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/account.min.js')}}"></script>
+    <script src="{{asset('assets/js/account.js')}}"></script>
 @endsection

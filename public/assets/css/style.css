@@ -72,6 +72,7 @@ input[name="accountType"]{
 }
 .img-account-profile{
     border: 3px solid #1a202c;
+
 }
 .editJob{
     cursor: pointer;
@@ -111,9 +112,7 @@ input[name="accountType"]{
     opacity: 1;
 }
 .img-account-profile{
-    max-width: 40%;
     object-fit: cover;
-    border-radius: 50%;
 }
 .jobSearchLabel{
     font-size: 18px;

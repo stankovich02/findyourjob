@@ -111,7 +111,7 @@ class Job extends Model
 
         }
         if($latest){
-            return $query->orderByDesc('id')->paginate(5);
+            $query->orderByDesc('id');
         }
         return $query->paginate(5);
     }
@@ -188,5 +188,14 @@ class Job extends Model
         }
         $job->saved_jobs()->attach($userId, ['created_at' => now(), 'updated_at' => now()]);
         return response()->json(['message' => 'Job saved successfully!'], ResponseAlias::HTTP_CREATED);
+    }
+
+    public function checkForExpiredJobs() : void
+    {
+        $jobs = self::where('status', self::STATUS_ACTIVE)->where('application_deadline', '<', Carbon::now())->get();
+        foreach ($jobs as $job){
+            $job->status = self::STATUS_EXPIRED;
+            $job->save();
+        }
     }
 }

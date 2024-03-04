@@ -9,6 +9,11 @@ class HomeController extends DefaultController
 {
     public function index() : \Illuminate\View\View
     {
+       /* $time = now();
+        $addHour = $time->addHour(1);
+        $getHourFromDate = $time->hour;
+        $getMinuteFromDate = $time->minute;
+        dd($getHourFromDate, $getMinuteFromDate);*/
         parent::__construct();
         $catModel = new Category();
         $this->data['categories'] = $catModel->getAll();

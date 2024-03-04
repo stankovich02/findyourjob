@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -46,7 +47,7 @@ class AccountController extends DefaultController
 
     }
 
-    public function picture(UpdateAccountPictureRequest $request) : RedirectResponse
+    public function picture(Request $request) : RedirectResponse
     {
         try {
             $userID = $request->session()->get('user')->id;

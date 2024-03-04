@@ -4,15 +4,27 @@ $.ajaxSetup({
     }
 });
 $(".addLink").click(function () {
-    let social = $(this).attr('data-social');
-    $(this).css("display", "none");
-    $(this).parent().html(
+    addLink($(this));
+});
+function addLink(element){
+    let social = element.attr('data-social');
+    element.css("display", "none");
+    element.parent().html(
         ` <input type="text" class="SocialLink form-control border-0 py-2" placeholder="Type link..."/>
         <button class="btn btn-primary ms-2 addLink" data-social="${social}">Update</button>`
     );
     $(".addLink").click(function () {
         let link = $(this).prev().val();
         let social = $(this).attr('data-social');
+        if(link === ""){
+            $(this).parent().html(`
+              <button class="btn btn-primary addLink" type="button" data-social="${social}">Add link</button>
+            `);
+            $(".addLink").click(function () {
+                addLink($(this));
+            });
+            return;
+        }
         $.ajax({
             url: '/account/socials',
             method: 'PUT',
@@ -28,8 +40,7 @@ $(".addLink").click(function () {
             }
         });
     });
-});
-
+}
 function changeLink(element) {
     let social = $(element).attr('data-social');
     $(element).css("display", "none");
@@ -60,6 +71,31 @@ function changeLink(element) {
 
 $(".changeLink").click(function () {
     changeLink(this);
+});
+$('#fileInput').on('change', function() {
+    var data = new FormData();
+    jQuery.each(jQuery('#fileInput')[0].files, function(i, file) {
+        data.append('picture', file);
+    });
+    $.ajax({
+        url: '/account/picture',
+        type: 'PUT',
+        data: data,
+        processData: false,
+        success: function(response,status) {
+            if(status === "success"){
+                $('#photoMsg').css('color','green');
+                $('#photoMsg').html("You changed your profile photo.");
+                setTimeout(function(){
+                    location.reload();
+                }, 2000);
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#photoMsg').css('color','red');
+            $('#photoMsg').html(xhr.responseText);
+        }
+    });
 });
 /*$("#fileInput").change(function () {
     let file = this.files[0];
