@@ -73,7 +73,7 @@ class Job extends Model
     {
         return $this->belongsToMany(User::class, 'saved_jobs', 'job_id', 'user_id');
     }
-    public function getAll(bool $latest = false,array $array = []) : Collection|LengthAwarePaginator
+    public function getAll(bool $latest = false,array $array = []) : Collection|array
     {
         $query = self::with('company', 'category','city', 'seniority', 'workplace', 'technology','saved_jobs')
             ->where('status',
@@ -113,7 +113,11 @@ class Job extends Model
         if($latest){
             $query->orderByDesc('id');
         }
-        return $query->paginate(5);
+        $countJobs = self::count();
+        return [
+            'jobs' => $query->paginate(5),
+            'countJobs' => $countJobs
+        ];
     }
     public function getSingleJob(int $id) : Model|null
     {

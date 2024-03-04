@@ -38,7 +38,7 @@ class JobController extends DefaultController
         $jobs = $this->jobModel->getAll();
         $categoryModel = new Category();
         $categories = $categoryModel->getAll();
-        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
+        return view('pages.client.jobs.index')->with('jobs', $jobs["jobs"])->with('countJobs', $jobs["countJobs"])->with('categories', $categories)->with('data', $this->data);
     }
 
     public function filter(Request $request) : JsonResponse
@@ -64,10 +64,10 @@ class JobController extends DefaultController
         }
 
         $clientResponse = [
-            'jobs' => $jobs,
+            'jobs' => $jobs['jobs'],
             'html' => []
         ];
-        foreach ($jobs as $job){
+        foreach ($jobs["jobs"] as $job){
             $clientResponse['html'][] = view('pages.client.jobs.partials.job', ['job' => $job])->render();
         }
         return response()->json($clientResponse);

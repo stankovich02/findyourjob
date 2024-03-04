@@ -17,7 +17,7 @@
                             <div class="row g-2">
 
                                 <div class="col-md-4 d-flex flex-column align-items-start">
-                                    <label for="jobKeyword" class="form-label text-white jobSearchLabel">Keyword:</label>
+                                    <label for="jobKeyword" class="form-label text-white jobSearchLabel">Search by job or company:</label>
                                     <input type="text" id="jobKeyword" class="form-control border-0"/>
                                 </div>
                                 <div class="col-md-4 d-flex flex-column align-items-start">
@@ -102,7 +102,7 @@
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= count($jobs); $i++)
+                            @for ($i = 1; $i <= $countJobs / 5; $i++)
                                 @if ($i === 1)
                                 <li class="page-item active" aria-current="page">
                                     <span class="page-link px-3 py-2">{{$i}}</span>

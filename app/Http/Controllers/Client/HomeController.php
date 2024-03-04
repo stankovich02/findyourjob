@@ -18,7 +18,8 @@ class HomeController extends DefaultController
         $catModel = new Category();
         $this->data['categories'] = $catModel->getAll();
         $jobModel = new Job();
-        $this->data['jobs'] = $jobModel->getAll(true,[]);
+        $jobs = $jobModel->getAll(true,[]);
+        $this->data['jobs'] = $jobs["jobs"];
         return view('pages.client.home')->with('data', $this->data);
     }
 }
