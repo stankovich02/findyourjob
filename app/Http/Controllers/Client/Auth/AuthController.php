@@ -83,7 +83,10 @@ class AuthController extends DefaultController
             }
             $request->session()->put('user', $user);
             $request->session()->put('accountType', $request->input('accountType'));
-            $this->logUserAction('User logged in.', $request, $user->id);
+            if($request->input('accountType') == 'employee')
+                $this->logUserAction('User logged in.', $request, $user->id);
+            else
+                $this->logUserAction('Company logged in.', $request, $user->id);
             return redirect()->route('home');
         }
         catch(\Exception $e){

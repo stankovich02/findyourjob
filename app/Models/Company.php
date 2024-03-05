@@ -63,7 +63,7 @@ class Company extends Model
         return self::all();
     }
 
-    public function insert(array $array) : void
+    public function insert(array $array) : int
     {
             $array['password'] = Hash::make($array['password'] . env('CUSTOM_STRING_FOR_HASH'));
             $this->name = $array['name'];
@@ -78,6 +78,7 @@ class Company extends Model
             $this->description = $array['description'];
             $this->save();
             $this->cities()->attach($array['cities'], ['created_at' => now(), 'updated_at' => now()]);
+            return $this->id;
     }
 
     public function getCompanyLocations(int $id) : Builder|array|Collection|Model

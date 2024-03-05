@@ -198,7 +198,8 @@
         @else
         @foreach($company->jobs as $job)
             @if($job->status == \App\Models\Job::STATUS_ACTIVE)
-                    @include("pages.client.jobs.partials.job")
+            {{--        @include("pages.client.jobs.partials.job")--}}
+                    <x-job :job="$job"/>
             @endif
         @endforeach
         @endif
@@ -207,7 +208,8 @@
             <h4 class="text-center mt-5">You have not applied for any jobs yet.</h4>
         @else
         @foreach($user->applications as $application)
-            <div class="job-item p-4 mb-4">
+                <x-job :job="$application"/>
+            {{--<div class="job-item p-4 mb-4">
                 <div class="row g-4">
                     <div class="col-sm-12 col-md-8 d-flex align-items-center">
                         <a href="{{route("companies.show", $application->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $application->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
@@ -248,7 +250,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--}}
             <!-- Jobs End -->
         @endforeach
         @endif
@@ -257,7 +259,7 @@
             <h4 class="text-center mt-5">You have not saved any jobs yet.</h4>
         @else
             @foreach($user->saved_jobs as $job)
-                <div class="job-item p-4 mb-4">
+               {{-- <div class="job-item p-4 mb-4">
                     <div class="row g-4">
                         <div class="col-sm-12 col-md-8 d-flex align-items-center">
                             <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
@@ -304,7 +306,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
+                    <x-job :job="$job"/>
                 <!-- Jobs End -->
             @endforeach
         @endif

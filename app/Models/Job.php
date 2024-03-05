@@ -154,7 +154,7 @@ class Job extends Model
 
     public function updateRow($name, $category, $seniority, $workplace, $technologies, $description,
                               $responsibilities, $requirements, $benefits, $location, $salary, $workType,
-                              $applicationDeadline, $companyId, $jobId) : void
+                              $applicationDeadline, $companyId, $jobId) : int
     {
         $job = self::find($jobId);
         $job->name = $name;
@@ -174,12 +174,15 @@ class Job extends Model
         $job->company_id = $companyId;
         $job->save();
         $job->technology()->sync($technologies);
+        return $job->id;
     }
-    public function deleteRow($jobId) : void
+    public function deleteRow($jobId) : int
     {
         $job = self::find($jobId);
+        $id = $job->id;
         $job->technology()->detach();
         $job->delete();
+        return $id;
     }
 
     public function saveJob($jobId, $userId) : JsonResponse

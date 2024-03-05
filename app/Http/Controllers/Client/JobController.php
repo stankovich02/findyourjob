@@ -68,7 +68,8 @@ class JobController extends DefaultController
             'html' => []
         ];
         foreach ($jobs["jobs"] as $job){
-            $clientResponse['html'][] = view('pages.client.jobs.partials.job', ['job' => $job])->render();
+            //use component Job
+            $clientResponse['html'][] = view('components.job', ['job' => $job])->render();
         }
         return response()->json($clientResponse);
     }
@@ -217,9 +218,10 @@ class JobController extends DefaultController
             $salary = $request->input('salary');
             $workType = $request->input('workType');
             $applicationDeadline = $request->input('applicationDeadline');
-            $this->jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
+            $jobID = $this->jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
                 $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
                     ->id, $id);
+            $this->logUserAction('Company edited a (id: ' . $jobID . ') job.', $request);
             return response(null,ResponseAlias::HTTP_OK);
         }
         catch (\Exception $e){
@@ -236,8 +238,9 @@ class JobController extends DefaultController
     {
         try {
             DB::beginTransaction();
-            $this->jobModel->deleteRow($id);
+            $companyID = $this->jobModel->deleteRow($id);
             DB::commit();
+            $this->logUserAction('Company deleted a job (id: ' . $id . ').', request());
             return response(null, ResponseAlias::HTTP_NO_CONTENT);
         }
         catch (\Exception $e){

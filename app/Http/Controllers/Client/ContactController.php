@@ -8,7 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
-class ContactController extends DefaultController
+class
+ContactController extends DefaultController
 {
     public function index() : View
     {

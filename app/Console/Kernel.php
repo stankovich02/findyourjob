@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
             foreach ($subscribers as $subscriber) {
                 Mail::to($subscriber->email)->send(new NewJobsNewsletter($subscriber->email,$jobs));
             }
-        })->dailyAt('19:00')->timezone('Europe/Belgrade');
+        });
     }
 
     /**

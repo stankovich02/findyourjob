@@ -59,7 +59,8 @@ class CompanyController extends DefaultController
             if ($request->input('website')) {
                 $array['website'] = $request->input('website');
             }
-            $this->companyModel->insert($array);
+            $companyID = $this->companyModel->insert($array);
+            $this->logUserAction('Company registered successfully.', $request, $companyID);
             DB::commit();
             return response()->json(['message' => 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.'], ResponseAlias::HTTP_CREATED);
         }
