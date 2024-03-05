@@ -51,7 +51,7 @@ class User extends Model
     {
         return $this->belongsToMany(Job::class, 'applications', 'user_id', 'job_id');
     }
-    public function insert(array $array) : string
+    public function insert(array $array) : array
     {
       try {
           $this->first_name = $array['first_name'];
@@ -69,7 +69,7 @@ class User extends Model
           }
           $this->token = $token;
           $this->save();
-          return $token;
+          return ['token' => $token, 'id' => $this->id];
       } catch (\Exception $e) {
           return $e->getMessage();
       }

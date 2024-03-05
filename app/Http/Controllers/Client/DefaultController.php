@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Client;
 use App\Models\Company;
 use App\Models\Nav;
 use App\Models\User;
-use Request;
+use App\Models\UserActionLog;
+use Illuminate\Http\Request;
+use Request as RequestFacade;
 
 class DefaultController extends Controller
 {
@@ -22,7 +24,7 @@ class DefaultController extends Controller
             $this->data['user'] = null;
         }
         $navModel = new Nav();
-        $route = Request::route()->getName();
+        $route = RequestFacade::route()->getName();
         $this->data['active'] = match ($route) {
             'home' => 'home',
             'jobs.index' => 'jobs.index',
@@ -31,7 +33,18 @@ class DefaultController extends Controller
             'author' => 'author',
             default => '',
         };
-        $this->data['nav'] = $navModel->getNav();
+          $this->data['nav'] = $navModel->getNav();
+    }
+
+    protected function logUserAction(string $action, Request $request, $user_id = null) : void
+    {
+        try {
+            $userActionLog = new UserActionLog();
+            $user_id = $request->session()->has('user') ? $request->session()->get('user')->id : $user_id;
+            $userActionLog->insert($request->ip(), $request->path(), $request->method(), $user_id, $action);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
 
     }
 }

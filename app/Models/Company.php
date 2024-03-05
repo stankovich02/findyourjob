@@ -54,9 +54,13 @@ class Company extends Model
         return $this->belongsToMany(City::class, 'companies_cities', 'company_id', 'city_id');
     }
 
-    public function getCompany(int $id) : Builder|array|Collection|Model
+    public function getCompany(int $id) : Collection|Model
     {
         return self::with('jobs','cities')->find($id);
+    }
+    public function getAll() : Collection|Model
+    {
+        return self::all();
     }
 
     public function insert(array $array) : void

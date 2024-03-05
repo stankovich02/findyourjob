@@ -27,15 +27,22 @@ class AuthController extends DefaultController
     }
     public function register(RegisterUserRequest $request) : RedirectResponse
     {
-        $array = [
-            'first_name' => $request->input('firstName'),
-            'last_name' => $request->input('lastName'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
-        $token = $this->userModel->insert($array);
-        Mail::to($request->input('email'))->send(new \App\Mail\EmailVerification($token));
-        return redirect()->back()->with('success', 'You have successfully registered! Please check your email to verify your account.');
+        try {
+            $array = [
+                'first_name' => $request->input('firstName'),
+                'last_name' => $request->input('lastName'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ];
+            $data = $this->userModel->insert($array);
+            Mail::to($request->input('email'))->send(new \App\Mail\EmailVerification($data['token']));
+            $this->logUserAction('User registered successfully.', $request, $data['id']);
+            return redirect()->back()->with('success', 'You have successfully registered! Please check your email to verify your account.');
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+
     }
     public function verify($token) : View|RedirectResponse
     {
@@ -63,16 +70,20 @@ class AuthController extends DefaultController
             else
                 $user = $companyModel::where('email', $email)->first();
             if(!$user || !password_verify($passwordWithEnv, $user->password)){
+                $this->logUserAction('User login failed.', $request, $user->id);
                 return redirect()->back()->with('error', 'Invalid credentials.');
             }
             if($user->is_active == 0 && $request->input('accountType') == 'employee'){
+                $this->logUserAction('User login failed.', $request, $user->id);
                 return redirect()->back()->with('error', 'Account is not verified. Please check your email for verification link.');
             }
             if($request->input('accountType') == 'company' && $user->status == $companyModel::STATUS_PENDING){
+                $this->logUserAction('Company login failed.', $request, $user->id);
                 return redirect()->back()->with('error', 'Your account is pending approval. Please wait for admin to approve your account.');
             }
             $request->session()->put('user', $user);
             $request->session()->put('accountType', $request->input('accountType'));
+            $this->logUserAction('User logged in.', $request, $user->id);
             return redirect()->route('home');
         }
         catch(\Exception $e){
@@ -83,8 +94,10 @@ class AuthController extends DefaultController
     public function logout(Request $request) : RedirectResponse
     {
         try {
+            $userID = $request->session()->get('user')->id;
             $request->session()->forget('user');
             $request->session()->forget('accountType');
+            $this->logUserAction('User logged out.', $request, $userID);
             return redirect()->route('home');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred');

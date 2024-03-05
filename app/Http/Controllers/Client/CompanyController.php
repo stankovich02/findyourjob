@@ -26,8 +26,11 @@ class CompanyController extends DefaultController
     /**
      * Display a listing of the resource.
      */
-    public function index(int $id)
+    public function index() : View
     {
+        parent::__construct();
+        $companies = $this->companyModel->getAll();
+        return view('pages.client.companies.index')->with('companies', $companies)->with('data', $this->data);
     }
 
     /**

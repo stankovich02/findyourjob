@@ -133,7 +133,8 @@ class JobController extends DefaultController
             $salary = $request->input('salary');
             $workType = $request->input('workType');
             $applicationDeadline = $request->input('applicationDeadline');
-            $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
+            $jobID = $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
+            $this->logUserAction('Company posted a ' . $name . ' (id: ' . $jobID . ') job.', $request);
             DB::commit();
             return response()->json(['message' => 'Job created successfully! Please wait for the admin to approve it!'], ResponseAlias::HTTP_CREATED);
         }

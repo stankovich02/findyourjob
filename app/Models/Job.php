@@ -129,7 +129,7 @@ class Job extends Model
             ->find
         ($id);
     }
-    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : void
+    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : int
     {
         $this->name = $name;
         $this->category_id = $category;
@@ -149,6 +149,7 @@ class Job extends Model
         $this->status = self::STATUS_PENDING;
         $this->save();
         $this->technology()->attach($technologies, ['created_at' => now(), 'updated_at' => now()]);
+        return $this->id;
     }
 
     public function updateRow($name, $category, $seniority, $workplace, $technologies, $description,
