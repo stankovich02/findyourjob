@@ -61,6 +61,10 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::post('/login', 'login')->name('login.login');
         Route::get('/register', 'showRegister')->name('register');
         Route::post('/register', 'register')->name('register.register');
+        Route::get('/forgot', 'forgotPassword')->name('forgotPassword');
+        Route::post('/forgot', 'sendEmailForReset')->name('sendEmailForReset');
+        Route::get('/password/reset/{token}', 'showFormForReset')->name('showFormForReset');
+        Route::post('/password/reset/{token}', 'resetPassword')->name('resetPassword');
     });
 });
 Route::view('/jobsnews', 'mail.new-jobs-newsletter')->name('jobsnews');

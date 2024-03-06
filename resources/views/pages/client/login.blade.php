@@ -27,6 +27,11 @@
                         @endif
                         </div>
                     </div>
+                    @if(session()->has('forgotPassword'))
+                        <div class="mb-3">
+                            <a href="{{route('forgotPassword')}}" class="signInFormLink font-small">Forgot your password? Click here.</a>
+                        </div>
+                    @endif
                     <div class="mb-3 d-flex align-items-center">
                         <p class="my-0">Select your account type:</p>
                         <label for="employeeRadio" class="form-label mb-0 mx-2">Employee</label>
@@ -38,6 +43,9 @@
                         Log in
                     </button>
                     <br/>
+                    @if(session()->has('success'))
+                        <p class="text-success">{{session('success')}}</p>
+                    @endif
                     @if(session()->has('error'))
                         <p class="text-danger">{{session('error')}}</p>
                     @endif

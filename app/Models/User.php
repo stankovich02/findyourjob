@@ -51,7 +51,7 @@ class User extends Model
     {
         return $this->belongsToMany(Job::class, 'applications', 'user_id', 'job_id');
     }
-    public function insert(array $array) : array
+    public function insert(array $array) : array|string
     {
       try {
           $this->first_name = $array['first_name'];
@@ -146,6 +146,28 @@ class User extends Model
             }
             return redirect()->route('account')->with('success', 'You have successfully updated your info.');
     }
-
+    public function getTokenForReset() : string
+    {
+        $token = Str::random(20);
+        $exists = User::where('token', $token)->first();
+        while ($exists) {
+            $token = Str::random(20);
+            $exists = User::where('token', $token)->first();
+        }
+        $this->token = $token;
+        $this->save();
+        return $token;
+    }
+    public function resetPassword(string $token, string $password) : bool
+    {
+        $user = User::where('token', $token)->first();
+        if(!$user){
+            return false;
+        }
+        $user->password = Hash::make($password . env('CUSTOM_STRING_FOR_HASH'));
+        $user->token = null;
+        $user->save();
+        return true;
+    }
 
 }

@@ -146,7 +146,7 @@ input[name="accountType"]{
     font-size: 20px;
     color: #999;
 }
-#passwordLogin:focus + .toggle-password:before {
+#passwordLogin:focus + .toggle-password:before, #resetPasswordLogin:hover + .toggle-password:before {
     color: #333;
 }
 .openedEye,.closedEye{
