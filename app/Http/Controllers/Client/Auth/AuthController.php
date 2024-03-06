@@ -83,10 +83,12 @@ class AuthController extends DefaultController
             }
             $request->session()->put('user', $user);
             $request->session()->put('accountType', $request->input('accountType'));
-            if($request->input('accountType') == 'employee')
+            if($request->input('accountType') == 'employee'){
                 $this->logUserAction('User logged in.', $request, $user->id);
-            else
+            }
+            else{
                 $this->logUserAction('Company logged in.', $request, $user->id);
+            }
             return redirect()->route('home');
         }
         catch(\Exception $e){
@@ -98,9 +100,13 @@ class AuthController extends DefaultController
     {
         try {
             $userID = $request->session()->get('user')->id;
+            $accountType = $request->session()->get('accountType');
             $request->session()->forget('user');
             $request->session()->forget('accountType');
-            $this->logUserAction('User logged out.', $request, $userID);
+            if($accountType == 'employee')
+                $this->logUserAction('User logged out.', $request, $userID);
+            else
+                $this->logUserAction('Company logged out.', $request, $userID);
             return redirect()->route('home');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred');

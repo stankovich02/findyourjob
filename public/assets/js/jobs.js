@@ -70,10 +70,10 @@ deleteButtons.forEach((deleteButton) => {
         console.log('clicked')
         let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
         $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
-        $(".modal").css("display", "block");
+        $(".deleteJobModal").css("display", "block");
         $("#closeModal").click(function (e) {
             e.preventDefault(); // Spriječava podrazumijevano ponašanje dugmeta "x"
-            $(".modal").css("display", "none");
+            $(".deleteJobModal").css("display", "none");
         });
         /*    $("#deleteModal").click(function () {
                 let id = deleteButton.getAttribute('data-id');
@@ -129,10 +129,10 @@ function filterJobs(page) {
                 console.log('clicked')
                 let jobName = this.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
                 $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
-                $(".modal").css("display", "block");
+                $(".deleteJobModal").css("display", "block");
                 $("#closeModal").click(function (e) {
                     e.preventDefault();
-                    $(".modal").css("display", "none");
+                    $(".deleteJobModal").css("display", "none");
                 });
                 $("#deleteModal").click(function () {
                     let id = deleteButton.getAttribute('data-id');

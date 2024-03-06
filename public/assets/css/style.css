@@ -95,9 +95,110 @@ input[name="accountType"]{
     top: -20px;
     z-index: 100;
 }
+.boostJob{
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: absolute;
+    right: 100px;
+    top: -20px;
+    z-index: 100;
+}
+.boostJob i{
+    margin-left: 10px;
+}
+.boostJobModal{
+    display: none;
+}
+.boostedJob{
+    cursor: default!important;
+    background: #4229ff;
+    position: absolute;
+    left: 3%;
+    top: -20px;
+    z-index: 100;
+}
+.boostedJob span{
+    color: #FFFFFF;
+    cursor: default!important;
+}
+.boostedJob span:hover{
+    color: #FFFFFF!important;
+}
+.boostedJob i{
+    color: #FFFFFF;
+}
+#passwordDiv{
+    position: relative;
+}
+#passwordDiv input{
+    padding-right: 30px;
+}
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-password:before {
+    font-weight: 900;
+    font-size: 20px;
+    color: #999;
+}
+#passwordLogin:focus + .toggle-password:before {
+    color: #333;
+}
+.openedEye,.closedEye{
+    font-size: 20px;
+    cursor: pointer;
+}
 .toast {
     opacity: 1 !important;
     width: 400px!important;
+}
+#companiesHeading{
+    font-size: 20px;
+    margin-top: 50px;
+}
+#compCount{
+    font-weight: 300;
+}
+#allCompanies a{
+    text-decoration: none;
+    color: #000000;
+}
+#allCompanies .card{
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .08);
+    border-radius: 10px;
+}
+#allCompanies .card .card-body p{
+    font-size: 18px;
+    font-weight: 700;
+
+}
+#allCompanies .card img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #1a202c;
+}
+.company{
+    background: #ffffff;
+    border-radius: 10px;
+    width:25%;
+    margin: 10px 2%;
+}
+#progressDetailsBar .progress-bar{
+   border-radius: 10px;
+    font-size: 15px;
+}
+#progressDetailsBar .progress{
+    border-radius: 10px;
+    height: 20px;
 }
 /*** Spinner ***/
 #spinner {

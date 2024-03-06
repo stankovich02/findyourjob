@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\PostJobRequest;
+use App\Models\BoostedJob;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
@@ -16,6 +17,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Stripe\Stripe;
+use Stripe\Charge;
 
 class JobController extends DefaultController
 {
@@ -38,7 +41,7 @@ class JobController extends DefaultController
         $jobs = $this->jobModel->getAll();
         $categoryModel = new Category();
         $categories = $categoryModel->getAll();
-        return view('pages.client.jobs.index')->with('jobs', $jobs["jobs"])->with('countJobs', $jobs["countJobs"])->with('categories', $categories)->with('data', $this->data);
+        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
     }
 
     public function filter(Request $request) : JsonResponse
@@ -64,14 +67,45 @@ class JobController extends DefaultController
         }
 
         $clientResponse = [
-            'jobs' => $jobs['jobs'],
+            'jobs' => $jobs,
             'html' => []
         ];
-        foreach ($jobs["jobs"] as $job){
-            //use component Job
+        foreach ($jobs as $job){
             $clientResponse['html'][] = view('components.job', ['job' => $job])->render();
         }
         return response()->json($clientResponse);
+    }
+
+    public function boost(Request $request, int $id) : RedirectResponse
+    {
+        Stripe::setApiKey('sk_test_51Or1PM08Wg9T2v5dDlLfT8fpvg9vH1gguxfkVVw3Dz6oZUER3916sHfs2D15boh728y1lbKCvViiyhOMffkRpyNL00fM6FlKbt');
+
+        if (!$request->has('stripeToken')) {
+            return redirect()->back()->with('boostError', 'Token not provided!');
+        }
+        $token = $request->stripeToken;
+        $amount = 1000;
+        $currency = 'eur';
+        try {
+            $charge = Charge::create([
+                'amount' => $amount,
+                'currency' => $currency,
+                'source' => $token,
+                'description' => 'Test payment'
+            ]);
+            $durationBoost = $request->input('duration');
+            $total = $request->input('total');
+            $jobID = $id;
+            $boostedJobsModel = new BoostedJob();
+            $boostedJobsModel->insert($jobID, $durationBoost, $total);
+            $stringDays = $durationBoost == 1 ? ' day' : ' days';
+            $this->logUserAction('Company boosted a job (id: ' . $jobID . ') for ' . $durationBoost . $stringDays
+                . '.',
+                $request);
+            return redirect()->back()->with('boostSuccess', 'Payment processed successfully. Your job is now boosted!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('boostError', $e->getMessage());
+        }
     }
 
     public function save(int $id) : JsonResponse
@@ -151,7 +185,7 @@ class JobController extends DefaultController
     /**
      * Display the specified resource.
      */
-    public function show(int $id) : View|RedirectResponse
+    public function show(int $id) : View|RedirectResponse|JsonResponse
     {
         parent::__construct();
         $jobModel = new Job();
@@ -161,6 +195,9 @@ class JobController extends DefaultController
         }
         if($job->status == Job::STATUS_EXPIRED || $job->status == Job::STATUS_PENDING){
             return redirect()->route('jobs.index');
+        }
+        if(\request()->ajax() && \request()->isMethod('get')){
+           return response()->json(['job' => $job]);
         }
         return view('pages.client.jobs.show')->with('job', $job)->with('data', $this->data);
     }

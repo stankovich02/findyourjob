@@ -90,7 +90,7 @@ class User extends Model
         }
     }
 
-    public function updateSocials(int $userID, string $social, string $link) : JsonResponse
+    public function updateSocials(int $userID, string $social, string $link = null) : JsonResponse
     {
         try {
             $user = User::find($userID);

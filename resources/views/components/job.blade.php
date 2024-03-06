@@ -1,9 +1,28 @@
-<div class="job-item p-4 mb-4 position-relative">
+<div class="job-item p-4 mb-5 position-relative">
+    @if((session()->has("user")) && (session()->get("accountType") == "company") && ($job->company_id == session()->get("user")->id) && ($job->boosted))
+        <div class="boostedJob">
+            <span class="btn">Boosted<i class="fas fa-bolt ms-4"></i></span>
+        </div>
+    @endif
+    @if(($job->isBoosted()) && ((session()->get("accountType") == "company") && ($job->company_id != session()->get("user")->id)) || (session()->get("accountType") == "employee"))
+        <div class="boostedJob d-flex align-items-center px-3">
+            <i class="fas fa-gem"></i>
+            <span class="btn">Featured Job</span>
+        </div>
+    @endif
+
+    @if((session()->has("user")) && (session()->get("accountType") == "company") && ($job->company_id == session()->get("user")->id) && (!$job->boosted))
+        <div class="boostJob">
+            <a href="" class="btn btn-warning" data-id="{{$job->id}}">Boost Job<i class="fas fa-bolt"></i></a>
+        </div>
+    @endif
     @if((session()->has("user")) && (session()->get("accountType") == "company") && ($job->company_id == session()->get("user")->id))
         <div class="deleteJob">
             <a href="" class="btn btn-danger" data-id="{{$job->id}}">X</a>
         </div>
     @endif
+
+
     <div class="row g-4">
         <div class="col-sm-12 col-md-8 d-flex align-items-center">
             <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>

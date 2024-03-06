@@ -83,6 +83,44 @@
         </div>
         <div class="col-xl-8">
             <!-- Account details card-->
+            @if(session("accountType") == "employee")
+            <div id="progressDetailsBar" class="mb-2">
+                <div class="progress">
+                    @php
+                        $progress = 0;
+                        if($data['user']->linkedin){
+                            $progress += 35;
+                        }
+                        if($data['user']->github){
+                            $progress += 35;
+                        }
+                        if($data['user']->avatar !== "user.jpg"){
+                            $progress += 30;
+                        }
+                    @endphp
+                    <div class="progress-bar" role="progressbar" style="width: {{$progress}}%" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100">{{$progress}}%</div>
+                </div>
+                @if($progress < 100)
+                    <p class="text-center mt-2">Complete your profile to increase your chances of getting hired.</p>
+                    <p class="my-0 mt-3">LinkedIn link
+                    @if($data['user']->linkedin)
+                        <i class="fas fa-check-circle"></i>
+                    @endif</p>
+                    <p class="my-0">Github link
+                    @if($data['user']->github)
+                        <i class="fas fa-check-circle"></i>
+                    @endif
+                    </p>
+                    <p class="my-0">Profile picture
+                        @if($data['user']->avatar !== "user.jpg")
+                            <i class="fas fa-check-circle"></i>
+                        @endif
+                    </p>
+                @else
+                    <p class="text-center mt-2">Your profile is complete. You are now more likely to get hired. <i class="far fa-laugh-wink"></i> </p>
+                @endif
+            </div>
+            @endif
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
@@ -198,7 +236,6 @@
         @else
         @foreach($company->jobs as $job)
             @if($job->status == \App\Models\Job::STATUS_ACTIVE)
-            {{--        @include("pages.client.jobs.partials.job")--}}
                     <x-job :job="$job"/>
             @endif
         @endforeach
@@ -209,49 +246,6 @@
         @else
         @foreach($user->applications as $application)
                 <x-job :job="$application"/>
-            {{--<div class="job-item p-4 mb-4">
-                <div class="row g-4">
-                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                        <a href="{{route("companies.show", $application->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $application->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
-                        <div class="text-start ps-4">
-                            <a href="{{route("jobs.show", $application->id)}}"><h5 class="mb-3 jobName">{{$application->name}}</h5></a>
-                            <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$application->city->name}}</span>
-                            <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$application->full_time ? "Full time" : "Part-time"}}</span>
-                            <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$application->seniority->name}}</span>
-                            <span class="text-truncate me-3"><i class="fas fa-briefcase text-primary me-2"></i>{{$application->workplace->name}}</span>
-                            @if($application->salary)
-                                <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                        <div class="d-flex mb-3">
-                            @if(session()->has("user") && session()->get("accountType") == "employee")
-                                @if($application->saved_jobs->where("id", session()->get("user")->id)->first())
-                                    <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$application->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
-                                @else
-                                    <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$application->id}}" href=""><i class="far fa-heart text-primary"></i></a>
-                                @endif
-                            @endif
-                            <a class="btn btn-muted" href="{{route("jobs.show", $application->id)}}">Applied</a>
-                        </div>
-                        <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{date('d/m/Y', strtotime($application->application_deadline))}}</small>
-                    </div>
-                    <div class="col-12">
-                        <div class="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                            @if($application->technology)
-                                @foreach($application->technology as $technology)
-                                    <span class="badge bg-primary me-2">{{$technology->name}}</span>
-                                @endforeach
-                                <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
-                            @else
-                                <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>--}}
-            <!-- Jobs End -->
         @endforeach
         @endif
         <h3 class="text-center pt-5 mt-5 mb-3">Saved jobs</h3>
@@ -259,56 +253,7 @@
             <h4 class="text-center mt-5">You have not saved any jobs yet.</h4>
         @else
             @foreach($user->saved_jobs as $job)
-               {{-- <div class="job-item p-4 mb-4">
-                    <div class="row g-4">
-                        <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                            <a href="{{route("companies.show", $job->company->id)}}"><img class="flex-shrink-0 img-fluid border rounded" src="{{asset("assets/img/companies/" . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;"></a>
-                            <div class="text-start ps-4">
-                                <a href="{{route("jobs.show", $job->id)}}"><h5 class="mb-3 jobName">{{$job->name}}</h5></a>
-                                <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{$job->city->name}}</span>
-                                <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{$job->full_time ? "Full time" : "Part-time"}}</span>
-                                <span class="text-truncate me-3"><i class="fa fa-user text-primary me-2"></i>{{$job->seniority->name}}</span>
-                                <span class="text-truncate me-3"><i class="fas fa-briefcase text-primary me-2"></i>{{$job->workplace->name}}</span>
-                                @if($job->salary)
-                                    <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{$job->salary}}&euro;</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                            <div class="d-flex mb-3">
-                                @if(session()->has("user") && session()->get("accountType") == "employee")
-                                    @if($job->saved_jobs->where("id", session()->get("user")->id)->first())
-                                        <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
-                                    @else
-                                        <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="far fa-heart text-primary"></i></a>
-                                    @endif
-                                @endif
-                                @if(session()->has("user") && session()->get("accountType") == "employee" && $job->applications->where("user_id", session()->get("user")->id)->first())
-                                    <a class="btn btn-muted" href="{{route("jobs.show", $job->id)}}">Applied</a>
-                                @elseif(!session()->has("user") || (session()->has("user") && session()->get("accountType") == "employee"))
-                                    <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">Apply Now</a>
-                                @else
-                                    <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">View job</a>
-                                @endif
-                            </div>
-                            <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{date('d/m/Y', strtotime($application->application_deadline))}}</small>
-                        </div>
-                        <div class="col-12">
-                            <div class="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                @if($job->technology)
-                                    @foreach($job->technology as $technology)
-                                        <span class="badge bg-primary me-2">{{$technology->name}}</span>
-                                    @endforeach
-                                    <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
-                                @else
-                                    <span class="badge bg-primary me-2">{{$application->seniority->name}}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>--}}
                     <x-job :job="$job"/>
-                <!-- Jobs End -->
             @endforeach
         @endif
     @endif
@@ -326,6 +271,27 @@
         </div>
     </div>
 </div>
+<div class="boostJobModal modal " tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content py-4">
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if(session("boostSuccess"))
+    <p id="boostSuccess">
+        {{session("boostSuccess")}}
+    </p>
+@endif
+@if(session("boostError"))
+    <p id="boostError">
+        {{session("boostError")}}
+    </p>
+@endif
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/account.js')}}"></script>

@@ -103,7 +103,7 @@
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= $countJobs / 5; $i++)
+                            @for ($i = 1; $i <= \App\Models\Job::count() / 5; $i++)
                                 @if ($i === 1)
                                 <li class="page-item active" aria-current="page">
                                     <span class="page-link px-3 py-2">{{$i}}</span>
@@ -126,7 +126,7 @@
     </div>
 </div>
 <!-- Jobs End -->
-<div class="modal" tabindex="-1">
+<div class="modal deleteJobModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -139,6 +139,28 @@
         </div>
     </div>
 </div>
+<div class="boostJobModal modal " tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content py-4">
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if(session("boostSuccess"))
+    <p id="boostSuccess">
+        {{session("boostSuccess")}}
+    </p>
+@endif
+@if(session("boostError"))
+    <p id="boostError">
+        {{session("boostError")}}
+    </p>
+@endif
+
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/jobs.js')}}"></script>

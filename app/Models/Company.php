@@ -60,7 +60,7 @@ class Company extends Model
     }
     public function getAll() : Collection|Model
     {
-        return self::all();
+        return self::where('status', self::STATUS_ACTIVE)->get();
     }
 
     public function insert(array $array) : int

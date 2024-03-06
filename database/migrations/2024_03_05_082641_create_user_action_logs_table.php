@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('ip_address');
             $table->string('path');
             $table->string('method');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('action');
             $table->timestamps();
         });

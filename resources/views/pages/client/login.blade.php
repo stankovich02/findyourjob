@@ -18,11 +18,14 @@
 
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control font-small" id="password" name="password" />
+                        <label for="passwordLogin" class="form-label">Password</label>
+                        <div id="passwordDiv">
+                        <input type="password" class="form-control font-small" id="passwordLogin" name="password" />
+                        <i toggle="#passwordLogin" class="toggle-password fas fa-eye"></i>
                         @if($errors->has('password'))
                             <p class="text-danger">{{$errors->first('password')}}</p>
                         @endif
+                        </div>
                     </div>
                     <div class="mb-3 d-flex align-items-center">
                         <p class="my-0">Select your account type:</p>
@@ -45,7 +48,5 @@
 
             </div>
         </div>
-
-
     </div>
 @endsection

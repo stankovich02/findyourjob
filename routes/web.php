@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,3 +64,4 @@ Route::middleware('IsNotLoggedIn')->group(function (){
     });
 });
 Route::view('/jobsnews', 'mail.new-jobs-newsletter')->name('jobsnews');
+Route::post('/jobs/boost/{id}', [\App\Http\Controllers\Client\JobController::class, 'boost'])->name('jobs.boost');

@@ -131,7 +131,8 @@
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         @foreach($data['jobs'] as $job)
-                            @include("pages.client.jobs.partials.job")
+                           {{-- @include("pages.client.jobs.partials.job")--}}
+                            <x-job :job="$job"/>
                         @endforeach
                         <a class="btn btn-primary py-3 px-5" href="{{route("jobs.index")}}">Browse More Jobs</a>
                     </div>
