@@ -38,5 +38,19 @@ class ApplicationController extends DefaultController
             return redirect()->back()->with('error', 'An error occurred while submitting your application. Please try again later.');
         }
     }
+    public function destroy(int $id) : RedirectResponse
+    {
+        try
+        {
+            $jobID = $this->applicationModel->getApplication($id)->job_id;
+            $jobName = Job::where('id', $jobID)->first()->name;
+            $this->applicationModel->deleteApplication($id);
+            $this->logUserAction('User removed application for a ' . $jobName . ' (id: ' . $jobID . ') job.', request());
+            return redirect()->route('jobs.show', $jobID)->with('success', 'Application has been removed successfully.');
+        }
+        catch (\Exception $e){
+            return redirect()->back()->with('error', 'An error occurred while deleting the application. Please try again later.');
+        }
+    }
 
 }

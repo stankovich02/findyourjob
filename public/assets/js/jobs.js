@@ -72,7 +72,6 @@ let deleteButtons = document.querySelectorAll('.deleteJob a');
 deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('clicked')
         let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
         $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
         $(".deleteJobModal").css("display", "block");

@@ -32,7 +32,7 @@ class Application extends Model
         $this->job_id = $jobID;
         $this->user_id = $userID;
         $this->cover_letter = $coverLetter;
-        $fileName = time() . '_' . $file->getClientOriginalName();
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->getPathname();
         move_uploaded_file($filePath, public_path("assets/applications/" . $fileName));
         $this->uploaded_file = $fileName;
@@ -41,5 +41,11 @@ class Application extends Model
     public function getApplication($id) : Application|Collection
     {
         return self::with('user')->find($id);
+    }
+    public function deleteApplication(int $id) : void
+    {
+        $application = self::find($id);
+        unlink(public_path('assets/applications/' . $application->uploaded_file));
+        $application->delete();
     }
 }

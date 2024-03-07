@@ -9,32 +9,29 @@
         <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Job Listing</h1>
         <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
             <!-- Search Start -->
-            <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+            <div class="container-fluid bg-primary mb-2 wow fadeIn mb-5" data-wow-delay="0.1s" style="padding: 35px;">
                 <div class="container">
                     <div class="row g-2">
                         <div class="col-md-10">
-                            <form data-action="{{route("jobs.filter")}}">
+                            <form data-action="{{route("jobs.filter")}}" id="filterForm">
                             <div class="row g-2">
-
                                 <div class="col-md-4 d-flex flex-column align-items-start">
                                     <label for="jobKeyword" class="form-label text-white jobSearchLabel">Search by job or company:</label>
                                     <input type="text" id="jobKeyword" class="form-control border-0"/>
                                 </div>
                                 <div class="col-md-4 d-flex flex-column align-items-start">
                                     <label for="jobCity" class="form-label text-white jobSearchLabel">Search by city:</label>
-                                    {{--<input type="text" id="jobCity" class="form-control border-0"/>--}}
                                     <div id="Cities"></div>
                                 </div>
                                 <div class="col-md-4 d-flex flex-column align-items-start">
                                     <label for="jobTechnologies" class="form-label text-white jobSearchLabel">Search by technology:</label>
-                                    {{--<input type="text" id="jobCity" class="form-control border-0"/>--}}
                                     <div id="Technologies"></div>
                                 </div>
                                 <div class="col-md-4 d-flex flex-column align-items-start">
                                     <label for="jobCategory" class="form-label text-white jobSearchLabel">Job Category:</label>
                                     <select class="form-select border-0" id="jobCategory">
                                         <option value="0">All</option>
-                                        @foreach($categories as $category)
+                                        @foreach($data['categories'] as $category)
                                             <option value="{{$category->id}}">{{$category->name}}</option>
                                         @endforeach()
                                     </select>
@@ -43,9 +40,9 @@
                                     <label for="jobSeniority" class="form-label text-white jobSearchLabel">Seniority:</label>
                                     <select class="form-select border-0" id="jobSeniority">
                                         <option value="0">All</option>
-                                        <option value="1">Junior</option>
-                                        <option value="2">Medior</option>
-                                        <option value="3">Senior</option>
+                                        @foreach($data['seniorities'] as $seniority)
+                                            <option value="{{$seniority->id}}">{{$seniority->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-4 d-flex flex-column align-items-start">
@@ -60,9 +57,9 @@
                                     <label for="workPlace" class="form-label text-white jobSearchLabel">Workplace:</label>
                                     <select class="form-select border-0" id="workPlace">
                                         <option value="0">All</option>
-                                        <option value="1">Office</option>
-                                        <option value="2">Remote</option>
-                                        <option value="3">Hybrid</option>
+                                        @foreach($data['workplaces'] as $workplace)
+                                            <option value="{{$workplace->id}}">{{$workplace->name}}</option>
+                                        @endforeach
 
                                     </select>
                                 </div>

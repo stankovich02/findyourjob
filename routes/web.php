@@ -31,12 +31,7 @@ Route::controller(\App\Http\Controllers\Client\ContactController::class)->group(
     Route::post('/contact', 'store')->name('contact.store');
 });
 
-
 Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
-
-Route::get('/verification/{token}', [App\Http\Controllers\Client\Auth\AuthController::class, 'verify'])->name('verify');
-
-
 
 Route::middleware('IsLoggedIn')->group(function (){
     Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
@@ -55,6 +50,7 @@ Route::middleware('IsLoggedIn')->group(function (){
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application/{id}', 'index')->name('application.index');
         Route::post('/application/store', 'store')->name('application.store');
+        Route::delete('/application/delete/{id}', 'destroy')->name('application.destroy');
     });
     Route::get('/logout', [\App\Http\Controllers\Client\Auth\AuthController::class, 'logout'])->name('logout');
 });
@@ -73,6 +69,8 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::post('/login', 'login')->name('login.login');
         Route::get('/register', 'showRegister')->name('register');
         Route::post('/register', 'register')->name('register.register');
+        Route::get('/verification/{token}',  'verify')->name('verify');
     });
+
 });
 

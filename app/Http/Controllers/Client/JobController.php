@@ -35,9 +35,10 @@ class JobController extends DefaultController
     {
         parent::__construct();
         $jobs = $this->jobModel->getAll();
-        $categoryModel = new Category();
-        $categories = $categoryModel->getAll();
-        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('categories', $categories)->with('data', $this->data);
+        $this->data['categories'] = Category::all();
+        $this->data['seniorities'] = Seniority::all();
+        $this->data['workplaces'] = Workplace::all();
+        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('data', $this->data);
     }
 
     public function filter(Request $request) : JsonResponse
