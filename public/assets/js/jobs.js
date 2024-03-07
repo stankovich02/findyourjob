@@ -51,6 +51,11 @@ $("#filterJobs").click(function (e) {
 });
 function printJobs(data) {
     let html = "";
+    if(data.length === 0){
+        html += `<h3 class="text-center mt-5 pt-3">There are no jobs that match your search criteria.</h3>`;
+        $("#allJobs").html(html);
+        return;
+    }
     data.forEach(job => {
         html += job;
     });

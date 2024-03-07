@@ -130,10 +130,14 @@
             <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
+                        @if($data['jobs']->count() == 0)
+                            <h4 class="text-center mt-5">There are no jobs available at the moment.</h4>
+                        @else
                         @foreach($data['jobs'] as $job)
                            {{-- @include("pages.client.jobs.partials.job")--}}
                             <x-job :job="$job"/>
                         @endforeach
+                        @endif
                         <a class="btn btn-primary py-3 px-5" href="{{route("jobs.index")}}">Browse More Jobs</a>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
             <span class="btn">Boosted<i class="fas fa-bolt ms-4"></i></span>
         </div>
     @endif
-    @if(($job->isBoosted()) && ((session()->get("accountType") == "company") && ($job->company_id != session()->get("user")->id)) || (session()->get("accountType") == "employee"))
+    @if(($job->isBoosted()) && (((session()->get("accountType") == "company") && ($job->company_id != session()->get("user")->id)) || (session()->get("accountType") == "employee") || (!session()->has("user"))))
         <div class="boostedJob d-flex align-items-center px-3">
             <i class="fas fa-gem"></i>
             <span class="btn">Featured Job</span>

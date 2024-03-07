@@ -91,10 +91,13 @@
             <!-- Search End -->
             <div class="tab-content">
                 <div id="allJobs" class="tab-pane fade show p-0 active">
-                    @foreach($jobs as $job)
-                      {{--@include('pages.client.jobs.partials.job')--}}
-                        <x-job :job="$job"/>
-                    @endforeach
+                    @if(count($jobs) == 0)
+                        <h4 class="text-center mt-5">There are no jobs available at the moment.</h4>
+                    @else
+                        @foreach($jobs as $job)
+                            <x-job :job="$job"/>
+                        @endforeach
+                    @endif
                     <nav aria-label="..." class="d-flex justify-content-center mt-5">
                         <ul class="pagination pagination-md">
                             <li class="page-item disabled" id="previousPage">

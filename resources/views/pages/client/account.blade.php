@@ -14,7 +14,7 @@
                         @if(session('accountType') === 'employee')
                         <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
                         @else
-                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
+                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('auserssets/img/companies/' . $company->logo)}}" alt="">
                         @endif
                             <!-- Profile picture help block-->
                         <br/>
@@ -88,13 +88,13 @@
                 <div class="progress">
                     @php
                         $progress = 0;
-                        if($data['user']->linkedin){
+                        if($user->linkedin){
                             $progress += 35;
                         }
-                        if($data['user']->github){
+                        if($user->github){
                             $progress += 35;
                         }
-                        if($data['user']->avatar !== "user.jpg"){
+                        if($user->avatar !== "user.jpg"){
                             $progress += 30;
                         }
                     @endphp
@@ -103,16 +103,16 @@
                 @if($progress < 100)
                     <p class="text-center mt-2">Complete your profile to increase your chances of getting hired.</p>
                     <p class="my-0 mt-3">LinkedIn link
-                    @if($data['user']->linkedin)
+                    @if($duser->linkedin)
                         <i class="fas fa-check-circle"></i>
                     @endif</p>
                     <p class="my-0">Github link
-                    @if($data['user']->github)
+                    @if($user->github)
                         <i class="fas fa-check-circle"></i>
                     @endif
                     </p>
                     <p class="my-0">Profile picture
-                        @if($data['user']->avatar !== "user.jpg")
+                        @if($user->avatar !== "user.jpg")
                             <i class="fas fa-check-circle"></i>
                         @endif
                     </p>
@@ -244,9 +244,9 @@
         @if($user->applications->count() == 0)
             <h4 class="text-center mt-5">You have not applied for any jobs yet.</h4>
         @else
-        @foreach($user->applications as $application)
-                <x-job :job="$application"/>
-        @endforeach
+            @foreach($user->applications as $application)
+                    <x-job :job="$application"/>
+            @endforeach
         @endif
         <h3 class="text-center pt-5 mt-5 mb-3">Saved jobs</h3>
         @if($user->saved_jobs->count() == 0)
