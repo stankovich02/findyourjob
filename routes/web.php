@@ -39,15 +39,19 @@ Route::get('/verification/{token}', [App\Http\Controllers\Client\Auth\AuthContro
 
 
 Route::middleware('IsLoggedIn')->group(function (){
-        Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
-            Route::get('/account','index')->name('account');
-            Route::put('/account/socials', 'updateSocials')->name('account.socials');
-            Route::put('/account/info', 'info')->name('account.info');
-            /*Route::put('/account/password', 'password')->name('account.password');*/
-            Route::put('/account/picture', 'picture')->name('account.picture');
+    Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
+        Route::prefix('account')->name('account.')->group(function (){
+            Route::get('/','index')->name('index');
+            Route::put('/socials', 'updateSocials')->name('socials');
+            Route::put('/info', 'info')->name('info');
+            Route::put('/picture', 'picture')->name('picture');
+            Route::get('/password/new', 'showFormForNewPassword')->name('show_form_for_new_password');
+            Route::put('/password/new', 'updatePassword')->name('update_password');
         });
+    });
         Route::put('/companies/logo/{id}', [\App\Http\Controllers\Client\CompanyController::class, 'logo'])->name('companies.logo');
         Route::post('/jobs/save/{id}', [\App\Http\Controllers\Client\JobController::class, 'save'])->name('jobs.save');
+        Route::post('/jobs/boost/{id}', [\App\Http\Controllers\Client\JobController::class, 'boost'])->name('jobs.boost');
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
         Route::get('/application/{id}', 'index')->name('application.index');
         Route::post('/application/store', 'store')->name('application.store');
@@ -56,16 +60,19 @@ Route::middleware('IsLoggedIn')->group(function (){
 });
 
 Route::middleware('IsNotLoggedIn')->group(function (){
+    Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
+        Route::prefix('account')->name('account.')->group(function (){
+            Route::get('/password/forgot','showFormForEmail')->name('show_form_for_email');
+            Route::post('/password/forgot', 'sendEmailForReset')->name('send_email_for_reset');
+            Route::get('/password/reset/{token}', 'showFormForReset')->name('show_form_for_reset');
+            Route::put('/password/reset/{token}', 'resetPassword')->name('reset_password');
+        });
+    });
     Route::controller(\App\Http\Controllers\Client\Auth\AuthController::class)->group(function (){
         Route::get('/login', 'showLogin')->name('login');
         Route::post('/login', 'login')->name('login.login');
         Route::get('/register', 'showRegister')->name('register');
         Route::post('/register', 'register')->name('register.register');
-        Route::get('/forgot', 'forgotPassword')->name('forgotPassword');
-        Route::post('/forgot', 'sendEmailForReset')->name('sendEmailForReset');
-        Route::get('/password/reset/{token}', 'showFormForReset')->name('showFormForReset');
-        Route::post('/password/reset/{token}', 'resetPassword')->name('resetPassword');
     });
 });
-Route::view('/jobsnews', 'mail.new-jobs-newsletter')->name('jobsnews');
-Route::post('/jobs/boost/{id}', [\App\Http\Controllers\Client\JobController::class, 'boost'])->name('jobs.boost');
+

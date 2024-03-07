@@ -32,7 +32,7 @@
                     @endif
                 </a>
                 <div class="dropdown-menu rounded-0 m-0">
-                    <a href="{{route('account')}}" class="dropdown-item">Account</a>
+                    <a href="{{route('account.index')}}" class="dropdown-item">Account</a>
                     <a href="{{route('logout')}}" class="dropdown-item">Logout</a>
                 </div>
             </div>

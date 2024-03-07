@@ -17,11 +17,9 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CompanyController extends DefaultController
 {
-    private Company $companyModel;
-    public function __construct()
+    public function __construct(private readonly Company $companyModel = new Company())
     {
         parent::__construct();
-        $this->companyModel = new Company();
     }
     /**
      * Display a listing of the resource.
@@ -80,7 +78,7 @@ class CompanyController extends DefaultController
     {
         parent::__construct();
         if(session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id){
-            return redirect()->route('account');
+            return redirect()->route('account.index');
         }
         $company = $this->companyModel->getCompany($id);
         if($company == null){
@@ -118,7 +116,7 @@ class CompanyController extends DefaultController
     {
         try {
             $this->companyModel->updateLogo($id, $request->picture);
-            return redirect()->route('account');
+            return redirect()->route('account.index');
         }
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while updating picture');

@@ -40,7 +40,7 @@ class ResetPassword extends Mailable
     {
         return new Content(
             view: 'mail.reset-password',
-            with: ['resetLink' => "http://127.0.0.1:8000/password/reset/" . $this->token],
+            with: ['resetLink' => route('account.show_form_for_reset', $this->token)],
         );
     }
 

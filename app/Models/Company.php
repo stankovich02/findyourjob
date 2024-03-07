@@ -108,7 +108,7 @@ class Company extends Model
             $company->phone = $phone;
         }
         $company->save();
-        return redirect()->route('account')->with('success', 'You have successfully updated company info.');
+        return redirect()->route('account.index')->with('success', 'You have successfully updated company info.');
     }
     public function updateLogo($companyID, $logo) : void
     {
@@ -120,5 +120,15 @@ class Company extends Model
         $company->logo = $imageName;
         session()->get('user')->logo = $imageName;
         $company->save();
+    }
+    public function updatePassword(int $userID, string $oldPassword, string $newPassword) : bool
+    {
+        $company = self::find($userID);
+        if (!Hash::check($oldPassword . env('CUSTOM_STRING_FOR_HASH'), $company->password)) {
+            return false;
+        }
+        $company->password = Hash::make($newPassword . env('CUSTOM_STRING_FOR_HASH'));
+        $company->save();
+        return true;
     }
 }

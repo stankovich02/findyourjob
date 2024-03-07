@@ -22,19 +22,15 @@ use Stripe\Charge;
 
 class JobController extends DefaultController
 {
-    private Job $jobModel;
-    private Company $companyModel;
+    public function __construct(private readonly Job $jobModel = new Job(), private readonly Company $companyModel =
+    new Company())
+    {
+        parent::__construct();
+        $this->middleware('IsCompany')->except('index', 'show', 'save', 'filter');
+    }
     /**
      * Display a listing of the resource.
      */
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->companyModel = new Company();
-        $this->jobModel = new Job();
-        $this->middleware('IsCompany')->except('index', 'show', 'save', 'filter');
-    }
     public function index() : View
     {
         parent::__construct();

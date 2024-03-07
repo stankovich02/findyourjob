@@ -14,7 +14,7 @@
                         @if(session('accountType') === 'employee')
                         <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
                         @else
-                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('auserssets/img/companies/' . $company->logo)}}" alt="">
+                        <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
                         @endif
                             <!-- Profile picture help block-->
                         <br/>
@@ -183,7 +183,7 @@
                             <div class="col-md-6">
                                 <label class="small mb-1">Password</label>
                                 <br/>
-                                <a href="" class="btn btn-primary" id="btnChangePassword">Change password</a>
+                                <a href="{{route('account.show_form_for_new_password')}}" class="btn btn-primary" id="btnChangePassword">Change password</a>
                             </div>
                         </div>
                         @else
@@ -205,7 +205,7 @@
                             <div class="col-md-6">
                                 <label class="small mb-1">Password</label>
                                 <br/>
-                                <a href="" class="btn btn-primary" id="btnChangePassword">Change password</a>
+                                <a href="{{route('account.show_form_for_new_password')}}" class="btn btn-primary" id="btnChangePassword">Change password</a>
                             </div>
                         </div>
                         @endif

@@ -116,7 +116,7 @@ class User extends Model
         $user->avatar = $imageName;
         session()->get('user')->avatar = $imageName;
         $user->save();
-        return redirect()->route('account');
+        return redirect()->route('account.index');
     }
 
     public function updateInfo(int $userID, string $firstName, string $lastName,string $email) : RedirectResponse
@@ -142,9 +142,9 @@ class User extends Model
             $user->save();
             if ($user->email != $email) {
                 $user->email = $email;
-                return redirect()->route('account')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
+                return redirect()->route('account.index')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
             }
-            return redirect()->route('account')->with('success', 'You have successfully updated your info.');
+            return redirect()->route('account.index')->with('success', 'You have successfully updated your info.');
     }
     public function getTokenForReset() : string
     {
@@ -158,7 +158,7 @@ class User extends Model
         $this->save();
         return $token;
     }
-    public function resetPassword(string $token, string $password) : bool
+    public function resetPassword(string $token, string $password) : bool|int
     {
         $user = User::where('token', $token)->first();
         if(!$user){
@@ -166,6 +166,16 @@ class User extends Model
         }
         $user->password = Hash::make($password . env('CUSTOM_STRING_FOR_HASH'));
         $user->token = null;
+        $user->save();
+        return $user->id;
+    }
+    public function updatePassword(int $userID, string $oldPassword, string $newPassword) : bool
+    {
+        $user = User::find($userID);
+        if (!Hash::check($oldPassword . env('CUSTOM_STRING_FOR_HASH'), $user->password)) {
+            return false;
+        }
+        $user->password = Hash::make($newPassword . env('CUSTOM_STRING_FOR_HASH'));
         $user->save();
         return true;
     }

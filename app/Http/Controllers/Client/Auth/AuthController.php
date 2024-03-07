@@ -142,43 +142,4 @@ class AuthController extends DefaultController
             return redirect()->back()->with('error', 'An error occurred');
         }
     }
-
-    public function forgotPassword() : View
-    {
-        return view('pages.client.forgot-password')->with('data', $this->data);
-    }
-    public function sendEmailForReset(Request $request) : RedirectResponse
-    {
-        try {
-            $email = $request->input('email');
-            $user = $this->userModel::where('email', $email)->first();
-            if(!$user){
-                return redirect()->back()->with('error', 'No user found with this email.');
-            }
-               $token = $user->getTokenForReset();
-            Mail::to($email)->send(new \App\Mail\ResetPassword($token));
-            return redirect()->back()->with('success', 'Please check your email for reset password link.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred');
-        }
-    }
-
-    public function showFormForReset($token) : View
-    {
-        return view('pages.client.reset-password')->with('data', $this->data)->with('token', $token);
-    }
-    public function resetPassword(ResetPasswordRequest $request, $token) : RedirectResponse
-    {
-        try {
-            $password = $request->input('password');
-            $reset = $this->userModel->resetPassword($token, $password);
-            if(!$reset){
-                return redirect()->back()->with('error', 'Invalid token.');
-            }
-            return redirect()->route('login')->with('success', 'Password has been successfully reset.');
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred.');
-        }
-    }
 }

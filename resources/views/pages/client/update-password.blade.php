@@ -6,16 +6,29 @@
     <div class="container py-5">
         <div class="row d-flex flex-column align-items-center">
             <div class="col-lg-5 col-md-7 col-12">
-                <form id="loginForm" class="font-small mx-auto" method="POST" action="{{route("account.reset_password", $token)}}">
+                <form id="loginForm" class="font-small mx-auto" method="POST" action="{{{route('account.update_password')}}}">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
+                        <label for="passwordLogin" class="form-label">Current password:</label>
+                        <div id="passwordDiv">
+                            <input type="password" class="form-control font-small" id="currentPassword" name="currentPassword" />
+                            <i toggle="#currentPassword" class="toggle-password fas fa-eye"></i>
+                            @if(session()->has('currentPassword'))
+                                <p class="text-danger mt-3">{{session('currentPassword')}}</p>
+                            @endif
+                            @if($errors->has('currentPassword'))
+                                <p class="text-danger mt-3">{{$errors->first('currentPassword')}}</p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="passwordLogin" class="form-label">New password:</label>
                         <div id="passwordDiv">
-                            <input type="password" class="form-control font-small" id="passwordLogin" name="password" />
+                            <input type="password" class="form-control font-small" id="passwordLogin" name="newPassword" />
                             <i toggle="#passwordLogin" class="toggle-password fas fa-eye"></i>
-                            @if($errors->has('password'))
-                                <p class="text-danger mt-3">{{$errors->first('password')}}</p>
+                            @if($errors->has('newPassword'))
+                                <p class="text-danger mt-3">{{$errors->first('newPassword')}}</p>
                             @endif
                         </div>
                     </div>
@@ -30,7 +43,7 @@
                         </div>
                     </div>
                     <button id="btnLogin" class="btn btn-primary text-center d-block mx-auto px-4">
-                        Reset password
+                        Change password
                     </button>
                     <br/>
                     @if(session()->has('error'))
@@ -43,5 +56,6 @@
     </div>
     <br/><br/><br/><br/><br/><br/>
 @endsection
+
 
 

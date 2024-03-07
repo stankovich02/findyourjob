@@ -10,17 +10,15 @@ use Illuminate\View\View;
 
 class ApplicationController extends DefaultController
 {
-    private Application $applicationModel;
 
-    public function __construct()
+    public function __construct(private readonly Application $applicationModel = new Application())
     {
         parent::__construct();
-        $this->applicationModel = new Application();
     }
     public function index(int $id) : View
     {
         parent::__construct();
-        $application = $this->applicationModel ->getApplication($id);
+        $application = $this->applicationModel->getApplication($id);
         return view('pages.client.application')->with('application', $application)->with('data', $this->data);
     }
     public function store(JobApplyRequest $request) : RedirectResponse
