@@ -38,11 +38,7 @@ $(window).on('load', function () {
         $("#jobCategory").val(category);
         localStorage.removeItem('category');
         filterJobs(1);
-
     }
-   /* if($("#jobKeyword").val() || $("#jobCategory").val() || $("#jobSeniority").val() || $("#workType").val() !== 'both' || $("#workPlace").val() || $('#jobSalary').is(":checked") || $('#latestJobs').is(":checked")){
-        filterJobs(1);
-    }*/
     });
 $("#filterJobs").click(function (e) {
     e.preventDefault();

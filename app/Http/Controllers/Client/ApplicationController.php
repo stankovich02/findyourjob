@@ -15,10 +15,18 @@ class ApplicationController extends DefaultController
     {
         parent::__construct();
     }
-    public function index(int $id) : View
+    public function index(int $id) : View|RedirectResponse
     {
         parent::__construct();
         $application = $this->applicationModel->getApplication($id);
+        if(session()->get('accountType') == 'employee'){
+            if($application->user_id != session()->get('user')->id){
+                return redirect()->route('home');
+            }
+        }
+        if($application->job->company_id != session()->get('user')->id){
+            return redirect()->route('home');
+        }
         return view('pages.client.application')->with('application', $application)->with('data', $this->data);
     }
     public function store(JobApplyRequest $request) : RedirectResponse
