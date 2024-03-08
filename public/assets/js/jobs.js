@@ -1,3 +1,4 @@
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -30,16 +31,29 @@ fetch('/api/technologies')
             search: true,
             maxWidth: '100%',
         });
+        if(localStorage.getItem('technology')){
+            let technology = localStorage.getItem('technology');
+            document.querySelector('#Technologies').setValue(`${technology}`);
+            localStorage.removeItem('technology');
+            filterJobs(1);
+        }
     });
+$(document).ready( function () {
 
-$(window).on('load', function () {
     if(localStorage.getItem('category')){
         let category = localStorage.getItem('category');
         $("#jobCategory").val(category);
         localStorage.removeItem('category');
         filterJobs(1);
     }
-    });
+    if(localStorage.getItem('keyword')){
+        let keyword = localStorage.getItem('keyword');
+        $("#jobKeyword").val(keyword);
+        localStorage.removeItem('keyword');
+        filterJobs(1);
+    }
+});
+
 $("#filterJobs").click(function (e) {
     e.preventDefault();
     filterJobs(1);

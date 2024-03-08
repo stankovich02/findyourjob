@@ -13,8 +13,8 @@
         <p id="companyError">{{session('companyError')}}</p>
     @endif
     <!-- Carousel Start -->
-    <div class="container-fluid p-0">
-        <div class="owl-carousel header-carousel position-relative">
+    <div class="container-fluid p-0 bg-primary py-5">
+       {{-- <div class="owl-carousel header-carousel position-relative">
             <div class="owl-carousel-item position-relative">
                 <img class="img-fluid" src="assets/img/carousel-1.jpg" alt="">
                 <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
@@ -47,7 +47,20 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
+            <div class="row pb-5">
+                <div class="col-12">
+                    <h2 class="text-center text-white p-0">Find your dream job with Find Your Job</h2>
+                </div>
+                <div class="col-6 mx-auto mt-4">
+                    <div class="search-container mx-auto">
+                        <input id="searchAll" type="text" placeholder="Search by job, company or technology..."/>
+                        <img class="search-icon" src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
+                    </div>
+                    <div id="searchResults" class="mx-auto">
+                    </div>
+                </div>
+            </div>
     </div>
     <!-- Carousel End -->
 

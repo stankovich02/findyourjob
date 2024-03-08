@@ -33,6 +33,8 @@ Route::controller(\App\Http\Controllers\Client\ContactController::class)->group(
 
 Route::post('/newsletter', [\App\Http\Controllers\Client\NewsletterController::class, 'store'])->name('newsletter');
 
+Route::get('/search', [\App\Http\Controllers\Client\HomeController::class, 'search'])->name('search');
+
 Route::middleware('IsLoggedIn')->group(function (){
     Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
         Route::prefix('account')->name('account.')->group(function (){
@@ -71,6 +73,5 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::post('/register', 'register')->name('register.register');
         Route::get('/verification/{token}',  'verify')->name('verify');
     });
-
 });
 
