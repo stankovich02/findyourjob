@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Register @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Register company @endsection
+@section('keywords') register, company, user @endsection
 @section('content')
     <div class="container py-5" @if ($errors->any() || session("success")) style="opacity: 1!important;display:block!important;" @endif  id="regForm">
         <div class="row d-flex flex-column align-items-center">

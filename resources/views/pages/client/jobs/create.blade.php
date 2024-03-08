@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Post a Job @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Post a job @endsection
+@section('keywords') post, job, company @endsection
 @section('content')
     <div class="container mx-auto bg-primary py-4 my-5 d-flex flex-column" id="postJobContainer">
         <h1 class="text-center text-white mb-5">Post a Job</h1>

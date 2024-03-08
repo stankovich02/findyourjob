@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') {{$job->name}} @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') {{$job->description}} @endsection
+@section('keywords') {{$job->name}}, {{$job->company->name}}, {{$job->city->name}}, {{$job->seniority->name}}, {{$job->workplace->name}}@endsection
 @section('content')
     <!-- Job Detail Start -->
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">

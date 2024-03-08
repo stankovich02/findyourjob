@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Application @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Application for a job @endsection
+@section('keywords') application, job, user @endsection
 @section('content')
     <div class="py-5 container">
 

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Register @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Register to our website @endsection
+@section('keywords') register, user, company @endsection
 @section('content')
     @if ((!session("success") && !$errors->any()))
     <div id="registerBegin" class="d-flex flex-column align-items-center my-5 py-5 container">
@@ -9,7 +9,6 @@
         <div id="chooseAccountType" class="d-flex my-5 justify-content-around w-50">
             <div class="accountType text-center text-white py-4 px-5" id="employeeButton">
                 <div class="accountTypeImage mb-3">
-                    {{--<i class="fas fa-briefcase fa-2x"></i>--}}
                     <img src="{{asset('assets/img/office-worker.png')}}" alt="Employee">
                 </div>
                 <div class="accountTypeText" >
@@ -19,7 +18,6 @@
             </div>
             <div class="accountType text-center text-white py-4 px-5" id="companyButton">
                 <div class="accountTypeImage mb-3">
-                   {{-- <i class="fas fa-building fa-2x"></i>--}}
                     <img src="{{asset('assets/img/company.png')}}" alt="Company">
                 </div>
                 <div class="accountTypeText" >
@@ -39,51 +37,56 @@
             <div class="my-4">
                 <label for="firstname" class="font-small">First name</label>
                 <input type="text" class="form-control font-small" id="firstname" name="firstName" value="{{old("firstName")}}"/>
+                @if($errors->has("firstName"))
+                    <p class="text-danger mt-1">{{$errors->first("firstName")}}</p>
+                @endif
             </div>
             <div class="my-4">
                 <label for="lastname" class="font-small">Last name</label>
                 <input type="text" class="form-control font-small" id="lastname" name="lastName" value="{{old("lastName")}}"/>
+                @if($errors->has("lastName"))
+                    <p class="text-danger mt-1">{{$errors->first("lastName")}}</p>
+                @endif
             </div>
             <div class="my-4">
                 <label for="email" class="font-small">Email</label>
                 <input type="text" class="form-control font-small" id="email" name="email" value="{{old("email")}}"/>
+                @if($errors->has("email"))
+                    <p class="text-danger mt-1">{{$errors->first("email")}}</p>
+                @endif
             </div>
             <div class="my-4">
                 <label for="password" class="font-small">Password</label>
                 <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
+                @if($errors->has("password"))
+                    <p class="text-danger mt-1">{{$errors->first("password")}}</p>
+                @endif
             </div>
             <div class="my-4">
                 <label for="confirmPassword" class="font-small">Confirm password</label>
                 <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("confirmPassword")}}"/>
+                @if($errors->has("confirmPassword"))
+                    <p class="text-danger mt-1">{{$errors->first("confirmPassword")}}</p>
+                @endif
             </div>
             <button id="btnRegister" class="btn btn-primary text-center d-block mx-auto px-4">
                 Register
             </button>
             <br/>
-            <a href="{{route("login")}}" class="signInFormLink" class="font-small">Already have an account? Log in instead.</a>
+            <a href="{{route("login")}}" class="signInFormLink font-small">Already have an account? Log in instead.</a>
         </form>
                 </div>
             </div>
     </div>
-    @if ($errors->any() || session("success"))
-        <div class="container w-50 py-0 mt-5" >
+    @if(session("success"))
+        <div class="container w-50 py-0 mt-3">
             @if(session('success'))
                 <div class="alert-success p-3">
                     <p class="text-center m-0 font-medium">{{session('success')}}</p>
                 </div>
             @endif
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
         </div>
     @endif
-
 @endsection
 @section('scripts')
     <script src="{{asset('assets/js/register.min.js')}}"></script>

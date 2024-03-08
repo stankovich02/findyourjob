@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Jobs @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Browse all of our jobs. @endsection
+@section('keywords') jobs, online, filter, company, location, category, technology, search @endsection
 @section('content')
 <!-- Jobs Start -->
 <div class="container-xxl py-5">

@@ -1,7 +1,4 @@
 <meta charset="utf-8">
-<title>
-    FindYourJob | @yield('title')
-</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta name="keywords" content="@yield('keywords')">
 <meta name="description" content="@yield('description')">

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') About Us @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Learn more about Find Your Job and our commitment to connecting top talent with leading employers. Discover our mission, values, and the innovative solutions we offer to streamline the job search process and facilitate efficient recruitment. Explore our story and see how we're transforming the way people find their dream careers and businesses discover exceptional talent. @endsection
+@section('keywords') about, us, findyourjob, find, your, job, career, opportunities, talent, acquisition, mission, values, innovative, solutions, recruitment, story, dream, careers, businesses, exceptional, talent @endsection
 @section('content')
     <div class="container-xxl py-5 bg-dark page-header mb-5">
         <div class="container my-5 pt-5 pb-4">

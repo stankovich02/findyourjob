@@ -40,7 +40,7 @@ class ContactAdmin extends Mailable
     {
         return $this->from($this->email, $this->name)
             ->subject($this->subject)
-            ->view('mail.contactAdmin')
+            ->view('mail.contact-admin')
             ->with([
                 'name' => $this->name,
                 'content' => $this->content,

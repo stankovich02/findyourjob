@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Home @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Discover Your Dream Career or Ideal Talent with Find Your Job. Our platform connects top talent with leading employers, streamlining the job search process for candidates and facilitating efficient recruitment for businesses. Start your journey towards success today! @endsection
+@section('keywords') home, jobs, career, talent, find your job @endsection
 @section('content')
     @if(session('verified'))
     <div id="verifiedAccount" class="d-flex align-items-center justify-content-center py-3">

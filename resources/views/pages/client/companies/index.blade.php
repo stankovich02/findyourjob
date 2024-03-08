@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Companies @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Browse all companies. @endsection
+@section('keywords') companies, findyourjob @endsection
 @section('content')
     <div class="container">
         <h2 id="companiesHeading">Companies <span id="compCount">({{count($companies)}} results)</span></h2>

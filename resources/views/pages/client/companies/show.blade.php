@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') {{$company->name}} @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') {{$company->description}} @endsection
+@section('keywords') {{$company->name}}, jobs, company, location, category, technology, search @endsection
 @section('content')
     <div id="company-wrapper" class="w-75 py-5 mx-auto">
         <div id="logo" class="text-center">

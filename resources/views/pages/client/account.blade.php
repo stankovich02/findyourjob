@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Account @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Account details page @endsection
+@section('keywords') account, user, company , password, linkedin, github , saved jobs @endsection
 @section('content')
 <div class="container-xl px-4 mt-5">
     <div class="row">

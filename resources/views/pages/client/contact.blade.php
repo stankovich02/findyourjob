@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Contact Us @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Get in touch with Find Your Job today for any inquiries, feedback, or partnership opportunities. Our dedicated team is here to assist you with your questions regarding our services, career opportunities, or talent acquisition needs. Reach out now to start a conversation and discover how we can collaborate for mutual success. @endsection
+@section('keywords') contact, us, findyourjob, find, your, job, career, opportunities, talent, acquisition, partnership, inquiries, feedback @endsection
 @section('content')
     <!-- Contact Start -->
     <div class="container-xxl py-5">

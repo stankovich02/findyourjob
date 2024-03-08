@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title') Login @endsection
-@section('description') Browse all of our products. @endsection
-@section('keywords') shop, online, products @endsection
+@section('description') Log in to our website @endsection
+@section('keywords') login, user, company @endsection
 @section('content')
     <div class="container py-5">
         <div class="row d-flex flex-column align-items-center">
