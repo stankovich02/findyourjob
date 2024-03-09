@@ -43,7 +43,6 @@
                     <p><i class="fa fa-check text-primary me-3"></i>Tailored Job Matching</p>
                     <p><i class="fa fa-check text-primary me-3"></i>Comprehensive Talent Pool</p>
                     <p><i class="fa fa-check text-primary me-3"></i>Efficient Recruitment Tools</p>
-                    <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
                 </div>
             </div>
         </div>

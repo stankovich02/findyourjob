@@ -75,10 +75,88 @@ if($("#companyError") && $("#companyError").text() != ""){
     $("#companyError").text("");
     toastr.info(text);
 }
+let deleteButtons = document.querySelectorAll('.deleteJob a');
+deleteButtons.forEach((deleteButton) => {
+    deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
+        console.log(jobName)
+        $(".deleteJobModal .modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
+        $(".deleteJobModal").css("display", "block");
+        $("#closeModal").click(function () {
+            $(".deleteJobModal").css("display", "none");
+        });
+        $("#deleteModal").click(function () {
+            let id = deleteButton.getAttribute('data-id');
+            $.ajax({
+                url: '/jobs/' + id,
+                method: 'DELETE',
+                success: function () {
+                    location.reload();
+                },
+                error: function (data) {
+                    if(data.responseJSON.errors){
+                        for (let key in data.responseJSON.errors) {
+                            toastr.error(data.responseJSON.errors[key][0]);
+                        }
+                    }
+                    if(data.responseJSON.error)
+                    {
+                        toastr.error(data.responseJSON.error);
+                    }
+
+
+                }
+            });
+        });
+    });
+});
 $(".categorySingle").click(function () {
     let category = $(this).attr('data-id');
     localStorage.setItem('category', category);
     window.location.href = "/jobs";
+});
+$(".saveJob").click(function (e) {
+    e.preventDefault();
+    let id = $(this).attr('data-id');
+    let icon = this.querySelector('i');
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/jobs/save/' + id,
+        method: 'POST',
+        data: {
+            jobID: id
+        },
+        success: function (data) {
+            if(icon.className === "far fa-heart text-primary")
+                setTimeout(() => {
+                    icon.className = "fas fa-heart text-primary";
+                }, 1000);
+            else
+                setTimeout(() => {
+                    icon.className = "far fa-heart text-primary";
+                }, 1000);
+            setTimeout(() => {
+                toastr.success(data.message);
+            }, 1000);
+
+        },
+        error: function (data) {
+            if(data.responseJSON.errors){
+                for (let key in data.responseJSON.errors) {
+                    toastr.error(data.responseJSON.errors[key][0]);
+                }
+            }
+            if(data.responseJSON.error){
+                toastr.error(data.responseJSON.error);
+            }
+
+        }
+    });
 });
 
 

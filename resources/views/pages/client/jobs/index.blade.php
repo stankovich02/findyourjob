@@ -103,7 +103,7 @@
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= \App\Models\Job::count() / 5; $i++)
+                            @for ($i = 1; $i <= ceil(\App\Models\Job::count() / 5); $i++)
                                 @if ($i === 1)
                                 <li class="page-item active" aria-current="page">
                                     <span class="page-link px-3 py-2">{{$i}}</span>

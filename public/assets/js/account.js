@@ -88,10 +88,10 @@ deleteButtons.forEach((deleteButton) => {
     deleteButton.addEventListener('click', (e) => {
         e.preventDefault();
         let jobName = deleteButton.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
-        $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
-        $(".modal").css("display", "block");
+        $(".deleteJobModal .modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
+        $(".deleteJobModal .modal").css("display", "block");
         $("#closeModal").click(function () {
-            $(".modal").css("display", "none");
+            $(".deleteJobModal").css("display", "none");
         });
         $("#deleteModal").click(function () {
             let id = deleteButton.getAttribute('data-id');
@@ -137,7 +137,7 @@ $(".saveJob").click(function (e) {
                 setTimeout(() => {
                     icon.className = "far fa-heart text-primary";
                 }, 1000);
-                location.reload();
+            location.reload();
         },
         error: function (data) {
             toastr.error(data.responseJSON.error);

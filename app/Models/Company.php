@@ -92,21 +92,11 @@ class Company extends Model
         if ($company == null) {
             return redirect()->route('account.index')->with('error', 'Company not found.');
         }
-        if ($company->name != $name) {
-            $company->name = $name;
-        }
-        if ($company->description != $description) {
-            $company->description = $description;
-        }
-        if ($company->email != $email) {
-            $company->email = $email;
-        }
-        if ($company->website != $website) {
-            $company->website = $website;
-        }
-        if ($company->phone != $phone) {
-            $company->phone = $phone;
-        }
+        $company->name = $name;
+        $company->description = $description;
+        $company->email = $email;
+        $company->website = $website;
+        $company->phone = $phone;
         $company->save();
         return redirect()->route('account.index')->with('success', 'You have successfully updated company info.');
     }

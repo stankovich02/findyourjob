@@ -53,10 +53,15 @@
                     </div>
                     @elseif(session()->has("user") && session("accountType") == "employee")
                         @if($job->applications->where("user_id", session()->get("user")->id)->count() > 0)
-                            <div class="col-3">
+                            <div class="col-4">
                                     <?php $application = $job->applications->where("user_id", session()->get("user")->id)->first(); ?>
                                 <a href="{{route("application.index", $application->id)}}" class="btn btn-primary w-100 py-2">View your application</a>
                             </div>
+                            @if (session("success"))
+                                <p class="text-success mt-3">
+                                    {{session("success")}}
+                                </p>
+                            @endif
                         @else
                             <div class="">
                                 <h4 class="mb-4">Apply For The Job</h4>
@@ -67,21 +72,24 @@
                                             <input type="hidden" name="jobID" value="{{$job->id}}">
                                             <div class="col-12 col-sm-6 mb-3">
                                                 <input type="file" class="form-control bg-white" name="uploadedFile">
+                                                @if($errors->has('uploadedFile'))
+                                                    <p class="text-danger mb-0">
+                                                        {{$errors->first('uploadedFile')}}
+                                                    </p>
+                                                @endif
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <textarea class="form-control" rows="5" name="coverLetter" placeholder="Cover Letter"></textarea>
+                                                @if($errors->has('coverLetter'))
+                                                    <p class="text-danger mb-0">
+                                                        {{$errors->first('coverLetter')}}
+                                                    </p>
+                                                @endif
                                             </div>
                                             <div class="col-12">
                                                 <button class="btn btn-primary w-100">Apply Now</button>
                                             </div>
                                         </form>
-                                        @if ($errors->any())
-                                            @foreach ($errors->all() as $error)
-                                                <p class="text-danger mb-0">
-                                                    {{$error}}
-                                                </p>
-                                            @endforeach
-                                        @endif
                                         @if (session("error"))
                                             <p class="text-danger mt-3">
                                                 {{session("error")}}

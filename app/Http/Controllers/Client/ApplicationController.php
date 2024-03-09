@@ -23,12 +23,10 @@ class ApplicationController extends DefaultController
             if ($application == null) {
                 return redirect()->route('home')->with('error', 'Application not found.');
             }
-            if (session()->get('accountType') == 'employee') {
-                if ($application->user_id != session()->get('user')->id) {
-                    return redirect()->route('home');
-                }
+            if (($application->user_id != session()->get('user')->id) && session()->get('accountType') == 'employee') {
+                return redirect()->route('home');
             }
-            if ($application->job->company_id != session()->get('user')->id) {
+            if (($application->job->company_id != session()->get('user')->id) && session()->get('accountType') == 'company') {
                 return redirect()->route('home');
             }
             return view('pages.client.application')->with('application', $application)->with('data', $this->data);
@@ -48,7 +46,7 @@ class ApplicationController extends DefaultController
             $userID = $request->session()->get('user')->id;
             $this->applicationModel->store($file,$coverLetter,$jobID,$userID);
             $this->logUserAction('User applied for a ' . $jobName . ' (id: ' . $jobID . ') job.', $request);
-            return redirect()->back()->with('success', 'Your application has been submitted successfully');
+            return redirect()->back()->with('success', 'Your application has been submitted successfully.');
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->back()->with('error', 'An error occurred while submitting your application. Please try again later.');
@@ -60,7 +58,7 @@ class ApplicationController extends DefaultController
         {
             $jobID = $this->applicationModel->getApplication($id)->job_id;
             $jobName = Job::where('id', $jobID)->first()->name;
-            $this->applicationModel->deleteApplication($id);
+            $this->applicationModel->deleteApplication($id,session()->get('user')->id);
             $this->logUserAction('User removed application for a ' . $jobName . ' (id: ' . $jobID . ') job.', request());
             return redirect()->route('jobs.show', $jobID)->with('success', 'Application has been removed successfully.');
         } catch (\Exception $e){

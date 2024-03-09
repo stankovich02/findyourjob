@@ -3,7 +3,7 @@
 @section('description') Register company @endsection
 @section('keywords') register, company, user @endsection
 @section('content')
-    <div class="container py-5" @if ($errors->any() || session("success")) style="opacity: 1!important;display:block!important;" @endif  id="regForm">
+    <div class="container py-5" style="opacity: 1!important;display:block!important;" id="regForm">
         <div class="row d-flex flex-column align-items-center">
         <h2 class="text-center font-xl">Register company</h2>
             <div class="col-lg-5 col-md-7 col-12">
@@ -30,12 +30,12 @@
                 <p id="phoneError" class="text-danger">
             </div>
             <div class="my-4">
-                <label for="Cities" class="font-small">Company locations:</label>
+                <label for="Cities" class="font-small">Company locations</label>
                 <div id="Cities"></div>
                 <p id="citiesError" class="text-danger">
             </div>
             <div class="my-4">
-                <label for="description">Description:</label>
+                <label for="description">Description</label>
                 <textarea class="form-control" name="description" id="description" style="height: 150px"></textarea>
                 <p id="descriptionError" class="text-danger">
             </div>

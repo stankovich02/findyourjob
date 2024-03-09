@@ -42,7 +42,7 @@ class Application extends Model
     {
         return self::with('user')->find($id);
     }
-    public function deleteApplication(int $id) : void
+    public function deleteApplication(int $id, int $userID) : void
     {
         $application = self::find($id);
         unlink(public_path('assets/applications/' . $application->uploaded_file));

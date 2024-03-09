@@ -67,7 +67,6 @@ class JobController extends DefaultController
             } else {
                 $jobs = $this->jobModel->getAll(false, $array);
             }
-
             $clientResponse = [
                 'jobs' => $jobs,
                 'html' => []
@@ -78,7 +77,7 @@ class JobController extends DefaultController
             return response()->json($clientResponse);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
-            return response()->json(['errors' => "An error occurred while getting cities"], \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['errors' => "An error occurred."], \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -142,14 +141,11 @@ class JobController extends DefaultController
             $categories = Category::all();
             $seniorities = Seniority::all();
             $workplaces = Workplace::all();
-            $technologies = Technology::all();
-            $companyModel = new Company();
-            $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
+            $companyLocations = $this->companyModel->getCompanyLocations(session()->get("user")->id);
             $array = [
                 'categories' => $categories,
                 'seniorities' => $seniorities,
                 'workplaces' => $workplaces,
-                'technologies' => $technologies,
                 'companyLocations' => $companyLocations
             ];
             return view('pages.client.jobs.create')->with('array', $array)->with('data', $this->data);
@@ -244,15 +240,12 @@ class JobController extends DefaultController
             $categories = Category::all();
             $seniorities = Seniority::all();
             $workplaces = Workplace::all();
-            $technologies = Technology::all();
-            $companyModel = new Company();
-            $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
+            $companyLocations = $this->companyModel->getCompanyLocations(session()->get("user")->id);
             $array = [
                 'job' => $job,
                 'categories' => $categories,
                 'seniorities' => $seniorities,
                 'workplaces' => $workplaces,
-                'technologies' => $technologies,
                 'companyLocations' => $companyLocations
             ];
             return view('pages.client.jobs.edit')->with('array', $array)->with('data', $this->data);
@@ -282,7 +275,7 @@ class JobController extends DefaultController
                 'salary' => $request->input('salary'),
                 'workType' => $request->input('workType'),
                 'applicationDeadline' => $request->input('applicationDeadline'),
-                'userID' => session()->get("user")->id,
+                'companyId' => session()->get("user")->id,
                 'id' => $id
             ];
             $jobID = $this->jobModel->updateRow($array);
@@ -290,7 +283,7 @@ class JobController extends DefaultController
                 return response()->json(['error' => 'Job not found!'], ResponseAlias::HTTP_NOT_FOUND);
             }
             $this->logUserAction('Company edited a (id: ' . $jobID . ') job.', $request);
-            return response(null,ResponseAlias::HTTP_OK);
+            return response(null,ResponseAlias::HTTP_NO_CONTENT);
         }
         catch (\Exception $e){
             $this->LogError($e->getMessage(), $e->getTraceAsString());

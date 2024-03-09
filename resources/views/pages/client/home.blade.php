@@ -63,14 +63,48 @@
         </div>
     </div>
     <!-- Jobs End -->
+    <div class="modal deleteJobModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteModal" >Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="boostJobModal modal " tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content py-4">
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if(session("boostSuccess"))
+        <p id="boostSuccess">
+            {{session("boostSuccess")}}
+        </p>
+    @endif
+    @if(session("boostError"))
+        <p id="boostError">
+            {{session("boostError")}}
+        </p>
+    @endif
     @if(session('verified'))
-        <p id="verifiedAccount">{{session('verified')}}</p>
+        <p id="verifiedAccount" class="d-none">{{session('verified')}}</p>
     @endif
     @if(session('companyError'))
-        <p id="companyError">{{session('companyError')}}</p>
+        <p id="companyError" class="d-none">{{session('companyError')}}</p>
     @endif
     @if(session('notVerified'))
-        <p id="notVerified">{{session('notVerified')}}</p>
+        <p id="notVerified" class="d-none">{{session('notVerified')}}</p>
     @endif
 @endsection
 @section('scripts')

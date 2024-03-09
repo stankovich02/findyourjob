@@ -189,8 +189,7 @@
                 data: data,
                 success: function (data) {
                     $("form p").text("");
-                    console.log(data.message);
-                   toastr.success(data.message);
+                    toastr.success(data.message);
                     $("#jobName").val("");
                     $("#jobSalary").val("");
                     descriptionEditor.setData(``);

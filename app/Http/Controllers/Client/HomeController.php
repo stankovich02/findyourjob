@@ -17,7 +17,6 @@ class HomeController extends DefaultController
     {
         parent::__construct();
         try {
-
             $catModel = new Category();
             $this->data['categories'] = $catModel->getAll();
             $jobModel = new Job();

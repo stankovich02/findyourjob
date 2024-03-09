@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\Client\HomeController::class, 'index'])->name('home');
 Route::get('/about', [\App\Http\Controllers\Client\AboutController::class, 'index'])->name('about');
 Route::get('/jobs/filter', [\App\Http\Controllers\Client\JobController::class, 'filter'])->name('jobs.filter');
+
+//testirati da li rade linkovi i sve bez controllera
 Route::view('/author', 'client.author')->name('author');
 
 Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
@@ -39,7 +41,7 @@ Route::middleware('IsLoggedIn')->group(function (){
     Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
         Route::prefix('account')->name('account.')->group(function (){
             Route::get('/','index')->name('index');
-            Route::patch('/socials', 'updateSocials')->name('socials');
+            Route::patch('/socials', 'updateSocials')->name('update_socials');
             Route::patch('/info', 'info')->name('info');
             Route::patch('/picture', 'picture')->name('picture');
             Route::get('/password/new', 'showFormForNewPassword')->name('show_form_for_new_password');

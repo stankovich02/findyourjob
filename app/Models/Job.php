@@ -211,6 +211,7 @@ class Job extends Model
     {
         $job = self::find($jobId);
         $job->technology()->detach();
+        $job->saved_jobs()->detach();
         $job->delete();
     }
 

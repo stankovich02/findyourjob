@@ -39,7 +39,6 @@ fetch('/api/technologies')
         }
     });
 $(document).ready( function () {
-
     if(localStorage.getItem('category')){
         let category = localStorage.getItem('category');
         $("#jobCategory").val(category);
@@ -86,22 +85,22 @@ deleteButtons.forEach((deleteButton) => {
         $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
         $(".deleteJobModal").css("display", "block");
         $("#closeModal").click(function (e) {
-            e.preventDefault(); // Spriječava podrazumijevano ponašanje dugmeta "x"
+            e.preventDefault();
             $(".deleteJobModal").css("display", "none");
         });
-        /*    $("#deleteModal").click(function () {
-                let id = deleteButton.getAttribute('data-id');
-                $.ajax({
-                    url: '/jobs/' + id,
-                    method: 'DELETE',
-                    success: function () {
-                        location.reload();
-                    },
-                    error: function (data) {
-                      toastr.error(data.message);
-                    }
-                });
-            });*/
+        $("#deleteModal").click(function () {
+            let id = deleteButton.getAttribute('data-id');
+            $.ajax({
+                url: '/jobs/' + id,
+                method: 'DELETE',
+                success: function () {
+                    location.reload();
+                },
+                error: function (data) {
+                  toastr.error(data.responseJSON.message);
+                }
+            });
+        });
     });
 });
 $(".pageLink").click(function (e) {
@@ -140,7 +139,7 @@ function filterJobs(page) {
             makePagination(data);
             $(document).on('click', '.deleteJob a', function (e) {
                 e.preventDefault();
-                console.log('clicked')
+                let id = $(this).attr('data-id');
                 let jobName = this.parentElement.nextElementSibling.querySelector('.jobName').innerHTML;
                 $(".modal-body p").html(`Are you sure you want to delete "${jobName}" job?`);
                 $(".deleteJobModal").css("display", "block");
@@ -149,7 +148,6 @@ function filterJobs(page) {
                     $(".deleteJobModal").css("display", "none");
                 });
                 $("#deleteModal").click(function () {
-                    let id = deleteButton.getAttribute('data-id');
                     $.ajax({
                         url: '/jobs/' + id,
                         method: 'DELETE',
