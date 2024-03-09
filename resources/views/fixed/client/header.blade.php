@@ -32,7 +32,12 @@
                     @endif
                 </a>
                 <div class="dropdown-menu rounded-0 m-0">
-                    <a href="{{route('account.index')}}" class="dropdown-item">Account</a>
+                    @if(session()->get('user')->isAdmin)
+                        <a href="{{route('admin.index')}}" class="dropdown-item">Admin</a>
+                    @endif
+                    @if(!session()->get('user')->isAdmin)
+                        <a href="{{route('account.index')}}" class="dropdown-item">Account</a>
+                    @endif
                     <a href="{{route('logout')}}" class="dropdown-item">Logout</a>
                 </div>
             </div>

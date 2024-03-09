@@ -103,7 +103,7 @@
                 @if($progress < 100)
                     <p class="text-center mt-2">Complete your profile to increase your chances of getting hired.</p>
                     <p class="my-0 mt-3">LinkedIn link
-                    @if($duser->linkedin)
+                    @if($user->linkedin)
                         <i class="fas fa-check-circle"></i>
                     @endif</p>
                     <p class="my-0">Github link

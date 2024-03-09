@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use App\Http\Middleware\IsLoggedIn;
 use App\Http\Middleware\IsNotLoggedIn;
 use App\Http\Middleware\IsCompany;
+use App\Http\Middleware\IsAdmin;
 class Kernel extends HttpKernel
 {
     /**
@@ -71,5 +72,6 @@ class Kernel extends HttpKernel
         'IsLoggedIn' => IsLoggedIn::class,
         'IsNotLoggedIn' => IsNotLoggedIn::class,
         'IsCompany' => IsCompany::class,
+        'IsAdmin' => IsAdmin::class
     ];
 }

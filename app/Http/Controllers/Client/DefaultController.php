@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Nav;
 use App\Models\User;
 use App\Models\UserActionLog;
-use Illuminate\Http\Request;
 use App\Traits\LogError;
+use Illuminate\Http\Request;
 use Request as RequestFacade;
 
 class DefaultController extends Controller

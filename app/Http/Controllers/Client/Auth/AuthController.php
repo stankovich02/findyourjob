@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Client\Auth;
 
-use App\Http\Controllers\Client\Controller;
 use App\Http\Controllers\Client\DefaultController;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
-use App\Http\Requests\ResetPasswordRequest;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -64,6 +62,7 @@ class AuthController extends DefaultController
     public function login(LoginUserRequest $request) : RedirectResponse
     {
         try{
+
             $email = $request->input('email');
             $password = $request->input('password');
             $passwordWithEnv = $password . env('CUSTOM_STRING_FOR_HASH');
@@ -110,6 +109,8 @@ class AuthController extends DefaultController
                 $this->logUserAction('Company login failed.', $request, $user->id);
                 return redirect()->back()->with('error', 'Your account is pending approval. Please wait for admin to approve your account.');
             }
+
+            $user->isAdmin = $user->role_id == 2;
             $request->session()->put('user', $user);
             $request->session()->put('accountType', $request->input('accountType'));
             if($request->input('accountType') == 'employee'){

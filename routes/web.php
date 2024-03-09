@@ -76,4 +76,11 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::get('/verification/{token}',  'verify')->name('verify');
     });
 });
+Route::middleware('IsAdmin')->prefix('/admin')->name('admin.')->group(function (){
+    Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('index');
+    Route::get('/jobs', [\App\Http\Controllers\Admin\JobController::class, 'index'])->name('jobs.index');
+    Route::patch('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'approve'])->name('jobs.approve');
+    Route::get('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'show'])->name('jobs.show');
+    Route::delete('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'destroy'])->name('jobs.destroy');
+});
 

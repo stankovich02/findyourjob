@@ -78,6 +78,7 @@ class Job extends Model
     {
         return $this->belongsToMany(User::class, 'saved_jobs', 'job_id', 'user_id');
     }
+
     public function getAll(bool $latest = false,array $array = []) : Collection|LengthAwarePaginator
     {
         $queryBoosted = self::with('company', 'category', 'city', 'seniority', 'workplace', 'technology', 'saved_jobs', 'boosted')
@@ -149,6 +150,19 @@ class Job extends Model
 
     }
 
+    public function getALlAdmin() : Collection|LengthAwarePaginator
+    {
+        return self::with('company', 'category', 'city', 'seniority', 'workplace', 'technology', 'saved_jobs', 'boosted')
+            ->where('status', self::STATUS_ACTIVE)
+            ->paginate(5);
+    }
+
+    public function getPendingJobs()
+    {
+        return self::with('company', 'category', 'city', 'seniority', 'workplace', 'technology', 'saved_jobs', 'boosted')
+            ->where('status', self::STATUS_PENDING)
+            ->paginate(5);
+    }
     public function isBoosted() : bool
     {
         return $this->boosted()->where('boosted_until', '>', Carbon::now())->exists();
@@ -239,5 +253,17 @@ class Job extends Model
             $job->status = self::STATUS_EXPIRED;
             $job->save();
         }
+    }
+    public function approve(int $id) : array
+    {
+        $job = self::find($id);
+        $job->status = self::STATUS_ACTIVE;
+        $data= [
+            'email' => $job->company->email,
+            'jobName' => $job->name,
+            'companyName' => $job->company->name
+        ];
+        $job->save();
+        return $data;
     }
 }
