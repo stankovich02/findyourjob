@@ -31,46 +31,55 @@ class JobController extends DefaultController
     /**
      * Display a listing of the resource.
      */
-    public function index() : View
+    public function index() : View|RedirectResponse
     {
         parent::__construct();
-        $jobs = $this->jobModel->getAll();
-        $this->data['categories'] = Category::all();
-        $this->data['seniorities'] = Seniority::all();
-        $this->data['workplaces'] = Workplace::all();
-        return view('pages.client.jobs.index')->with('jobs', $jobs)->with('data', $this->data);
+        try {
+            $jobs = $this->jobModel->getAll();
+            $this->data['categories'] = Category::all();
+            $this->data['seniorities'] = Seniority::all();
+            $this->data['workplaces'] = Workplace::all();
+            return view('pages.client.jobs.index')->with('jobs', $jobs)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
+        }
     }
 
     public function filter(Request $request) : JsonResponse
     {
-        $array = [];
-        $array['keyword'] = $request->input('keyword');
-        if($request->has('cities')){
-            $array['cities'] = $request->input('cities');
-        }
-        if($request->has('technologies')){
-            $array['technologies'] = $request->input('technologies');
-        }
-        $array['category'] = $request->input('category');
-        $array['seniority'] = $request->input('seniority');
-        $array['workplace'] = $request->input('workplace');
-        $array['salary'] = $request->input('salary');
-        $array['workType'] = $request->input('workType');
-        if($request->input('latestJobs') == "true"){
-            $jobs = $this->jobModel->getAll(true,$array);
-        }
-        else{
-            $jobs = $this->jobModel->getAll(false,$array);
-        }
+        try {
+            $array = [];
+            $array['keyword'] = $request->input('keyword');
+            if ($request->has('cities')) {
+                $array['cities'] = $request->input('cities');
+            }
+            if ($request->has('technologies')) {
+                $array['technologies'] = $request->input('technologies');
+            }
+            $array['category'] = $request->input('category');
+            $array['seniority'] = $request->input('seniority');
+            $array['workplace'] = $request->input('workplace');
+            $array['salary'] = $request->input('salary');
+            $array['workType'] = $request->input('workType');
+            if ($request->input('latestJobs') == "true") {
+                $jobs = $this->jobModel->getAll(true, $array);
+            } else {
+                $jobs = $this->jobModel->getAll(false, $array);
+            }
 
-        $clientResponse = [
-            'jobs' => $jobs,
-            'html' => []
-        ];
-        foreach ($jobs as $job){
-            $clientResponse['html'][] = view('components.job', ['job' => $job])->render();
+            $clientResponse = [
+                'jobs' => $jobs,
+                'html' => []
+            ];
+            foreach ($jobs as $job) {
+                $clientResponse['html'][] = view('components.job', ['job' => $job])->render();
+            }
+            return response()->json($clientResponse);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return response()->json(['errors' => "An error occurred while getting cities"], \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return response()->json($clientResponse);
     }
 
     public function boost(Request $request, int $id) : RedirectResponse
@@ -101,6 +110,7 @@ class JobController extends DefaultController
                 $request);
             return redirect()->back()->with('boostSuccess', 'Payment processed successfully. Your job is now boosted!');
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->back()->with('boostError', $e->getMessage());
         }
     }
@@ -112,6 +122,7 @@ class JobController extends DefaultController
             return $this->jobModel->saveJob($id, $userID);
         }
         catch (\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -122,27 +133,30 @@ class JobController extends DefaultController
      */
     public function create() : View|RedirectResponse
     {
-        parent::__construct();
-        $company = $this->companyModel->getCompany(session()->get("user")->id);
-        if($company->logo == 'user.jpg')
-        {
-            return redirect()->route('home')->with('companyError', 'Please upload a logo before creating a job!');
+        try {
+            parent::__construct();
+            $company = $this->companyModel->getCompany(session()->get("user")->id);
+            if ($company->logo == 'user.jpg') {
+                return redirect()->route('home')->with('companyError', 'Please upload a logo before creating a job!');
+            }
+            $categories = Category::all();
+            $seniorities = Seniority::all();
+            $workplaces = Workplace::all();
+            $technologies = Technology::all();
+            $companyModel = new Company();
+            $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
+            $array = [
+                'categories' => $categories,
+                'seniorities' => $seniorities,
+                'workplaces' => $workplaces,
+                'technologies' => $technologies,
+                'companyLocations' => $companyLocations
+            ];
+            return view('pages.client.jobs.create')->with('array', $array)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
-
-        $categories = Category::all();
-        $seniorities = Seniority::all();
-        $workplaces= Workplace::all();
-        $technologies = Technology::all();
-        $companyModel = new Company();
-        $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
-        $array = [
-            'categories' => $categories,
-            'seniorities' => $seniorities,
-            'workplaces' => $workplaces,
-            'technologies' => $technologies,
-            'companyLocations' => $companyLocations
-        ];
-        return view('pages.client.jobs.create')->with('array', $array)->with('data', $this->data);
     }
 
     /**
@@ -173,6 +187,7 @@ class JobController extends DefaultController
         catch (\Exception $e)
         {
             DB::rollBack();
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -184,6 +199,7 @@ class JobController extends DefaultController
      */
     public function show(int $id) : View|RedirectResponse|JsonResponse
     {
+        try{
         parent::__construct();
         $jobModel = new Job();
         $job = $jobModel->getSingleJob($id);
@@ -197,6 +213,11 @@ class JobController extends DefaultController
            return response()->json(['job' => $job]);
         }
         return view('pages.client.jobs.show')->with('job', $job)->with('data', $this->data);
+        }
+        catch (\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -205,32 +226,37 @@ class JobController extends DefaultController
     public function edit(int $id) : View|RedirectResponse
     {
         parent::__construct();
-        $jobModel = new Job();
-        $job = $jobModel->getSingleJob($id);
-        if ($job == null) {
-            return redirect()->route('jobs.index');
+        try {
+            $jobModel = new Job();
+            $job = $jobModel->getSingleJob($id);
+            if ($job == null) {
+                return redirect()->route('jobs.index');
+            }
+            if (session()->get("user")->id != $job->company_id) {
+                return redirect()->route('jobs.index');
+            }
+            if ($job->status == Job::STATUS_EXPIRED || $job->status == Job::STATUS_PENDING) {
+                return redirect()->route('jobs.index');
+            }
+            $categories = Category::all();
+            $seniorities = Seniority::all();
+            $workplaces = Workplace::all();
+            $technologies = Technology::all();
+            $companyModel = new Company();
+            $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
+            $array = [
+                'job' => $job,
+                'categories' => $categories,
+                'seniorities' => $seniorities,
+                'workplaces' => $workplaces,
+                'technologies' => $technologies,
+                'companyLocations' => $companyLocations
+            ];
+            return view('pages.client.jobs.edit')->with('array', $array)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
-        if(session()->get("user")->id != $job->company_id){
-            return redirect()->route('jobs.index');
-        }
-        if($job->status == Job::STATUS_EXPIRED || $job->status == Job::STATUS_PENDING){
-            return redirect()->route('jobs.index');
-        }
-        $categories = Category::all();
-        $seniorities = Seniority::all();
-        $workplaces= Workplace::all();
-        $technologies = Technology::all();
-        $companyModel = new Company();
-        $companyLocations = $companyModel->getCompanyLocations(session()->get("user")->id);
-        $array = [
-            'job' => $job,
-            'categories' => $categories,
-            'seniorities' => $seniorities,
-            'workplaces' => $workplaces,
-            'technologies' => $technologies,
-            'companyLocations' => $companyLocations
-        ];
-        return view('pages.client.jobs.edit')->with('array', $array)->with('data', $this->data);
     }
 
     /**
@@ -255,10 +281,14 @@ class JobController extends DefaultController
             $jobID = $this->jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
                 $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
                     ->id, $id);
+            if ($jobID == 0) {
+                return response()->json(['error' => 'Job not found!'], ResponseAlias::HTTP_NOT_FOUND);
+            }
             $this->logUserAction('Company edited a (id: ' . $jobID . ') job.', $request);
             return response(null,ResponseAlias::HTTP_OK);
         }
         catch (\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -272,13 +302,14 @@ class JobController extends DefaultController
     {
         try {
             DB::beginTransaction();
-            $companyID = $this->jobModel->deleteRow($id);
+            $this->jobModel->deleteRow($id);
             DB::commit();
             $this->logUserAction('Company deleted a job (id: ' . $id . ').', request());
             return response(null, ResponseAlias::HTTP_NO_CONTENT);
         }
         catch (\Exception $e){
             DB::rollBack();
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }

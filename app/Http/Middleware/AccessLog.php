@@ -16,13 +16,13 @@ class AccessLog
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $accessLogPath = 'logs/AccessLog.txt'; // Putanja do fajla
-        $accessLog = Storage::get($accessLogPath); // Uzimanje sadržaja iz fajla
+        $accessLogPath = 'logs/AccessLog.txt';
+        $accessLog = Storage::get($accessLogPath);
 
-        // Dodavanje novog reda u log
+
         $accessLog .= date('Y-m-d H:i:s') . ' ' . $request->ip() . ' ' . $request->path() . ' ' . $request->method() . PHP_EOL;
 
-        // Upisivanje novog sadržaja u fajl
+
         Storage::put($accessLogPath, $accessLog);
 
         return $next($request);

@@ -18,6 +18,7 @@ class NewsletterController extends DefaultController
             $model = new Newsletter();
             return $model->insert($request->email);
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

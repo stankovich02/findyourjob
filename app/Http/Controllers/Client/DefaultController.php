@@ -7,10 +7,12 @@ use App\Models\Nav;
 use App\Models\User;
 use App\Models\UserActionLog;
 use Illuminate\Http\Request;
+use App\Traits\LogError;
 use Request as RequestFacade;
 
 class DefaultController extends Controller
 {
+    use LogError;
     protected array $data = [];
     public function __construct()
     {

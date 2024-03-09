@@ -187,6 +187,9 @@ class Job extends Model
                               $applicationDeadline, $companyId, $jobId) : int
     {
         $job = self::find($jobId);
+        if ($job == null) {
+            return 0;
+        }
         $job->name = $name;
         $job->category_id = $category;
         $job->seniority_id = $seniority;
@@ -206,13 +209,11 @@ class Job extends Model
         $job->technology()->sync($technologies);
         return $job->id;
     }
-    public function deleteRow($jobId) : int
+    public function deleteRow($jobId) : void
     {
         $job = self::find($jobId);
-        $id = $job->id;
         $job->technology()->detach();
         $job->delete();
-        return $id;
     }
 
     public function saveJob($jobId, $userId) : JsonResponse

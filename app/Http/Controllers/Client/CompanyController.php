@@ -24,11 +24,16 @@ class CompanyController extends DefaultController
     /**
      * Display a listing of the resource.
      */
-    public function index() : View
+    public function index() : View|RedirectResponse
     {
         parent::__construct();
-        $companies = $this->companyModel->getAll();
-        return view('pages.client.companies.index')->with('companies', $companies)->with('data', $this->data);
+        try {
+            $companies = $this->companyModel->getAll();
+            return view('pages.client.companies.index')->with('companies', $companies)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -63,10 +68,8 @@ class CompanyController extends DefaultController
             return response()->json(['message' => 'You have successfully registered company! Please wait for the admin to verify your account. You will receive an email once your account is verified.'], ResponseAlias::HTTP_CREATED);
         }
         catch (\Exception $e) {
-            /*if(File::exists(public_path('/assets/img/products/' . $imageName))){
-               File::delete(public_path('/assets/img/products/' . $imageName));
-           }*/
             DB::rollBack();
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['error' => 'An error occurred.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 }
@@ -77,17 +80,22 @@ class CompanyController extends DefaultController
     public function show(int $id) : View|RedirectResponse
     {
         parent::__construct();
-        if(session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id){
-            return redirect()->route('account.index');
+        try {
+            if (session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id) {
+                return redirect()->route('account.index');
+            }
+            $company = $this->companyModel->getCompany($id);
+            if ($company == null) {
+                return redirect()->route('home');
+            }
+            if ($company->status == Company::STATUS_PENDING) {
+                return redirect()->route('home');
+            }
+            return view('pages.client.companies.show')->with('company', $company)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
-        $company = $this->companyModel->getCompany($id);
-        if($company == null){
-            return redirect()->route('home');
-        }
-        if($company->status == Company::STATUS_PENDING){
-            return redirect()->route('home');
-        }
-        return view('pages.client.companies.show')->with('company', $company)->with('data', $this->data);
     }
 
     /**
@@ -106,8 +114,8 @@ class CompanyController extends DefaultController
         try {
             return $this->companyModel->updateCompany($id, $request->input('companyName'), $request->input('description'),
                 $request->input('email'), $request->input('website'), $request->input('phone'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->back()->with('error', 'An error occurred.');
         }
     }
@@ -117,9 +125,9 @@ class CompanyController extends DefaultController
         try {
             $this->companyModel->updateLogo($id, $request->picture);
             return redirect()->route('account.index');
-        }
-        catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while updating picture');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
 
     }

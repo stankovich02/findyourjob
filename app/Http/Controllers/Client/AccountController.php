@@ -24,16 +24,21 @@ class AccountController extends DefaultController
     {
         parent::__construct();
     }
-    public function index(Request $request) : View
+    public function index(Request $request) : View|RedirectResponse
     {
         parent::__construct();
-        $userID = $request->session()->get('user')->id;
-        if ($request->session()->get("accountType") == "employee") {
-            $user = User::with('applications')->find($userID);
-            return view('pages.client.account')->with('user', $user)->with('data', $this->data);
-        }
+        try {
+            $userID = $request->session()->get('user')->id;
+            if ($request->session()->get("accountType") == "employee") {
+                $user = User::with('applications')->find($userID);
+                return view('pages.client.account')->with('user', $user)->with('data', $this->data);
+            }
             $user = Company::find($userID);
             return view('pages.client.account')->with('company', $user)->with('data', $this->data);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
+        }
 
     }
 
@@ -44,6 +49,7 @@ class AccountController extends DefaultController
             $this->userModel->updateSocials($userID, $request->social, $request->link);
             return  response()->json(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return response()->json(['errors' => "An error occurred while updating socials"], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -55,9 +61,9 @@ class AccountController extends DefaultController
             $userID = $request->session()->get('user')->id;
             $this->userModel->updatePicture($userID, $request->picture);
             return redirect()->route('account.index');
-        }
-        catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while updating picture');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
 
     }
@@ -67,9 +73,9 @@ class AccountController extends DefaultController
         try {
             $userID = $request->session()->get('user')->id;
             return $this->userModel->updateInfo($userID, $request->firstName, $request->lastName, $request->email);
-        }
-        catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while updating info');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
     }
 
@@ -98,10 +104,9 @@ class AccountController extends DefaultController
                 return redirect()->route('login')->with('success', 'Password updated successfully. Please login again.');
             }
             return redirect()->back()->with('currentPassword', 'Current password is incorrect.');
-        }
-        catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while updating password');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
     }
 
@@ -127,7 +132,7 @@ class AccountController extends DefaultController
             Mail::to($email)->send(new \App\Mail\ResetPassword($token));
             return redirect()->back()->with('success', 'Please check your email for reset password link.');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->back()->with('error', 'An error occurred.');
         }
     }
@@ -146,7 +151,7 @@ class AccountController extends DefaultController
             $this->logUserAction('User has reset the password.', $request, $id);
             return redirect()->route('login')->with('success', 'Password has been successfully reset.');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->back()->with('error', 'An error occurred.');
         }
     }

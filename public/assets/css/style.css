@@ -285,6 +285,9 @@ width: 30px;
 #lastSearchResult{
     border-radius: 0 0 10px 10px;
 }
+#searchWrapper{
+    padding: 150px 0!important;
+}
 /*** Spinner ***/
 #spinner {
     opacity: 0;

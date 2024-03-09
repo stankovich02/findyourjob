@@ -16,13 +16,8 @@ use Illuminate\View\View;
 
 class AuthController extends DefaultController
 {
-    private User $userModel;
-
-    private Company $companyModel;
-    public function __construct()
+    public function __construct(private readonly User $userModel = new User(), private readonly Company $companyModel = new Company())
     {
-        $this->userModel = new User();
-        $this->companyModel = new Company();
         parent::__construct();
     }
     public function showRegister() : View
@@ -43,18 +38,23 @@ class AuthController extends DefaultController
             $this->logUserAction('User registered successfully.', $request, $data['id']);
             return redirect()->back()->with('success', 'You have successfully registered! Please check your email to verify your account.');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred');
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
 
     }
     public function verify($token) : View|RedirectResponse
     {
-        $verified = $this->userModel->verify($token);
-        if ($verified) {
-            return redirect()->route('home')->with('verified', true);
+        try {
+            $verified = $this->userModel->verify($token);
+            if ($verified) {
+                return redirect()->route('home')->with('verified', 'Your account has been successfully activated!');
+            }
+            return redirect()->route('home')->with('notVerified', 'Your account could not be verified!');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
-        return view('mail.verified')->with('message', 'Your account could not be verified!');
 
     }
     public function showLogin() : View
@@ -121,9 +121,9 @@ class AuthController extends DefaultController
             session()->forget('loginAttempts');
             session()->forget('lastLoginAttempt');
             return redirect()->route('home');
-        }
-        catch(\Exception $e){
-            return redirect()->back()->with('error', 'An error occurred');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
     }
     public function logout(Request $request) : RedirectResponse
@@ -139,7 +139,8 @@ class AuthController extends DefaultController
                 $this->logUserAction('Company logged out.', $request, $userID);
             return redirect()->route('home');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred');
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
     }
 }

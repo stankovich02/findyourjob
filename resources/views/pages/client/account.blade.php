@@ -21,7 +21,7 @@
                         <!-- Profile picture upload button-->
                         <form action="{{session('accountType') == 'employee' ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
                             @csrf
-                            @method('PUT')
+                            @method('PATCH')
                             <input id="fileInput" type="file" class="mt-3" name="picture">
                             <button type="submit" class="btn btn-primary mt-3" id="uploadButton">Upload new picture</button>
                         </form>
@@ -130,7 +130,7 @@
                         <form id="accountDetails" action="{{route("companies.update", session()->get("user")->id)}}" method="POST">
                     @endif
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
                        @if(session('accountType') === 'company')
                         <div class="mb-3">
                             <label class="small mb-1" for="companyName">Company name</label>

@@ -39,14 +39,14 @@ Route::middleware('IsLoggedIn')->group(function (){
     Route::controller(\App\Http\Controllers\Client\AccountController::class)->group(function (){
         Route::prefix('account')->name('account.')->group(function (){
             Route::get('/','index')->name('index');
-            Route::put('/socials', 'updateSocials')->name('socials');
-            Route::put('/info', 'info')->name('info');
-            Route::put('/picture', 'picture')->name('picture');
+            Route::patch('/socials', 'updateSocials')->name('socials');
+            Route::patch('/info', 'info')->name('info');
+            Route::patch('/picture', 'picture')->name('picture');
             Route::get('/password/new', 'showFormForNewPassword')->name('show_form_for_new_password');
-            Route::put('/password/new', 'updatePassword')->name('update_password');
+            Route::patch('/password/new', 'updatePassword')->name('update_password');
         });
     });
-        Route::put('/companies/logo/{id}', [\App\Http\Controllers\Client\CompanyController::class, 'logo'])->name('companies.logo');
+        Route::patch('/companies/logo/{id}', [\App\Http\Controllers\Client\CompanyController::class, 'logo'])->name('companies.logo');
         Route::post('/jobs/save/{id}', [\App\Http\Controllers\Client\JobController::class, 'save'])->name('jobs.save');
         Route::post('/jobs/boost/{id}', [\App\Http\Controllers\Client\JobController::class, 'boost'])->name('jobs.boost');
     Route::controller(\App\Http\Controllers\Client\ApplicationController::class)->group(function (){
@@ -63,7 +63,7 @@ Route::middleware('IsNotLoggedIn')->group(function (){
             Route::get('/password/forgot','showFormForEmail')->name('show_form_for_email');
             Route::post('/password/forgot', 'sendEmailForReset')->name('send_email_for_reset');
             Route::get('/password/reset/{token}', 'showFormForReset')->name('show_form_for_reset');
-            Route::put('/password/reset/{token}', 'resetPassword')->name('reset_password');
+            Route::patch('/password/reset/{token}', 'resetPassword')->name('reset_password');
         });
     });
     Route::controller(\App\Http\Controllers\Client\Auth\AuthController::class)->group(function (){

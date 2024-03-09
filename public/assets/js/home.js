@@ -1,34 +1,3 @@
-if($("#verifiedAccount")){
-    $("#verifiedAccount").animate({
-        opacity: 1,
-        top: "5%"
-    }, 1500, function () {
-
-    })
-
-    setTimeout(() => {
-        $("#verifiedAccount").animate({
-            top: "-50%"
-        }, 2000, function () {
-        });
-    }, 5000);
-    setTimeout(() => {
-        $("#verifiedAccount").remove();
-    }, 8000);
-
-}
-if($("#companyError") && $("#companyError").text() != ""){
-    console.log($("#companyError"))
-    let text = $("#companyError").text();
-    $("#companyError").text("");
-    toastr.info(text);
-}
-$(".categorySingle").click(function () {
-    let category = $(this).attr('data-id');
-    localStorage.setItem('category', category);
-    window.location.href = "/jobs";
-});
-
 $("#searchAll").on('input', function () {
     if($(this).val().length > 2){
         let search = $(this).val();
@@ -42,6 +11,9 @@ $("#searchAll").on('input', function () {
                 printSearchResults(response);
             }
         });
+    }
+    else{
+        $("#searchResults").html("");
     }
 });
 function printSearchResults(response){
@@ -60,7 +32,7 @@ function printSearchResults(response){
                 break;
         }
         html += `
-        <a class="text-dark linkSearch ${classForLink}">
+        <a data-link="${item.link}" class="text-dark linkSearch ${classForLink}">
           <div class="search-result d-flex align-items-center">
             <div class="iconResult me-3 d-flex justify-content-center">
                 <i class="${item.icon}"></i>
@@ -77,17 +49,36 @@ function printSearchResults(response){
     $(".searchByJob").click(function () {
         let text = $(this).find('.titleResult').text();
         localStorage.setItem('keyword', text);
-        window.location.href = "/jobs";
+        window.location.href = $(this).attr('data-link');
     });
     $(".searchByTechnology").click(function () {
         let titleResult = $(this).find('.titleResult');
         let id = titleResult.attr('data-id');
         localStorage.setItem('technology', id);
-        window.location.href = "/jobs";
+        window.location.href = $(this).attr('data-link');
     });
     $(".searchByCompany").click(function () {
         let titleResult = $(this).find('.titleResult');
         let id = titleResult.attr('data-id');
-        window.location.href = "/companies/"+id;
+        window.location.href = $(this).attr('data-link');
     });
 }
+if($("#verifiedAccount").length){
+    toastr.success($("#verifiedAccount").text());
+}
+if($("#notVerified").length){
+   toastr.error($("#notVerified").text());
+}
+if($("#companyError") && $("#companyError").text() != ""){
+    console.log($("#companyError"))
+    let text = $("#companyError").text();
+    $("#companyError").text("");
+    toastr.info(text);
+}
+$(".categorySingle").click(function () {
+    let category = $(this).attr('data-id');
+    localStorage.setItem('category', category);
+    window.location.href = "/jobs";
+});
+
+

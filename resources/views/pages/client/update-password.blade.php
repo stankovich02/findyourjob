@@ -8,7 +8,7 @@
             <div class="col-lg-5 col-md-7 col-12">
                 <form id="loginForm" class="font-small mx-auto" method="POST" action="{{{route('account.update_password')}}}">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
                     <div class="mb-3">
                         <label for="passwordLogin" class="form-label">Current password:</label>
                         <div id="passwordDiv">

@@ -18,14 +18,19 @@ ContactController extends DefaultController
     }
     public function store(ContactAdminRequest $request) : RedirectResponse
     {
-        $email = $request->input('email');
-        $name = $request->input('name');
-        $subject = $request->input('subject');
-        $content = $request->input('message');
-        $admins = User::where('role_id', 2)->get();
-        foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new \App\Mail\ContactAdmin($name, $email, $subject, $content));
+        try {
+            $email = $request->input('email');
+            $name = $request->input('name');
+            $subject = $request->input('subject');
+            $content = $request->input('message');
+            $admins = User::where('role_id', 2)->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->send(new \App\Mail\ContactAdmin($name, $email, $subject, $content));
+            }
+            return redirect()->back()->with('success', 'Your message has been sent successfully.');
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->back()->with('error', 'An error occurred.');
         }
-        return redirect()->back()->with('success', 'Your message has been sent successfully.');
     }
 }

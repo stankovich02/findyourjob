@@ -27,7 +27,7 @@ function addLink(element){
         }
         $.ajax({
             url: '/account/socials',
-            method: 'PUT',
+            method: 'PATCH',
             data: {
                 social: social,
                 link: link
@@ -54,7 +54,7 @@ function changeLink(element) {
         let social = $(this).attr('data-social');
         $.ajax({
             url: '/account/socials',
-            method: 'PUT',
+            method: 'PATCH',
             data: {
                 social: social,
                 link: link
@@ -72,57 +72,6 @@ function changeLink(element) {
 $(".changeLink").click(function () {
     changeLink(this);
 });
-$('#fileInput').on('change', function() {
-    var data = new FormData();
-    jQuery.each(jQuery('#fileInput')[0].files, function(i, file) {
-        data.append('picture', file);
-    });
-    $.ajax({
-        url: '/account/picture',
-        type: 'PUT',
-        data: data,
-        processData: false,
-        success: function(response,status) {
-            if(status === "success"){
-                $('#photoMsg').css('color','green');
-                $('#photoMsg').html("You changed your profile photo.");
-                setTimeout(function(){
-                    location.reload();
-                }, 2000);
-            }
-        },
-        error: function(xhr, status, error) {
-            $('#photoMsg').css('color','red');
-            $('#photoMsg').html(xhr.responseText);
-        }
-    });
-});
-/*$("#fileInput").change(function () {
-    let file = this.files[0];
-    let url = $('#imageUpload').attr('data-action');
-    let formData = new FormData();
-    formData.append('picture', file);
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $.ajax({
-        url: url,
-        method: 'PUT',
-        data: formData,
-        processData: false,
-        cache: false,
-        contentType: false,
-        success: function (data) {
-            location.reload();
-        },
-        error: function (data) {
-            $("#pictureError").css('color', 'red');
-            $("#pictureError").html(data.responseJSON.errors.picture[0]);
-        }
-    });
-});*/
 
 $("#btnEdit").click(function () {
     $("#accountDetails input").removeAttr('disabled');
