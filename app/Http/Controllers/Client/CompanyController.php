@@ -86,7 +86,7 @@ class CompanyController extends DefaultController
             }
             $company = $this->companyModel->getCompany($id);
             if ($company == null) {
-                return redirect()->route('home');
+                return redirect()->route('home')->with('error', 'Company not found.');
             }
             if ($company->status == Company::STATUS_PENDING) {
                 return redirect()->route('home');

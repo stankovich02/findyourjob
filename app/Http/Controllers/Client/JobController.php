@@ -166,21 +166,24 @@ class JobController extends DefaultController
     {
         try {
             DB::beginTransaction();
-            $name = $request->input('name');
-            $category = $request->input('category');
-            $seniority = $request->input('seniority');
-            $workplace = $request->input('workplace');
-            $technologies = $request->input('technologies');
-            $description = $request->input('description');
-            $responsibilities = $request->input('responsibilities');
-            $requirements = $request->input('requirements');
-            $benefits = $request->input('benefits');
-            $location = $request->input('location');
-            $salary = $request->input('salary');
-            $workType = $request->input('workType');
-            $applicationDeadline = $request->input('applicationDeadline');
-            $jobID = $this->jobModel->insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")->id);
-            $this->logUserAction('Company posted a ' . $name . ' (id: ' . $jobID . ') job.', $request);
+            $array = [
+            'name' => $request->input('name'),
+            'category' => $request->input('category'),
+            'seniority' => $request->input('seniority'),
+            'workplace' => $request->input('workplace'),
+            'technologies' => $request->input('technologies'),
+            'description' => $request->input('description'),
+            'responsibilities' => $request->input('responsibilities'),
+            'requirements' => $request->input('requirements'),
+            'benefits' => $request->input('benefits'),
+            'location' => $request->input('location'),
+            'salary' => $request->input('salary'),
+            'workType' => $request->input('workType'),
+            'applicationDeadline' => $request->input('applicationDeadline'),
+            'companyId' => session()->get("user")->id
+            ];
+            $jobID = $this->jobModel->insert($array);
+            $this->logUserAction('Company posted a ' . $array['name'] . ' (id: ' . $jobID . ') job.', $request);
             DB::commit();
             return response()->json(['message' => 'Job created successfully! Please wait for the admin to approve it!'], ResponseAlias::HTTP_CREATED);
         }
@@ -265,22 +268,24 @@ class JobController extends DefaultController
     public function update(PostJobRequest $request, int $id) : JsonResponse|Response
     {
         try {
-            $name = $request->input('name');
-            $category = $request->input('category');
-            $seniority = $request->input('seniority');
-            $workplace = $request->input('workplace');
-            $technologies = $request->input('technologies');
-            $description = $request->input('description');
-            $responsibilities = $request->input('responsibilities');
-            $requirements = $request->input('requirements');
-            $benefits = $request->input('benefits');
-            $location = $request->input('location');
-            $salary = $request->input('salary');
-            $workType = $request->input('workType');
-            $applicationDeadline = $request->input('applicationDeadline');
-            $jobID = $this->jobModel->updateRow($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities,
-                $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, session()->get("user")
-                    ->id, $id);
+            $array = [
+                'name' => $request->input('name'),
+                'category' => $request->input('category'),
+                'seniority' => $request->input('seniority'),
+                'workplace' => $request->input('workplace'),
+                'technologies' => $request->input('technologies'),
+                'description' => $request->input('description'),
+                'responsibilities' => $request->input('responsibilities'),
+                'requirements' => $request->input('requirements'),
+                'benefits' => $request->input('benefits'),
+                'location' => $request->input('location'),
+                'salary' => $request->input('salary'),
+                'workType' => $request->input('workType'),
+                'applicationDeadline' => $request->input('applicationDeadline'),
+                'userID' => session()->get("user")->id,
+                'id' => $id
+            ];
+            $jobID = $this->jobModel->updateRow($array);
             if ($jobID == 0) {
                 return response()->json(['error' => 'Job not found!'], ResponseAlias::HTTP_NOT_FOUND);
             }
@@ -292,7 +297,6 @@ class JobController extends DefaultController
             return response()->json(['error' => 'An error occurred! Please try again later!'],
                 ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     /**

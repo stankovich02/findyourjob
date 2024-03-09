@@ -159,54 +159,52 @@ class Job extends Model
             ->find
         ($id);
     }
-    public function insert($name, $category, $seniority, $workplace, $technologies, $description, $responsibilities, $requirements, $benefits, $location, $salary, $workType, $applicationDeadline, $companyId) : int
+    public function insert($array) : int
     {
-        $this->name = $name;
-        $this->category_id = $category;
-        $this->seniority_id = $seniority;
-        $this->workplace_id = $workplace;
-        $this->description = $description;
-        $this->responsibilities = $responsibilities;
-        $this->requirements = $requirements;
-        $this->benefits = $benefits;
-        $this->city_id = $location;
-        if($salary !== null){
-            $this->salary = $salary;
+        $this->name = $array['name'];
+        $this->category_id = $array['category'];
+        $this->seniority_id = $array['seniority'];
+        $this->workplace_id = $array['workplace'];
+        $this->description = $array['description'];
+        $this->responsibilities = $array['responsibilities'];
+        $this->requirements = $array['requirements'];
+        $this->benefits = $array['benefits'];
+        $this->city_id = $array['location'];
+        if($array['salary'] !== null){
+            $this->salary = $array['salary'];
         }
-        $this->full_time = $workType;
-        $this->application_deadline = $applicationDeadline;
-        $this->company_id = $companyId;
+        $this->full_time = $array['workType'];
+        $this->application_deadline = $array['applicationDeadline'];
+        $this->company_id = $array['companyId'];
         $this->status = self::STATUS_PENDING;
         $this->save();
-        $this->technology()->attach($technologies, ['created_at' => now(), 'updated_at' => now()]);
+        $this->technology()->attach($array['technologies'],['created_at' => now(), 'updated_at' => now()]);
         return $this->id;
     }
 
-    public function updateRow($name, $category, $seniority, $workplace, $technologies, $description,
-                              $responsibilities, $requirements, $benefits, $location, $salary, $workType,
-                              $applicationDeadline, $companyId, $jobId) : int
+    public function updateRow($array) : int
     {
-        $job = self::find($jobId);
+        $job = self::find($array['id']);
         if ($job == null) {
             return 0;
         }
-        $job->name = $name;
-        $job->category_id = $category;
-        $job->seniority_id = $seniority;
-        $job->workplace_id = $workplace;
-        $job->description = $description;
-        $job->responsibilities = $responsibilities;
-        $job->requirements = $requirements;
-        $job->benefits = $benefits;
-        $job->city_id = $location;
-        if($salary !== null){
-            $job->salary = $salary;
+        $job->name = $array['name'];
+        $job->category_id = $array['category'];
+        $job->seniority_id = $array['seniority'];
+        $job->workplace_id = $array['workplace'];
+        $job->description = $array['description'];
+        $job->responsibilities = $array['responsibilities'];
+        $job->requirements = $array['requirements'];
+        $job->benefits = $array['benefits'];
+        $job->city_id = $array['location'];
+        if($array['salary'] !== null){
+            $job->salary = $array['salary'];
         }
-        $job->full_time = $workType;
-        $job->application_deadline = $applicationDeadline;
-        $job->company_id = $companyId;
+        $job->full_time = $array['workType'];
+        $job->application_deadline = $array['applicationDeadline'];
+        $job->company_id = $array['companyId'];
         $job->save();
-        $job->technology()->sync($technologies);
+        $job->technology()->sync($array['technologies']);
         return $job->id;
     }
     public function deleteRow($jobId) : void

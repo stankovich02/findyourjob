@@ -20,6 +20,9 @@ class ApplicationController extends DefaultController
         parent::__construct();
         try {
             $application = $this->applicationModel->getApplication($id);
+            if ($application == null) {
+                return redirect()->route('home')->with('error', 'Application not found.');
+            }
             if (session()->get('accountType') == 'employee') {
                 if ($application->user_id != session()->get('user')->id) {
                     return redirect()->route('home');

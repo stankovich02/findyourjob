@@ -90,7 +90,7 @@ class Company extends Model
     {
         $company = self::find($id);
         if ($company == null) {
-            return response(null, 404);
+            return redirect()->route('account.index')->with('error', 'Company not found.');
         }
         if ($company->name != $name) {
             $company->name = $name;
