@@ -11,9 +11,12 @@ use Illuminate\View\View;
 class
 ContactController extends DefaultController
 {
-    public function index() : View
+    public function index() : View|RedirectResponse
     {
         parent::__construct();
+        if(session()->has('user') && session()->get('user')->isAdmin) {
+           return redirect()->route('home');
+        }
         return view('pages.client.contact')->with('data', $this->data);
     }
     public function store(ContactAdminRequest $request) : RedirectResponse

@@ -14,7 +14,7 @@
             <div class="row gy-5 gx-4">
                 <div class="col-lg-8">
                     <div class="d-flex align-items-center mb-5">
-                        <img class="flex-shrink-0 img-fluid border rounded" src="{{asset('assets/img/categories/' . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
+                        <img class="flex-shrink-0 img-fluid border rounded" src="{{asset('assets/img/companies/' . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
                         <div class="text-start ps-4">
                             <h3 class="mb-1">{{$job->name}}</h3>
                             <p class="m-0">{{$job->company->name}}</p>
@@ -51,7 +51,7 @@
                     <div class="col-3">
                         <a href="{{route("login")}}" class="btn btn-primary w-100 py-2">Login to apply</a>
                     </div>
-                    @elseif(session()->has("user") && session("accountType") == "employee")
+                    @elseif(session()->has("user") && session("accountType") == "employee" && !session()->get("user")->isAdmin)
                         @if($job->applications->where("user_id", session()->get("user")->id)->count() > 0)
                             <div class="col-4">
                                     <?php $application = $job->applications->where("user_id", session()->get("user")->id)->first(); ?>
@@ -62,6 +62,7 @@
                                     {{session("success")}}
                                 </p>
                             @endif
+
                         @else
                             <div class="">
                                 <h4 class="mb-4">Apply For The Job</h4>

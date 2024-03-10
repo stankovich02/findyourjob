@@ -54,6 +54,9 @@ $(function () {
                         }
                     }],
                     yAxes: [{
+                        ticks: {
+                            max: 20
+                        },
                         gridLines: {
                             display: true
                         }

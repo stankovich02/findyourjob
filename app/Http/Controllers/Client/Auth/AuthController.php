@@ -71,7 +71,7 @@ class AuthController extends DefaultController
             else
                 $user = $this->companyModel::where('email', $email)->first();
             if(!$user){
-                $this->logUserAction('User login failed.', $request, $user->id);
+                $this->logUserAction('User login failed.', $request);
                 return redirect()->back()->with('error', 'Invalid credentials.');
             }
             if(!password_verify($passwordWithEnv, $user->password)){

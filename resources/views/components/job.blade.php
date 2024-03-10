@@ -40,7 +40,7 @@
         </div>
         <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
             <div class="d-flex mb-3">
-                @if(session()->has("user") && session()->get("accountType") == "employee")
+                @if(session()->has("user") && session()->get("accountType") == "employee" && !session()->get("user")->isAdmin)
                     @if($job->saved_jobs->where("id", session()->get("user")->id)->first())
                         <a class="btn btn-light btn-square me-3 saveJob" data-id="{{$job->id}}" href=""><i class="fas fa-heart text-primary"></i></a>
                     @else
@@ -49,7 +49,7 @@
                 @endif
                 @if(session()->has("user") && session()->get("accountType") == "employee" && $job->applications->where("user_id", session()->get("user")->id)->first())
                     <a class="btn btn-muted" href="{{route("jobs.show", $job->id)}}">Applied</a>
-                @elseif(!session()->has("user") || (session()->has("user") && session()->get("accountType") == "employee"))
+                @elseif((!session()->has("user") || (session()->has("user") && session()->get("accountType") == "employee")) && !session()->get('user')->isAdmin)
                     <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">Apply Now</a>
                 @else
                     <a class="btn btn-primary" href="{{route("jobs.show", $job->id)}}">View job</a>

@@ -20,15 +20,17 @@
                     <a class="btn btn-outline-light btn-social" href="https://linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-6">
-                <h5 class="text-white mb-4">Newsletter</h5>
-                <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
-                <div class="position-relative" style="max-width: 400px;">
-                    <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" id="newsletterEmail" name="email" placeholder="Your email">
-                    <button type="button" id="newsletterButton" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                    <p id="newsletterMsg" class="mt-2"></p>
+            @if(!session()->has('user') || (session()->has('user') && !session()->get('user')->isAdmin))
+                <div class="col-lg-5 col-md-6">
+                    <h5 class="text-white mb-4">Newsletter</h5>
+                    <p>Subscribe to our newsletter and get our newest updates right on your inbox.</p>
+                    <div class="position-relative" style="max-width: 400px;">
+                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" id="newsletterEmail" name="email" placeholder="Your email">
+                        <button type="button" id="newsletterButton" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        <p id="newsletterMsg" class="mt-2"></p>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
     <div class="container">
