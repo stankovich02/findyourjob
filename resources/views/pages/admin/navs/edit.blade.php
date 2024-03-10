@@ -1,5 +1,6 @@
 
 @extends('layouts.admin-layout')
+@section('title', 'Edit Navigation')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
         <section class="content w-50 mx-auto pt-5">

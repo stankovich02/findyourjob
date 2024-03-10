@@ -1,4 +1,5 @@
 @extends('layouts.admin-layout')
+@section('title', 'Company Details')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
         <!-- Content Header (Page header) -->

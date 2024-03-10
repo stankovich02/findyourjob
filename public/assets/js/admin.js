@@ -3,7 +3,6 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
 if(window.location.pathname.includes('/admin/jobs')) {
     $("#deleteJob").click(function (e) {
         e.preventDefault();

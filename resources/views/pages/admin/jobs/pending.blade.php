@@ -1,4 +1,5 @@
 @extends('layouts.admin-layout')
+@section('title', 'Pending Jobs')
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
         <!-- Main content -->
