@@ -21,8 +21,7 @@ Route::get('/', [\App\Http\Controllers\Client\HomeController::class, 'index'])->
 Route::get('/about', [\App\Http\Controllers\Client\AboutController::class, 'index'])->name('about');
 Route::get('/jobs/filter', [\App\Http\Controllers\Client\JobController::class, 'filter'])->name('jobs.filter');
 
-//testirati da li rade linkovi i sve bez controllera
-Route::view('/author', 'client.author')->name('author');
+Route::get('/author', [\App\Http\Controllers\Client\AuthorController::class, 'index'])->name('author');
 
 Route::resource('jobs', \App\Http\Controllers\Client\JobController::class);
 
@@ -78,6 +77,7 @@ Route::middleware('IsNotLoggedIn')->group(function (){
 });
 Route::middleware('IsAdmin')->prefix('/admin')->name('admin.')->group(function (){
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('index');
+    Route::get('/applications/stats', [\App\Http\Controllers\Admin\AdminController::class, 'applicationStats'])->name('applications.stats');
     Route::controller(\App\Http\Controllers\Admin\JobController::class)->group(function (){
         Route::get('/jobs','index')->name('jobs.index');
         Route::get('/jobs/pending','pending')->name('jobs.pending');

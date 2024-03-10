@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -42,7 +43,92 @@ class AdminController extends Controller
                 $registrations++;
             }
         }
+
+        $applications = Application::all();
+        $applicationsToday = 0;
+        foreach ($applications as $application) {
+            if ($application->created_at->format('Y-m-d') == $today){
+                $applicationsToday++;
+            }
+        }
         return view('pages.admin.dashboard')->with('active', $this->currentRoute)->with('uniqueVisitors',
-                $uniqueVisitors)->with('registrations', $registrations);
+                $uniqueVisitors)->with('registrations', $registrations)->with('applicationsToday', $applicationsToday);
+    }
+
+    public function applicationStats()
+    {
+        $applications = Application::all();
+        $january = 0;
+        $february = 0;
+        $march = 0;
+        $april = 0;
+        $may = 0;
+        $june = 0;
+        $july = 0;
+        $august = 0;
+        $september = 0;
+        $october = 0;
+        $november = 0;
+        $december = 0;
+        foreach ($applications as $application) {
+            if($application->created_at->format('Y') == date('Y')){
+                $month = $application->created_at->format('m');
+                switch ($month) {
+                    case '01':
+                        $january++;
+                        break;
+                    case '02':
+                        $february++;
+                        break;
+                    case '03':
+                        $march++;
+                        break;
+                    case '04':
+                        $april++;
+                        break;
+                    case '05':
+                        $may++;
+                        break;
+                    case '06':
+                        $june++;
+                        break;
+                    case '07':
+                        $july++;
+                        break;
+                    case '08':
+                        $august++;
+                        break;
+                    case '09':
+                        $september++;
+                        break;
+                    case '10':
+                        $october++;
+                        break;
+                    case '11':
+                        $november++;
+                        break;
+                    case '12':
+                        $december++;
+                        break;
+                    }
+                }
+
+
+        }
+        $array = [
+            'January' => $january,
+            'February' => $february,
+            'March' => $march,
+            'April' => $april,
+            'May' => $may,
+            'June' => $june,
+            'July' => $july,
+            'August' => $august,
+            'September' => $september,
+            'October' => $october,
+            'November' => $november,
+            'December' => $december
+        ];
+        return response()->json($array);
     }
 }
