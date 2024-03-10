@@ -5,7 +5,7 @@
         <!-- Content Header (Page header) -->
         <a href="{{route('admin.navs.create')}}" class="btn btn-primary m-3">Add nav</a>
         <!-- Main content -->
-        <section class="content">
+        <section class="content pt-3">
             <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>

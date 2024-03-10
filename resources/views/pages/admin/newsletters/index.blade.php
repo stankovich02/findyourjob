@@ -3,7 +3,7 @@
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
         <!-- Main content -->
-        <section class="content">
+        <section class="content pt-3">
             <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>

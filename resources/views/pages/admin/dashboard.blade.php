@@ -58,7 +58,7 @@
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>44</h3>
+                                <h3>{{$registrations}}</h3>
                                 <p>User Registrations</p>
                             </div>
                             <div class="icon">
@@ -72,7 +72,7 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>65</h3>
+                                <h3>{{$uniqueVisitors}}</h3>
                                 <p>Unique Visitors</p>
                             </div>
                             <div class="icon">
@@ -88,9 +88,8 @@
                 <div class="row">
                     <!-- Left col -->
                     <section class="col-lg-7 connectedSortable">
-                        <!-- Custom tabs (Charts with tabs)-->
                         <div class="card">
-                            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                            <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-chart-pie mr-1"></i>
                                     Sales
@@ -109,11 +108,12 @@
                             <div class="card-body">
                                 <div class="tab-content p-0">
                                     <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                        <canvas id="revenue-chart-canvas" height="300" style="height: 300px; display: block; width: 900px;" width="900" class="chartjs-render-monitor"></canvas>
+                                    <div class="chart tab-pane active" id="revenue-chart"
+                                         style="position: relative; height: 300px;">
+                                        <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
                                     </div>
                                     <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                                        <canvas id="sales-chart-canvas" height="0" style="height: 0px; display: block; width: 0px;" class="chartjs-render-monitor" width="0"></canvas>
+                                        <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
                                     </div>
                                 </div>
                             </div><!-- /.card-body -->

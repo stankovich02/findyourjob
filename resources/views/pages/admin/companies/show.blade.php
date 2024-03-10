@@ -5,7 +5,7 @@
         <!-- Content Header (Page header) -->
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content pt-3">
            <div class="container py-5">
                <div class="row">
                    <div class="col-12 d-flex flex-column align-items-center">
