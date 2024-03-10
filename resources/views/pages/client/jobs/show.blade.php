@@ -14,7 +14,7 @@
             <div class="row gy-5 gx-4">
                 <div class="col-lg-8">
                     <div class="d-flex align-items-center mb-5">
-                        <img class="flex-shrink-0 img-fluid border rounded" src="{{asset('assets/img/companies/' . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
+                        <img class="flex-shrink-0 img-fluid border rounded" src="{{asset('assets/img/categories/' . $job->company->logo)}}" alt="" style="width: 80px; height: 80px;">
                         <div class="text-start ps-4">
                             <h3 class="mb-1">{{$job->name}}</h3>
                             <p class="m-0">{{$job->company->name}}</p>

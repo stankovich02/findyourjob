@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class City extends Model
 {
@@ -29,4 +30,24 @@ class City extends Model
    {
       return self::all();
    }
+   public function getAllAdmin() : LengthAwarePaginator
+   {
+      return self::paginate(10);
+   }
+   public function insert(string $cityName) : void
+   {
+      $this->name = $cityName;
+      $this->save();
+   }
+    public function updateCity(int $id,string $cityName) : void
+    {
+        $city = self::find($id);
+        $city->name = $cityName;
+        $city->save();
+    }
+    public function deleteCity(int $id) : void
+    {
+        $city = self::find($id);
+        $city->delete();
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Contact Admin</title>
+    <title>Job status</title>
     <style>
        h4{
            margin-bottom: 10px;

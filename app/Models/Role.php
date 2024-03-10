@@ -17,4 +17,24 @@ class Role extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function getAll()
+    {
+        return self::all();
+    }
+    public function insert(string $name)
+    {
+        $this->name = $name;
+        $this->save();
+    }
+    public function updateRole(int $id, string $name)
+    {
+        $role = self::find($id);
+        $role->name = $name;
+        $role->save();
+    }
+    public function deleteRole(int $id)
+    {
+        $role = self::find($id);
+        $role->delete();
+    }
 }

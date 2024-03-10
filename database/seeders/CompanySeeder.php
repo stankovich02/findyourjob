@@ -111,7 +111,7 @@ class CompanySeeder extends Seeder
                 'logo' => 'microsoft',
                 'website' => 'https://www.microsoft.com/en-rs/mdcs',
                 'phone' => '+381 11 330 6600',
-                'description' => "We are growing towards the most innovative Microsoft engineering Campus in Europe composed of high performing teams and extraordinary individuals building cutting edge Microsoft software services and products. Our outcomes power digital transformation of the most strategic WW companies as well as improve lives of every single individual. Our engineers come from most of the WW nations demonstrating the full diversity and inclusion as one of the core Microsoft Values. While we take pride about the quality and values of our people, we are also very proud of the ecosystem we generate around us, making Belgrade as one of the key engineering hubs in this part of the world. By enabling the key desired business outcomes of our customers, we lead and secure the profound business impact to Microsoft Corp."
+                'description' => "We are growing towards the most innovative Microsoft engineering Campus in Europe composed of high performing teams and extraordinary individuals building cutting edge Microsoft software services and products. Our outcomes power digital transformation of the most strategic WW categories as well as improve lives of every single individual. Our engineers come from most of the WW nations demonstrating the full diversity and inclusion as one of the core Microsoft Values. While we take pride about the quality and values of our people, we are also very proud of the ecosystem we generate around us, making Belgrade as one of the key engineering hubs in this part of the world. By enabling the key desired business outcomes of our customers, we lead and secure the profound business impact to Microsoft Corp."
             ],
             [
                 'name' => 'SAP',
@@ -147,7 +147,7 @@ class CompanySeeder extends Seeder
                 'logo' => 'rtrk',
                 'website' => 'http://www.rt-rk.com',
                 'phone' => '+381 21 4801100',
-                'description' => "RT-RK is a premium embedded software development house in the Southeast Europe, with a focus on consumer electronics and infotainment systems. The company was founded in 1991, and currently employs 500+ engineers. RT-RK has a background in being a near shore development center of silicon vendor, networking, automotive, and consumer electronics companies. RT-RK operates under the umbrella of TTTech Group."
+                'description' => "RT-RK is a premium embedded software development house in the Southeast Europe, with a focus on consumer electronics and infotainment systems. The company was founded in 1991, and currently employs 500+ engineers. RT-RK has a background in being a near shore development center of silicon vendor, networking, automotive, and consumer electronics categories. RT-RK operates under the umbrella of TTTech Group."
             ],
             [
                 'name' => 'Netcare',
@@ -173,7 +173,7 @@ class CompanySeeder extends Seeder
                 "password" => Hash::make('30hills123' . env('CUSTOM_STRING_FOR_HASH')),
                 'logo' => '30hills',
                 'website' => 'https://30hills.com/',
-                'description' => "Inspiring businesses to bring innovative, stunning ideas to life. 30Hills is a digital incubator and solution provider focused on implementing customized and innovative solutions for startups and corporations. Our expertise is in managing the process of innovation through product development and application of Agile and Design Thinking methodologies. Our team has created the environment in which we help our clients in the process of ideating, designing, and building digital solutions that address current and upcoming business needs. 30Hills has a large number of local and international startup and corporate clients. These clients come from various industries such as banking, retail, sport, procurement, construction, oil, gaming, education, etc. Therefore, the firm’s job is to digitize those companies and industries by creating products that make a change, achieve results and maximize business potential."
+                'description' => "Inspiring businesses to bring innovative, stunning ideas to life. 30Hills is a digital incubator and solution provider focused on implementing customized and innovative solutions for startups and corporations. Our expertise is in managing the process of innovation through product development and application of Agile and Design Thinking methodologies. Our team has created the environment in which we help our clients in the process of ideating, designing, and building digital solutions that address current and upcoming business needs. 30Hills has a large number of local and international startup and corporate clients. These clients come from various industries such as banking, retail, sport, procurement, construction, oil, gaming, education, etc. Therefore, the firm’s job is to digitize those categories and industries by creating products that make a change, achieve results and maximize business potential."
             ],
             [
                 'name' => 'Ubisoft',

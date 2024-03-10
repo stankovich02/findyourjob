@@ -150,18 +150,30 @@ class Job extends Model
 
     }
 
-    public function getALlAdmin() : Collection|LengthAwarePaginator
+    public function getAllAdmin() : Collection|LengthAwarePaginator
     {
         return self::with('company', 'category', 'city', 'seniority', 'workplace', 'technology', 'saved_jobs', 'boosted')
             ->where('status', self::STATUS_ACTIVE)
             ->paginate(5);
     }
 
-    public function getPendingJobs()
+    public function getPendingJobs() : Collection|LengthAwarePaginator
     {
         return self::with('company', 'category', 'city', 'seniority', 'workplace', 'technology', 'saved_jobs', 'boosted')
             ->where('status', self::STATUS_PENDING)
             ->paginate(5);
+    }
+
+    public function getBoosted(): Collection|LengthAwarePaginator
+    {
+        //get all columns from boosted relation, expired boosted also
+        return self::with('company', 'boosted')
+            ->whereHas('boosted', function ($query) {
+                $query->where('boosted_at', 'IS NOT', null);
+            })
+            ->paginate(5);
+
+
     }
     public function isBoosted() : bool
     {

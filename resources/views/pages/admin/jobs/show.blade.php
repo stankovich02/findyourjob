@@ -58,8 +58,25 @@
                            {!!$job->benefits!!}
                        </div>
                        <div class="single d-flex flex-column text-center">
+                           <p class="mb-0 font-weight-bold">Technologies:</p>
+                           <p>
+                               @if(count($job->technology) == 1)
+                                   {{$job->technology[0]->name}}
+                               @else
+                                   @foreach($job->technology as $technology)
+                                       @if($loop->last)
+                                         {{$technology->name}}
+                                             @break
+                                       @endif
+                                        {{$technology->name}},
+                                   @endforeach
+                               @endif
+
+                           </p>
+                       </div>
+                       <div class="single d-flex flex-column text-center">
                            <p class="mb-0 font-weight-bold">Application deadline:</p>
-                           {{$job->application_deadline}}
+                           <p>{{$job->application_deadline}}</p>
                        </div>
                        @if($job->status == \App\Models\Job::STATUS_PENDING)
 

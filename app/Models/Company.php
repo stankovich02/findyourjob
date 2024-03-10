@@ -121,4 +121,11 @@ class Company extends Model
         $company->save();
         return true;
     }
+    public function approve(int $id) : array
+    {
+        $company = self::find($id);
+        $company->status = self::STATUS_ACTIVE;
+        $company->save();
+        return ['email' => $company->email, 'name' => $company->name];
+    }
 }

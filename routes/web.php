@@ -78,9 +78,34 @@ Route::middleware('IsNotLoggedIn')->group(function (){
 });
 Route::middleware('IsAdmin')->prefix('/admin')->name('admin.')->group(function (){
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('index');
-    Route::get('/jobs', [\App\Http\Controllers\Admin\JobController::class, 'index'])->name('jobs.index');
-    Route::patch('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'approve'])->name('jobs.approve');
-    Route::get('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'show'])->name('jobs.show');
-    Route::delete('/jobs/{id}', [\App\Http\Controllers\Admin\JobController::class, 'destroy'])->name('jobs.destroy');
+    Route::controller(\App\Http\Controllers\Admin\JobController::class)->group(function (){
+        Route::get('/jobs','index')->name('jobs.index');
+        Route::get('/jobs/pending','pending')->name('jobs.pending');
+        Route::get('/jobs/boosted','boosted')->name('jobs.boosted');
+        Route::patch('/jobs/{id}', 'approve')->name('jobs.approve');
+        Route::get('/jobs/{id}', 'show')->name('jobs.show');
+        Route::delete('/jobs/{id}', 'destroy')->name('jobs.destroy');
+        Route::delete('/jobs/boosted/{id}', 'destroyBoosted')->name('jobs.destroy_boosted');
+    });
+    Route::controller(\App\Http\Controllers\Admin\CompanyController::class)->group(function (){
+        Route::get('/companies','index')->name('companies.index');
+        Route::get('/companies/pending','pending')->name('companies.pending');
+        Route::patch('/companies/{id}', 'approve')->name('companies.approve');
+        Route::get('/companies/{id}', 'show')->name('companies.show');
+        Route::delete('/companies/{id}', 'destroy')->name('companies.destroy');
+    });
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::patch('/users/ban/{id}', [\App\Http\Controllers\Admin\UserController::class, 'ban'])->name('users.ban');
+    Route::patch('/users/unban/{id}', [\App\Http\Controllers\Admin\UserController::class, 'unban'])->name('users.unban');
+    Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+    Route::resource('cities', \App\Http\Controllers\Admin\CityController::class);
+    Route::resource('navs', \App\Http\Controllers\Admin\NavController::class);
+    Route::resource('seniorities', \App\Http\Controllers\Admin\SeniorityController::class);
+    Route::resource('technologies', \App\Http\Controllers\Admin\TechnologyController::class);
+    Route::resource('workplaces', \App\Http\Controllers\Admin\WorkplaceController::class);
+    Route::get('/newsletters', [\App\Http\Controllers\Client\NewsletterController::class, 'index'])->name('newsletters.index');
+    Route::delete('/newsletters/{id}', [\App\Http\Controllers\Client\NewsletterController::class, 'destroy'])->name('newsletters.destroy');
+
 });
 

@@ -15,4 +15,22 @@ class Nav extends Model
     {
         return self::all();
     }
+    public function insert(string $navName, string $navRoute) : void
+    {
+        $this->name = $navName;
+        $this->route = $navRoute;
+        $this->save();
+    }
+    public function updateNav(int $id, string $navName, string $navRoute) : void
+    {
+        $nav = self::find($id);
+        $nav->name = $navName;
+        $nav->route = $navRoute;
+        $nav->save();
+    }
+    public function deleteNav(int $id) : void
+    {
+        $nav = self::find($id);
+        $nav->delete();
+    }
 }

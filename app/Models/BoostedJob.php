@@ -10,6 +10,8 @@ class BoostedJob extends Model
 {
     protected $table = 'boosted_jobs';
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'job_id',
         'boosted_at',
