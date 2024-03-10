@@ -101,9 +101,13 @@ class AuthController extends DefaultController
                 }
                 return redirect()->back()->with('error', 'Invalid credentials.');
             }
-            if($user->is_active == 0 && $request->input('accountType') == 'employee'){
+            if($user->is_active == 0 && $request->input('accountType') == 'employee' && $user->token){
                 $this->logUserAction('User login failed.', $request, $user->id);
                 return redirect()->back()->with('error', 'Account is not verified. Please check your email for verification link.');
+            }
+            if($user->is_active == 0 && $request->input('accountType') == 'employee' && !$user->token){
+                $this->logUserAction('User login failed.', $request, $user->id);
+                return redirect()->back()->with('error', 'Admin has banned your account. Please contact admin for more information.');
             }
             if($request->input('accountType') == 'company' && $user->status == $this->companyModel::STATUS_PENDING){
                 $this->logUserAction('Company login failed.', $request, $user->id);
