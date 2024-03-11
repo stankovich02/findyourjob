@@ -45,15 +45,21 @@
                 <input type="text" class="form-control font-small" id="email" name="email" value="{{old("email")}}"/>
                 <p id="emailError" class="text-danger">
             </div>
-            <div class="my-4">
+            <div class="mb-3">
                 <label for="password" class="font-small">Password</label>
-                <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
-                <p id="passwordError" class="text-danger">
+                <div id="passwordDiv">
+                    <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
+                    <i toggle="#password" class="toggle-password fas fa-eye"></i>
+                    <p id="passwordError" class="text-danger">
+                </div>
             </div>
-            <div class="my-4">
+            <div class="mb-3">
                 <label for="confirmPassword" class="font-small">Confirm password</label>
-                <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("confirmPassword")}}"/>
-                <p id="confirmPasswordError" class="text-danger">
+                <div id="passwordDiv">
+                    <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("confirmPassword")}}"/>
+                    <i toggle="#confirmPassword" class="toggle-password fas fa-eye"></i>
+                    <p id="confirmPasswordError" class="text-danger">
+                </div>
             </div>
             <button id="btnRegister" class="btn btn-primary text-center d-block mx-auto px-4">
                 Register

@@ -88,12 +88,12 @@
             <!-- Search End -->
             <div class="tab-content">
                 <div id="allJobs" class="tab-pane fade show p-0 active">
-                    @if(count($jobs) == 0)
-                        <h4 class="text-center mt-5">There are no jobs available at the moment.</h4>
-                    @else
+                    @if(count($jobs) > 0)
                         @foreach($jobs as $job)
                             <x-job :job="$job"/>
                         @endforeach
+                    @else
+                        <h4 class="text-center mt-5">There are no jobs available at the moment.</h4>
                     @endif
                     <nav aria-label="..." class="d-flex justify-content-center mt-5">
                         <ul class="pagination pagination-md">
@@ -163,5 +163,5 @@
 
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/jobs.js')}}"></script>
+    <script src="{{asset('assets/js/jobs.min.js')}}"></script>
 @endsection

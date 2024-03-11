@@ -55,19 +55,25 @@
                     <p class="text-danger mt-1">{{$errors->first("email")}}</p>
                 @endif
             </div>
-            <div class="my-4">
-                <label for="password" class="font-small">Password</label>
-                <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
-                @if($errors->has("password"))
-                    <p class="text-danger mt-1">{{$errors->first("password")}}</p>
-                @endif
+            <div class="mb-3">
+                <label for="passwordLogin" class="form-label">Password</label>
+                <div id="passwordDiv">
+                    <input type="password" class="form-control font-small" id="password" name="password" value="{{old("password")}}"/>
+                    <i toggle="#password" class="toggle-password fas fa-eye"></i>
+                    @if($errors->has("password"))
+                        <p class="text-danger mt-1">{{$errors->first("password")}}</p>
+                    @endif
+                </div>
             </div>
-            <div class="my-4">
-                <label for="confirmPassword" class="font-small">Confirm password</label>
-                <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("confirmPassword")}}"/>
-                @if($errors->has("confirmPassword"))
-                    <p class="text-danger mt-1">{{$errors->first("confirmPassword")}}</p>
-                @endif
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Password</label>
+                <div id="passwordDiv">
+                    <input type="password" class="form-control font-small" id="confirmPassword" name="confirmPassword" value="{{old("password")}}"/>
+                    <i toggle="#confirmPassword" class="toggle-password fas fa-eye"></i>
+                    @if($errors->has("confirmPassword"))
+                        <p class="text-danger mt-1">{{$errors->first("confirmPassword")}}</p>
+                    @endif
+                </div>
             </div>
             <button id="btnRegister" class="btn btn-primary text-center d-block mx-auto px-4">
                 Register

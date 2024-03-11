@@ -160,6 +160,84 @@ function filterJobs(page) {
                     });
                 });
             });
+            $(document).on('click', '.boostJob a', function (e) {
+                e.preventDefault();
+                let jobId = $(this).attr('data-id');
+                $.ajax({
+                    url: `/jobs/${parseInt(jobId)}`,
+                    method: 'GET',
+                    data: {
+                        jobId: jobId
+                    },
+                    success: function (data) {
+                        html = `
+
+               <p>Job Title: ${data.job.name}</p>
+               <p>Job Category: ${data.job.category.name}</p>
+                <p>Job Location: ${data.job.city.name}</p>
+                <p>Application Deadline: ${data.job.application_deadline}</p>
+                <label for="boostDuration">Choose Boost Duration:</label>
+                <div id="calculateBoost">
+                      <select class="form-select" aria-label="Default select example" id="boostDuration">
+                        <option value="0">Select Duration</option>
+                        <option value="1">1 Day</option>
+                        <option value="3">3 Days</option>
+                        <option value="7">7 Days</option>
+                        <option value="14">14 Days</option>
+                    </select>
+                </div>
+
+               `;
+                        $(".boostJobModal .modal-body").html(html);
+                        $(".boostJobModal").css("display", "block");
+                        $(".boostJobModal #closeModal").click(function (e) {
+                            e.preventDefault();
+                            $(".boostJobModal").css("display", "none");
+                        });
+                        $("#boostDuration").change(function (e) {
+                            let html = `
+                    <div id="calculationMessage">
+                    </div>`;
+                            $("#calculateBoost").append(html);
+                            if ($(this).val() == 0) {
+                                $("#calculationMessage").remove();
+                                $(".boostJobModal form").remove();
+                                return;
+                            }
+                            if ($(".boostJobModal form")) {
+                                $(".boostJobModal form").remove();
+                            }
+                            let duration = $(this).val();
+                            let amount = 5;
+                            let total = amount * duration;
+                            let csrf = $('meta[name="csrf-token"]').attr('content');
+                            $("#calculationMessage").html(`<h5 class="mt-5 text-success"> For ${duration} ${duration == 1 ? "Day" : "Days"}, You will be charged ${total} EUR.</h5>`);
+                            let stripeModal = `
+                     <form action="/jobs/boost/${jobId}" method="post">
+                        <input type="hidden" name="_token" value="${csrf}">
+                        <input type="hidden" name="duration" value="${duration}">
+                        <input type="hidden" name="total" value="${total}">
+                        <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_51Or1PM08Wg9T2v5dxSHY09d2QRoPJlvI6AviM5HY8mKo4GJt7kUK6QayJ9bKiVy0lnXa9aJisPi4iL1qvM1QG6g8008evIG994"
+                            data-amount="${total * 100}"
+                            data-name="Boost Job Payment"
+                            data-image="http://127.0.0.1:8000/assets/img/logo.png"
+                            data-locale="auto"
+                            data-email="false"
+                            data-currency="eur"
+                            data-label="Pay">
+                        </script>
+                    </form>
+                    `;
+                            $(".boostJobModal .modal-body").append(stripeModal);
+                        });
+                    },
+                    error: function (data) {
+                        toastr.error(data.responseJSON.message);
+                    }
+                });
+            })
         },
         error: function (data) {
             if(data.responseJSON.errors){

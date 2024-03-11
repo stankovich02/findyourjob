@@ -36,6 +36,6 @@
 
 
 
-<script src="{{asset('assets/js/admin.js')}}"></script>
+<script src="{{asset('assets/js/admin.min.js')}}"></script>
 
 <script src="{{asset('dist/js/pages/dashboard.js')}}"></script>

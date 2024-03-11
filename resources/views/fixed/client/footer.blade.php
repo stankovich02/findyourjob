@@ -7,6 +7,7 @@
                 @foreach($data['nav'] as $nav)
                     <a class="btn btn-link text-white-50" href="{{route($nav->route)}}">{{$nav->name}}</a>
                 @endforeach
+                <a class="btn btn-link text-danger" href="{{asset('documentation.pdf')}}">Documentation</a>
             </div>
             <div class="col-lg-4 col-md-6">
                 <h5 class="text-white mb-4">Contact</h5>
@@ -62,7 +63,7 @@
 <script src="{{asset('assets/js/virtual-select.min.js')}}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
-<script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{asset('assets/js/main.min.js')}}"></script>
 <!-- Start of LiveChat (www.livechat.com) code -->
 <script>
     window.__lc = window.__lc || {};

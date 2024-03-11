@@ -294,5 +294,5 @@
 @endif
 @endsection
 @section('scripts')
-    <script src="{{asset('assets/js/account.js')}}"></script>
+    <script src="{{asset('assets/js/account.min.js')}}"></script>
 @endsection

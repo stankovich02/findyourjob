@@ -13,7 +13,7 @@
     bottom: 20px;
     z-index: 99;
 }
-
+/* My changes */
 .accountType{
     margin-bottom: 0;
     background-color: #00B074;
@@ -146,7 +146,7 @@ input[name="accountType"]{
     font-size: 20px;
     color: #999;
 }
-#passwordLogin:focus + .toggle-password:before, #resetPasswordLogin:hover + .toggle-password:before,#currentPassword:hover + .toggle-password:before {
+#password:focus + .toggle-password:before,#confirmPassword:focus + .toggle-password:before,#passwordLogin:focus + .toggle-password:before, #resetPasswordLogin:hover + .toggle-password:before,#currentPassword:hover + .toggle-password:before {
     color: #333;
 }
 .font-small {
@@ -288,6 +288,8 @@ width: 30px;
 #searchWrapper{
     padding: 150px 0!important;
 }
+/* end of my changes */
+
 /*** Spinner ***/
 #spinner {
     opacity: 0;

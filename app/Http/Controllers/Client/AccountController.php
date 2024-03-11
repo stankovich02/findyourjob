@@ -28,6 +28,9 @@ class AccountController extends DefaultController
     {
         parent::__construct();
         try {
+            if(session()->get('user')->isAdmin){
+                return redirect()->route('admin.index');
+            }
             $userID = $request->session()->get('user')->id;
             if ($request->session()->get("accountType") == "employee") {
                 $user = User::with('applications')->find($userID);

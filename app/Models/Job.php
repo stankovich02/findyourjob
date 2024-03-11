@@ -93,20 +93,14 @@ class Job extends Model
                 $query->where('boosted_until', '>', Carbon::now());
             });
         if($array){
-            if($array['keyword']){
-                $keyword = $array['keyword'];
-                $queryBoosted->where('name', 'like', '%'.$array['keyword'].'%')
-                    ->orWhereHas('company', function($query) use ($keyword) {
-                        $query->where('name', 'like', '%'.$keyword.'%');
-                    });
-                $queryNonBoosted->where('name', 'like', '%'.$array['keyword'].'%')
-                    ->orWhereHas('company', function($query) use ($keyword) {
-                        $query->where('name', 'like', '%'.$keyword.'%');
-                    });
-            }
             if($array['category']){
                 $queryBoosted->where('category_id', $array['category']);
                 $queryNonBoosted->where('category_id', $array['category']);
+            }
+            if($array['salary'] == "true")
+            {
+                $queryBoosted->whereNotNull('salary');
+                $queryNonBoosted->whereNotNull('salary');
             }
             if(isset($array['cities'])){
                 $queryBoosted->whereIn('city_id', $array['cities']);
@@ -120,11 +114,6 @@ class Job extends Model
                 $queryBoosted->where('workplace_id', $array['workplace']);
                 $queryNonBoosted->where('workplace_id', $array['workplace']);
             }
-            if($array['salary'] == "true")
-            {
-                $queryBoosted->whereNotNull('salary');
-                $queryNonBoosted->whereNotNull('salary');
-            }
             if($array['workType'] !== "both")
             {
                 $queryBoosted->where('full_time', $array['workType'] === "1" ? 1 : 0);
@@ -137,6 +126,21 @@ class Job extends Model
                 });
                 $queryNonBoosted->whereHas('technology', function($query) use ($technologyIds) {
                     $query->whereIn('technology_id', $technologyIds);
+                });
+            }
+            if($array['keyword']){
+                $keyword = $array['keyword'];
+                $queryBoosted->where(function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('company', function ($q) use ($keyword) {
+                            $q->where('name', 'like', '%' . $keyword . '%');
+                        });
+                });
+                $queryNonBoosted->where(function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('company', function ($q) use ($keyword) {
+                            $q->where('name', 'like', '%' . $keyword . '%');
+                        });
                 });
             }
 
