@@ -136,14 +136,17 @@ class User extends Model
                 Mail::to($email)->send(new \App\Mail\EmailVerification($token));
             }
             if ($user->first_name != $firstName){
+                session()->get('user')->first_name = $firstName;
                 $user->first_name = $firstName;
             }
             if ($user->last_name != $lastName){
+                session()->get('user')->last_name = $lastName;
                 $user->last_name = $lastName;
             }
             $user->updated_at = now();
             $user->save();
             if ($user->email != $email) {
+                session()>get('user')->email = $email;
                 $user->email = $email;
                 return redirect()->route('account.index')->with('success', 'You have successfully updated your info. Please check your email to verify your new email address.');
             }

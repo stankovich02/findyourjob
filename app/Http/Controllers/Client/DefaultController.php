@@ -20,16 +20,6 @@ class DefaultController extends Controller
 
     public function __construct()
     {
-        if (session()->has('user')) {
-            if (session()->get('accountType') == 'employee') {
-                $this->data['user'] = User::with('applications')->find(session()->get('user')->id);
-            } else {
-                $this->data['user'] = Company::find(session()->get('user')->id);
-            }
-        } else {
-            $this->data['user'] = null;
-        }
-
         $navModel = new Nav();
         $route = RequestFacade::route()->getName();
         $this->data['active'] = match ($route) {
