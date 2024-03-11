@@ -11,6 +11,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -19,6 +21,8 @@
                     <tr>
                         <td class="entityID">{{ $technology->id }}</td>
                         <td class="entityName">{{ $technology->name }}</td>
+                        <td>{{$technology->created_at}}</td>
+                        <td>{{$technology->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.technologies.edit', $technology->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

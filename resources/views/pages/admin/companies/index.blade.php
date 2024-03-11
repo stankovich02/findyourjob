@@ -16,6 +16,8 @@
                     <th>Website</th>
                     <th>Phone</th>
                     <th>Description</th>
+                    <th>Registered At</th>
+                    <th>Updated At</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -40,6 +42,8 @@
                         @else
                             <td>{{ $company->description }}</td>
                         @endif
+                        <td>{{$company->created_at}}</td>
+                        <td>{{$company->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.companies.show', $company->id)}}" class="btn btn-primary">View more...</a>
                         </td>

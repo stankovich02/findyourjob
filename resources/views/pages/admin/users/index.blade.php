@@ -18,6 +18,8 @@
                     <th>Avatar</th>
                     <th>Active</th>
                     <th>Role</th>
+                    <th>Registered At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -46,14 +48,16 @@
                                 <span class="badge bg-secondary">User</span>
                             @endif
                         </td>
+                        <td>{{$user->created_at}}</td>
+                        <td>{{$user->updated_at}}</td>
                         <td>
-                            <a href="{{route('admin.users.edit', $user->id)}}" class="btn btn-primary">
+                            <a href="{{route('admin.users.edit', $user->id)}}" class="my-1 btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>
                             @if($user->id != session()->get('user')->id)
                             <form @if($user->is_active) action="{{route('admin.users.ban', $user->id)}}" @else action="{{route('admin.users.unban', $user->id)}}" @endif  method="POST" class="d-inline">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-secondary @if($user->is_active) banModal @else unBanModal @endif ">
+                                <button type="submit" class="my-1 btn btn-secondary @if($user->is_active) banModal @else unBanModal @endif ">
                                  <!-- icon for ban user -->
                                     <i class="fas fa-ban me-2"></i>  @if($user->is_active) Ban @else Unban @endif
                                 </button>
@@ -61,7 +65,7 @@
                             <form action="{{route('admin.users.destroy', $user->id)}}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger deleteBtn">
+                                <button type="submit" class="my-1 btn btn-danger deleteBtn">
                                     <i class="fas fa-trash me-2"></i>  Delete
                                 </button>
                             </form>

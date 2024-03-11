@@ -17,6 +17,8 @@
                     <th>Work type</th>
                     <th>Seniority</th>
                     <th>Workplace</th>
+                    <th>Posted At</th>
+                    <th>Updated At</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -36,8 +38,8 @@
                         <td>{{$job->full_time ? "Full Time" : "Part Time"}}</td>
                         <td>{{$job->seniority->name}}</td>
                         <td>{{$job->workplace->name}}</td>
-
-
+                        <td>{{$job->created_at}}</td>
+                        <td>{{$job->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.jobs.show', $job->id)}}" class="btn btn-primary">
                                 <i class="fas fa-eye me-2"></i>  View more...</a>

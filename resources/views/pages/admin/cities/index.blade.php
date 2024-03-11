@@ -11,6 +11,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -19,6 +21,8 @@
                     <tr>
                         <td class="entityID">{{ $city->id }}</td>
                         <td class="entityName">{{ $city->name }}</td>
+                        <td>{{$city->created_at}}</td>
+                        <td>{{$city->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.cities.edit', $city->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

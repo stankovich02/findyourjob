@@ -12,6 +12,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Route</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -21,6 +23,8 @@
                         <td class="entityID">{{ $nav->id }}</td>
                         <td class="entityName">{{ $nav->name }}</td>
                         <td>{{$nav->route}}</td>
+                        <td>{{$nav->created_at}}</td>
+                        <td>{{$nav->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.navs.edit', $nav->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

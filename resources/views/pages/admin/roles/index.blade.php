@@ -11,6 +11,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -19,6 +21,8 @@
                     <tr>
                         <td class="entityID">{{ $role->id }}</td>
                         <td class="entityName">{{ $role->name }}</td>
+                        <td>{{$role->created_at}}</td>
+                        <td>{{$role->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.roles.edit', $role->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

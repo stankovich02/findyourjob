@@ -9,6 +9,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Email</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -17,6 +19,8 @@
                     <tr>
                         <td class="entityID">{{ $newsletter->id }}</td>
                         <td class="entityName">{{ $newsletter->email }}</td>
+                        <td>{{$newsletter->created_at}}</td>
+                        <td>{{$newsletter->updated_at}}</td>
                         <td>
                             <form action="{{route('admin.newsletters.destroy', $newsletter->id)}}" method="POST" class="d-inline">
                                 @csrf

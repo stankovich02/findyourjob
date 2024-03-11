@@ -11,6 +11,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -19,6 +21,8 @@
                     <tr>
                         <td class="entityID">{{ $workplace->id }}</td>
                         <td class="entityName">{{ $workplace->name }}</td>
+                        <td>{{$workplace->created_at}}</td>
+                        <td>{{$workplace->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.workplaces.edit', $workplace->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

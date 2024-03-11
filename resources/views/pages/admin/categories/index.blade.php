@@ -12,6 +12,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Icon</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -21,6 +23,8 @@
                         <td class="entityID">{{ $category->id }}</td>
                         <td class="entityName">{{ $category->name }}</td>
                         <td><img src="{{asset('assets/img/' . $category->icon)}}" style="width: 50px;height: 50px" alt="icon"/></td>
+                        <td>{{$category->created_at}}</td>
+                        <td>{{$category->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.categories.edit', $category->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>
@@ -32,6 +36,7 @@
                                 </button>
                             </form>
                         </td>
+
                     </tr>
                 @endforeach
                 </tbody>

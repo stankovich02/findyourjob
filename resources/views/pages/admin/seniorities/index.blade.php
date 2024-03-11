@@ -11,6 +11,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -19,6 +21,8 @@
                     <tr>
                         <td class="entityID">{{ $seniority->id }}</td>
                         <td class="entityName">{{ $seniority->name }}</td>
+                        <td>{{$seniority->created_at}}</td>
+                        <td>{{$seniority->updated_at}}</td>
                         <td>
                             <a href="{{route('admin.seniorities.edit', $seniority->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

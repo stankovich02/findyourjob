@@ -106,6 +106,7 @@ Route::middleware('IsAdmin')->prefix('/admin')->name('admin.')->group(function (
     Route::resource('workplaces', \App\Http\Controllers\Admin\WorkplaceController::class);
     Route::get('/newsletters', [\App\Http\Controllers\Client\NewsletterController::class, 'index'])->name('newsletters.index');
     Route::delete('/newsletters/{id}', [\App\Http\Controllers\Client\NewsletterController::class, 'destroy'])->name('newsletters.destroy');
-
+    Route::get('/user-actions', [\App\Http\Controllers\Admin\UserActionController::class, 'index'])->name('user-actions.index');
+    Route::delete('/user-actions/{id}', [\App\Http\Controllers\Admin\UserActionController::class, 'destroy'])->name('user-actions.destroy');
 });
 

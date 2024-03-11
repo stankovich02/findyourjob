@@ -194,6 +194,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('admin.user-actions.index')}}" class="nav-link @if($active == 'admin.user-actions.index') active @endif">
+                        <i class="nav-icon fas fa-bolt"></i>
+                        <p>
+                            User Actions
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
