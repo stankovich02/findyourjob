@@ -66,6 +66,32 @@
                     <!-- ./col -->
                 </div>
                 <!-- /.row -->
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box shadow">
+                            <span class="info-box-icon bg-warning"><i class="fas fa-briefcase"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pending Jobs</span>
+                                <span class="info-box-number">{{\App\Models\Job::where('status', \App\Models\Job::STATUS_PENDING)->count()}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box shadow">
+                            <span class="info-box-icon bg-warning"><i class="fas fa-building"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pending Companies</span>
+                                <span class="info-box-number">{{\App\Models\Company::where('status', \App\Models\Company::STATUS_PENDING)->count()}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
                 <!-- Main row -->
                 <div class="row">
                     <!-- Left col -->

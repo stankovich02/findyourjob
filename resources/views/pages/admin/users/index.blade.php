@@ -49,6 +49,7 @@
                         <td>
                             <a href="{{route('admin.users.edit', $user->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>
+                            @if($user->id != session()->get('user')->id)
                             <form @if($user->is_active) action="{{route('admin.users.ban', $user->id)}}" @else action="{{route('admin.users.unban', $user->id)}}" @endif  method="POST" class="d-inline">
                                 @csrf
                                 @method('PATCH')
@@ -64,6 +65,7 @@
                                     <i class="fas fa-trash me-2"></i>  Delete
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
