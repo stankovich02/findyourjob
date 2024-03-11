@@ -98,6 +98,7 @@ class Company extends Model
         $company->website = $website;
         $company->phone = $phone;
         $company->updated_at = now();
+        session()->get('user')->name = $name;
         $company->save();
         return redirect()->route('account.index')->with('success', 'You have successfully updated company info.');
     }
