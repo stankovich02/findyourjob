@@ -39,6 +39,7 @@ class Category extends Model
             unlink(public_path('assets/img/'.$category->icon));
             $category->icon = $newIcon;
         }
+        $category->updated_at = now();
         $category->save();
     }
     public function deleteCategory(string $id) : void

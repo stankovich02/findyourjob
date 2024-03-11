@@ -97,6 +97,7 @@ class Company extends Model
         $company->email = $email;
         $company->website = $website;
         $company->phone = $phone;
+        $company->updated_at = now();
         $company->save();
         return redirect()->route('account.index')->with('success', 'You have successfully updated company info.');
     }
@@ -109,6 +110,7 @@ class Company extends Model
         }
         $company->logo = $imageName;
         session()->get('user')->logo = $imageName;
+        $company->updated_at = now();
         $company->save();
     }
     public function updatePassword(int $userID, string $oldPassword, string $newPassword) : bool
@@ -118,6 +120,7 @@ class Company extends Model
             return false;
         }
         $company->password = Hash::make($newPassword . env('CUSTOM_STRING_FOR_HASH'));
+        $company->updated_at = now();
         $company->save();
         return true;
     }
@@ -125,6 +128,7 @@ class Company extends Model
     {
         $company = self::find($id);
         $company->status = self::STATUS_ACTIVE;
+        $company->updated_at = now();
         $company->save();
         return ['email' => $company->email, 'name' => $company->name];
     }

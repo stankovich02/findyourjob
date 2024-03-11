@@ -229,6 +229,7 @@ class Job extends Model
         $job->full_time = $array['workType'];
         $job->application_deadline = $array['applicationDeadline'];
         $job->company_id = $array['companyId'];
+        $job->updated_at = now();
         $job->save();
         $job->technology()->sync($array['technologies']);
         return $job->id;
@@ -275,6 +276,7 @@ class Job extends Model
             'jobName' => $job->name,
             'companyName' => $job->company->name
         ];
+        $job->updated_at = now();
         $job->save();
         return $data;
     }

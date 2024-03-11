@@ -17,8 +17,8 @@
                     <th>Path</th>
                     <th>Method</th>
                     <th>User ID</th>
-                    <th>Created At</th>
                     <th>Action</th>
+                    <th>Created At</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -74,6 +74,7 @@ class TechnologyController extends AdminController
         try{
             $technology = $this->technologyModel::find($id);
             $technology->name = $request->input('name');
+            $technology->updated_at = now();
             $technology->save();
             return redirect()->route('admin.technologies.index')->with('success', 'Technology updated successfully.');
         }

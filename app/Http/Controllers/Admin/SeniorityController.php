@@ -74,6 +74,7 @@ class SeniorityController extends AdminController
         try{
             $seniority = $this->seniorityModel::find($id);
             $seniority->name = $request->input('name');
+            $seniority->updated_at = now();
             $seniority->save();
             return redirect()->route('admin.seniorities.index')->with('success', 'Seniority updated successfully.');
         }

@@ -99,6 +99,7 @@ class User extends Model
             } else {
                 $user->linkedin = $link;
             }
+            $user->updated_at = now();
             $user->save();
             $socialMessage = $social == 'github' ? 'Github' : 'LinkedIn';
             return response()->json(["message" => "$socialMessage link updated."], ResponseAlias::HTTP_CREATED);
@@ -115,6 +116,7 @@ class User extends Model
         }
         $user->avatar = $imageName;
         session()->get('user')->avatar = $imageName;
+        $user->updated_at = now();
         $user->save();
         return redirect()->route('account.index');
     }
@@ -139,6 +141,7 @@ class User extends Model
             if ($user->last_name != $lastName){
                 $user->last_name = $lastName;
             }
+            $user->updated_at = now();
             $user->save();
             if ($user->email != $email) {
                 $user->email = $email;
@@ -166,6 +169,7 @@ class User extends Model
         }
         $user->password = Hash::make($password . env('CUSTOM_STRING_FOR_HASH'));
         $user->token = null;
+        $user->updated_at = now();
         $user->save();
         return $user->id;
     }
@@ -176,6 +180,7 @@ class User extends Model
             return false;
         }
         $user->password = Hash::make($newPassword . env('CUSTOM_STRING_FOR_HASH'));
+        $user->updated_at = now();
         $user->save();
         return true;
     }

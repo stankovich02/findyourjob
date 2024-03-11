@@ -107,6 +107,7 @@ class UserController extends AdminController
                     unlink('assets/img/users/' . $user->avatar);
                 $user->avatar = $avatar;
             }
+            $user->updated_at = now();
             $user->save();
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
         }
@@ -121,6 +122,7 @@ class UserController extends AdminController
         try{
             $user = $this->userModel::find($id);
             $user->is_active = 0;
+            $user->updated_at = now();
             $user->save();
             return redirect()->route('admin.users.index')->with('success', 'User banned successfully.');
         }
@@ -135,6 +137,7 @@ class UserController extends AdminController
         try{
             $user = $this->userModel::find($id);
             $user->is_active = 1;
+            $user->updated_at = now();
             $user->save();
             return redirect()->route('admin.users.index')->with('success', 'User unbanned successfully.');
         }

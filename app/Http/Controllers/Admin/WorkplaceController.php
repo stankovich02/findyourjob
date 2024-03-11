@@ -75,6 +75,7 @@ class WorkplaceController extends AdminController
         try {
             $workplace = $this->workplaceModel::find($id);
             $workplace->name = $request->name;
+            $workplace->updated_at = now();
             $workplace->save();
             return redirect()->route('admin.workplaces.index')->with('success', 'Workplace updated successfully.');
         } catch (\Exception $e) {

@@ -43,6 +43,7 @@ class City extends Model
     {
         $city = self::find($id);
         $city->name = $cityName;
+        $city->updated_at = now();
         $city->save();
     }
     public function deleteCity(int $id) : void

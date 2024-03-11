@@ -30,6 +30,7 @@ class Role extends Model
     {
         $role = self::find($id);
         $role->name = $name;
+        $role->updated_at = now();
         $role->save();
     }
     public function deleteRole(int $id)

@@ -26,6 +26,7 @@ class Nav extends Model
         $nav = self::find($id);
         $nav->name = $navName;
         $nav->route = $navRoute;
+        $nav->updated_at = now();
         $nav->save();
     }
     public function deleteNav(int $id) : void
