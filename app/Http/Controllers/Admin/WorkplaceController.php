@@ -17,8 +17,13 @@ class WorkplaceController extends AdminController
      */
     public function index()
     {
-        $workplaces = $this->workplaceModel::all();
-        return view('pages.admin.workplaces.index')->with('workplaces', $workplaces)->with('active', $this->currentRoute);
+        try {
+            $workplaces = $this->workplaceModel::all();
+            return view('pages.admin.workplaces.index')->with('workplaces', $workplaces)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -43,6 +48,7 @@ class WorkplaceController extends AdminController
             ]);
             return redirect()->route('admin.workplaces.index')->with('success', 'Workplace created successfully.');
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.workplaces.index')->with('error', 'An error occurred while creating workplace.');
         }
     }
@@ -60,8 +66,12 @@ class WorkplaceController extends AdminController
      */
     public function edit(string $id)
     {
-        $workplace = $this->workplaceModel::find($id);
-        return view('pages.admin.workplaces.edit')->with('workplace', $workplace)->with('active', $this->currentRoute);
+        try {
+            $workplace = $this->workplaceModel::find($id);
+            return view('pages.admin.workplaces.edit')->with('workplace', $workplace)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.workplaces.index')->with('error', 'An error occurred while editing workplace.');
+        }
     }
 
     /**
@@ -79,6 +89,7 @@ class WorkplaceController extends AdminController
             $workplace->save();
             return redirect()->route('admin.workplaces.index')->with('success', 'Workplace updated successfully.');
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.workplaces.index')->with('error', 'An error occurred while updating workplace.');
         }
     }
@@ -92,6 +103,7 @@ class WorkplaceController extends AdminController
             $this->workplaceModel::destroy($id);
             return redirect()->route('admin.workplaces.index')->with('success', 'Workplace deleted successfully.');
         } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.workplaces.index')->with('error', 'An error occurred while deleting workplace.');
         }
     }

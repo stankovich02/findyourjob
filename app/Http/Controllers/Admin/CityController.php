@@ -17,8 +17,13 @@ class CityController extends AdminController
      */
     public function index()
     {
-        $cities = $this->cityModel->getAllAdmin();
-        return view('pages.admin.cities.index')->with('cities', $cities)->with('active', $this->currentRoute);
+        try {
+            $cities = $this->cityModel->getAllAdmin();
+            return view('pages.admin.cities.index')->with('cities', $cities)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -42,6 +47,7 @@ class CityController extends AdminController
             return redirect()->route('admin.cities.index')->with('success', 'City created successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.cities.index')->with('error', 'City not created.');
         }
     }
@@ -59,8 +65,14 @@ class CityController extends AdminController
      */
     public function edit(string $id)
     {
-        $city = $this->cityModel::find($id);
-        return view('pages.admin.cities.edit')->with('city', $city)->with('active', $this->currentRoute);
+        try {
+            $city = $this->cityModel::find($id);
+            return view('pages.admin.cities.edit')->with('city', $city)->with('active', $this->currentRoute);
+        }
+        catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.cities.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -76,6 +88,7 @@ class CityController extends AdminController
             return redirect()->route('admin.cities.index')->with('success', 'City updated successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.cities.index')->with('error', 'City not updated.');
         }
     }
@@ -90,6 +103,7 @@ class CityController extends AdminController
             return redirect()->route('admin.cities.index')->with('success', 'City deleted successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.cities.index')->with('error', 'City not deleted.');
         }
     }

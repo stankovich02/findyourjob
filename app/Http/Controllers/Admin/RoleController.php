@@ -17,8 +17,13 @@ class RoleController extends AdminController
      */
     public function index()
     {
-        $roles = $this->roleModel->getAll();
-        return view('pages.admin.roles.index')->with('roles', $roles)->with('active', $this->currentRoute);
+        try {
+            $roles = $this->roleModel->getAll();
+            return view('pages.admin.roles.index')->with('roles', $roles)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -42,6 +47,7 @@ class RoleController extends AdminController
             return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.roles.index')->with('error', 'Role not created.');
         }
     }
@@ -59,8 +65,13 @@ class RoleController extends AdminController
      */
     public function edit(string $id)
     {
-        $role = $this->roleModel::find($id);
-        return view('pages.admin.roles.edit')->with('role', $role)->with('active', $this->currentRoute);
+        try {
+            $role = $this->roleModel::find($id);
+            return view('pages.admin.roles.edit')->with('role', $role)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.roles.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -76,6 +87,7 @@ class RoleController extends AdminController
             return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.roles.index')->with('error', 'Role not updated.');
         }
     }
@@ -90,6 +102,7 @@ class RoleController extends AdminController
             return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.roles.index')->with('error', 'Role not deleted.');
         }
     }

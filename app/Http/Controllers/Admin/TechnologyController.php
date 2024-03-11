@@ -17,8 +17,13 @@ class TechnologyController extends AdminController
      */
     public function index()
     {
-        $technologies = $this->technologyModel::paginate(10);
-        return view('pages.admin.technologies.index')->with('technologies', $technologies)->with('active', $this->currentRoute);
+        try {
+            $technologies = $this->technologyModel::paginate(10);
+            return view('pages.admin.technologies.index')->with('technologies', $technologies)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -42,6 +47,7 @@ class TechnologyController extends AdminController
             return redirect()->route('admin.technologies.index')->with('success', 'Technology created successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.technologies.index')->with('error', 'Technology not created.');
         }
     }
@@ -59,8 +65,13 @@ class TechnologyController extends AdminController
      */
     public function edit(string $id)
     {
-        $technology = $this->technologyModel::find($id);
-        return view('pages.admin.technologies.edit')->with('technology', $technology)->with('active', $this->currentRoute);
+        try {
+            $technology = $this->technologyModel::find($id);
+            return view('pages.admin.technologies.edit')->with('technology', $technology)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.technologies.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -79,6 +90,7 @@ class TechnologyController extends AdminController
             return redirect()->route('admin.technologies.index')->with('success', 'Technology updated successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.technologies.index')->with('error', 'Technology not updated.');
         }
     }
@@ -93,6 +105,7 @@ class TechnologyController extends AdminController
             return redirect()->route('admin.technologies.index')->with('success', 'Technology deleted successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.technologies.index')->with('error', 'Technology not deleted.');
         }
     }

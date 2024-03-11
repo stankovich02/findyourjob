@@ -24,8 +24,13 @@ class UserController extends AdminController
      */
     public function index()
     {
-        $users = $this->userModel::paginate(5);
-        return view('pages.admin.users.index')->with('users', $users)->with('active', $this->currentRoute);
+        try {
+            $users = $this->userModel::paginate(5);
+            return view('pages.admin.users.index')->with('users', $users)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -66,6 +71,7 @@ class UserController extends AdminController
         }
         catch(\Exception $e)
         {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'Error while adding user.');
         }
 
@@ -84,8 +90,13 @@ class UserController extends AdminController
      */
     public function edit(int $id)
     {
-        $user = $this->userModel::find($id);
-        return view('pages.admin.users.edit')->with('user', $user)->with('roles', Role::all())->with('active', $this->currentRoute);
+        try {
+            $user = $this->userModel::find($id);
+            return view('pages.admin.users.edit')->with('user', $user)->with('roles', Role::all())->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.users.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -113,6 +124,7 @@ class UserController extends AdminController
         }
         catch(\Exception $e)
         {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'Error while updating user.');
         }
     }
@@ -128,6 +140,7 @@ class UserController extends AdminController
         }
         catch(\Exception $e)
         {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'Error while banning user.');
         }
     }
@@ -143,6 +156,7 @@ class UserController extends AdminController
         }
         catch(\Exception $e)
         {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'Error while unbanning user.');
         }
     }
@@ -160,6 +174,7 @@ class UserController extends AdminController
         }
         catch(\Exception $e)
         {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'Error while deleting user.');
         }
     }

@@ -17,8 +17,13 @@ class NavController extends AdminController
      */
     public function index()
     {
-        $navs = $this->navModel->getNav();
-        return view('pages.admin.navs.index')->with('navs', $navs)->with('active', $this->currentRoute);
+        try {
+            $navs = $this->navModel->getNav();
+            return view('pages.admin.navs.index')->with('navs', $navs)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -43,6 +48,7 @@ class NavController extends AdminController
             return redirect()->route('admin.navs.index')->with('success', 'Navigation created successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.navs.index')->with('error', 'Navigation not created.');
         }
     }
@@ -60,8 +66,13 @@ class NavController extends AdminController
      */
     public function edit(string $id)
     {
-        $nav = $this->navModel::find($id);
-        return view('pages.admin.navs.edit')->with('nav', $nav)->with('active', $this->currentRoute);
+        try {
+            $nav = $this->navModel::find($id);
+            return view('pages.admin.navs.edit')->with('nav', $nav)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.navs.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -78,6 +89,7 @@ class NavController extends AdminController
             return redirect()->route('admin.navs.index')->with('success', 'Navigation updated successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.navs.index')->with('error', 'Navigation not created.');
         }
     }
@@ -92,6 +104,7 @@ class NavController extends AdminController
             return redirect()->route('admin.navs.index')->with('success', 'Navigation deleted successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.navs.index')->with('error', 'Navigation not deleted.');
         }
     }

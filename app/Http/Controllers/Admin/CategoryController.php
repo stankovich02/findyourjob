@@ -18,9 +18,14 @@ class CategoryController extends AdminController
      */
     public function index()
     {
-        $categoryModel = new Category();
-        $categories = $categoryModel->getAll();
-        return view('pages.admin.categories.index')->with('categories', $categories)->with('active', $this->currentRoute);
+        try {
+            $categoryModel = new Category();
+            $categories = $categoryModel->getAll();
+            return view('pages.admin.categories.index')->with('categories', $categories)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+           $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -41,7 +46,7 @@ class CategoryController extends AdminController
             return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
         }
         catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.categories.index')->with('error', 'Category creation failed.');
         }
     }
@@ -59,8 +64,13 @@ class CategoryController extends AdminController
      */
     public function edit(string $id)
     {
-        $category = $this->categoryModel::find($id);
-        return view('pages.admin.categories.edit')->with('category', $category)->with('active', $this->currentRoute);
+        try {
+            $category = $this->categoryModel::find($id);
+            return view('pages.admin.categories.edit')->with('category', $category)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.categories.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -72,7 +82,7 @@ class CategoryController extends AdminController
             $this->categoryModel->updateCategory($request->input('categoryName'),$request->file('icon'), $id);
             return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
         }catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.categories.index')->with('error', 'Category update failed.');
         }
 
@@ -87,7 +97,7 @@ class CategoryController extends AdminController
             $this->categoryModel->deleteCategory($id);
             return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
         }catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.categories.index')->with('error', 'Category deletion failed.');
         }
     }

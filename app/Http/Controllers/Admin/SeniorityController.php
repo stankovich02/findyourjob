@@ -17,8 +17,13 @@ class SeniorityController extends AdminController
      */
     public function index()
     {
-        $seniorities = $this->seniorityModel::all();
-        return view('pages.admin.seniorities.index')->with('seniorities', $seniorities)->with('active', $this->currentRoute);
+        try {
+            $seniorities = $this->seniorityModel::all();
+            return view('pages.admin.seniorities.index')->with('seniorities', $seniorities)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -42,6 +47,7 @@ class SeniorityController extends AdminController
             return redirect()->route('admin.seniorities.index')->with('success', 'Seniority created successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.seniorities.index')->with('error', 'Seniority not created.');
         }
     }
@@ -59,8 +65,13 @@ class SeniorityController extends AdminController
      */
     public function edit(string $id)
     {
-        $seniority = $this->seniorityModel::find($id);
-        return view('pages.admin.seniorities.edit')->with('seniority', $seniority)->with('active', $this->currentRoute);
+        try {
+            $seniority = $this->seniorityModel::find($id);
+            return view('pages.admin.seniorities.edit')->with('seniority', $seniority)->with('active', $this->currentRoute);
+        } catch (\Exception $e) {
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
+            return redirect()->route('admin.seniorities.index')->with('error', 'An error occurred.');
+        }
     }
 
     /**
@@ -79,6 +90,7 @@ class SeniorityController extends AdminController
             return redirect()->route('admin.seniorities.index')->with('success', 'Seniority updated successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.seniorities.index')->with('error', 'Seniority not updated.');
         }
     }
@@ -94,6 +106,7 @@ class SeniorityController extends AdminController
             return redirect()->route('admin.seniorities.index')->with('success', 'Seniority deleted successfully.');
         }
         catch(\Exception $e){
+            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.seniorities.index')->with('error', 'Seniority not deleted.');
         }
     }
