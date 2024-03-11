@@ -18,8 +18,8 @@
                 <tbody>
                 @foreach($categories as $category)
                     <tr>
-                        <td>{{ $category->id }}</td>
-                        <td>{{ $category->name }}</td>
+                        <td class="entityID">{{ $category->id }}</td>
+                        <td class="entityName">{{ $category->name }}</td>
                         <td><img src="{{asset('assets/img/' . $category->icon)}}" style="width: 50px;height: 50px" alt="icon"/></td>
                         <td>
                             <a href="{{route('admin.categories.edit', $category->id)}}" class="btn btn-primary">

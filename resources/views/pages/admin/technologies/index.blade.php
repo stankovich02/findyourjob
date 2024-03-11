@@ -17,8 +17,8 @@
                 <tbody>
                 @foreach($technologies as $technology)
                     <tr>
-                        <td>{{ $technology->id }}</td>
-                        <td>{{ $technology->name }}</td>
+                        <td class="entityID">{{ $technology->id }}</td>
+                        <td class="entityName">{{ $technology->name }}</td>
                         <td>
                             <a href="{{route('admin.technologies.edit', $technology->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

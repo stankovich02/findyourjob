@@ -17,8 +17,8 @@
                 <tbody>
                 @foreach($roles as $role)
                     <tr>
-                        <td>{{ $role->id }}</td>
-                        <td>{{ $role->name }}</td>
+                        <td class="entityID">{{ $role->id }}</td>
+                        <td class="entityName">{{ $role->name }}</td>
                         <td>
                             <a href="{{route('admin.roles.edit', $role->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

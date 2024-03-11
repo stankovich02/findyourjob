@@ -9,12 +9,15 @@ use App\Models\User;
 use App\Models\UserActionLog;
 use App\Traits\LogError;
 use Illuminate\Http\Request;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Request as RequestFacade;
 
 class DefaultController extends Controller
 {
     use LogError;
     protected array $data = [];
+
     public function __construct()
     {
         if (session()->has('user')) {
@@ -49,6 +52,5 @@ class DefaultController extends Controller
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
-
     }
 }

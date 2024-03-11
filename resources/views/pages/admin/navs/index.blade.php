@@ -18,8 +18,8 @@
                 <tbody>
                 @foreach($navs as $nav)
                     <tr>
-                        <td>{{ $nav->id }}</td>
-                        <td>{{ $nav->name }}</td>
+                        <td class="entityID">{{ $nav->id }}</td>
+                        <td class="entityName">{{ $nav->name }}</td>
                         <td>{{$nav->route}}</td>
                         <td>
                             <a href="{{route('admin.navs.edit', $nav->id)}}" class="btn btn-primary">

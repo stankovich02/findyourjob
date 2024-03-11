@@ -15,8 +15,8 @@
                 <tbody>
                 @foreach($newsletters as $newsletter)
                     <tr>
-                        <td>{{ $newsletter->id }}</td>
-                        <td>{{ $newsletter->email }}</td>
+                        <td class="entityID">{{ $newsletter->id }}</td>
+                        <td class="entityName">{{ $newsletter->email }}</td>
                         <td>
                             <form action="{{route('admin.newsletters.destroy', $newsletter->id)}}" method="POST" class="d-inline">
                                 @csrf

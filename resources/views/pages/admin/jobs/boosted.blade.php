@@ -23,8 +23,8 @@
                     <tbody>
                     @foreach($boostedJobs as $job)
                         <tr>
-                            <td>{{ $job->boosted->id }}</td>
-                            <td>{{ $job->name }}</td>
+                            <td class="entityID">{{ $job->boosted->id }}</td>
+                            <td class="entityName">{{ $job->name }}</td>
                             <td>{{ $job->company->name }}</td>
                             <td>{{ $job->boosted->boosted_at }}</td>
                             <td>{{ $job->boosted->boosted_until }}</td>
@@ -34,7 +34,7 @@
                                 <form action="{{route('admin.jobs.destroy_boosted', $job->boosted->id)}}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger deleteBtn">
                                         <i class="fas fa-trash me-2"></i>  Delete
                                     </button>
                                 </form>
@@ -57,6 +57,18 @@
         </section>
         <!-- /.content -->
     </div>
-
+    <div class="modal deleteBoostedJobModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="closeModal" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="deleteModal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 

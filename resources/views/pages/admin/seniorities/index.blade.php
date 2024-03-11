@@ -17,8 +17,8 @@
                 <tbody>
                 @foreach($seniorities as $seniority)
                     <tr>
-                        <td>{{ $seniority->id }}</td>
-                        <td>{{ $seniority->name }}</td>
+                        <td class="entityID">{{ $seniority->id }}</td>
+                        <td class="entityName">{{ $seniority->name }}</td>
                         <td>
                             <a href="{{route('admin.seniorities.edit', $seniority->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

@@ -17,8 +17,8 @@
                 <tbody>
                 @foreach($workplaces as $workplace)
                     <tr>
-                        <td>{{ $workplace->id }}</td>
-                        <td>{{ $workplace->name }}</td>
+                        <td class="entityID">{{ $workplace->id }}</td>
+                        <td class="entityName">{{ $workplace->name }}</td>
                         <td>
                             <a href="{{route('admin.workplaces.edit', $workplace->id)}}" class="btn btn-primary">
                                 <i class="fas fa-edit me-2"></i>  Edit</a>

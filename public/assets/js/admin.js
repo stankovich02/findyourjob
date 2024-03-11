@@ -103,6 +103,9 @@ if(window.location.pathname.includes('/admin/workplaces')) {
 if(window.location.pathname.includes('/admin/newsletters')) {
     deleteEntity('newsletter','.deleteNewsletterModal');
 }
+if(window.location.pathname.includes('/admin/jobs/boosted')) {
+    deleteEntity('boosted job','.deleteBoostedJobModal');
+}
 if($("#successMessage").length) {
     toastr.success($("#successMessage").text());
 }
@@ -114,7 +117,9 @@ function deleteEntity(entity,modalClass){
         $(this).click(function (e) {
             e.preventDefault();
             let button = $(this);
-            $(modalClass + " .modal-body p").html(`Are you sure you want to delete ${entity}?`);
+            let id = $(this).parent().parent().parent().find(".entityID").text();
+            let entityName = $(this).parent().parent().parent().find(".entityName").text();
+            $(modalClass + " .modal-body p").html(`Are you sure you want to delete <span class="font-weight-bold">${entityName}</span> ${entity} with  <span class="font-weight-bold">ID:${id}</span> ?`);
             $(modalClass).css("display", "block");
             $(modalClass + " #closeModal").click(function (e) {
                 e.preventDefault();
