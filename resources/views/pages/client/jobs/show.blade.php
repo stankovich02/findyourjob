@@ -7,7 +7,7 @@
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container">
             <a href="{{route("jobs.index")}}" class="btn btn-primary mb-3">Back to jobs</a>
-            @if(session()->has("user") && session("accountType") == "company" && $job->company->id == session()->get("user")->id)
+            @if(session()->has("user") && session()->get('user')->isCompany && $job->company->id == session()->get("user")->id)
                 <br/>
                 <a href="{{route("jobs.edit", $job->id)}}" class="btn btn-primary mb-3">Edit job</a>
             @endif
@@ -67,7 +67,7 @@
                             <div class="">
                                 <h4 class="mb-4">Apply For The Job</h4>
                                 <div class="row g-3">
-                                    @if( session()->has("user") && session("accountType") == "employee")
+                                    @if( session()->has("user") && !session()->get('user')->isCompany)
                                         <form action="{{route("application.store")}}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="jobID" value="{{$job->id}}">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            @if(session()->has("user") && session("accountType") == "company" && $job->company->id == session()->get("user")->id)
+            @if(session()->has("user") && session()->get('user')->isCompany && $job->company->id == session()->get("user")->id)
             <!-- Applied users -->
             <div class="row d-flex">
                 <div class="col-12">

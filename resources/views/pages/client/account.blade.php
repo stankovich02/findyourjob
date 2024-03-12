@@ -83,7 +83,7 @@
         </div>
         <div class="col-xl-8">
             <!-- Account details card-->
-            @if(session("accountType") == "employee")
+            @if(!session()->get('user')->isCompany)
             <div id="progressDetailsBar" class="mb-2">
                 <div class="progress">
                     @php
@@ -124,14 +124,14 @@
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    @if(session('accountType') == "employee")
+                    @if(!session()->get('user')->isCompany)
                         <form id="accountDetails" action="{{route("account.info")}}" method="POST">
                     @else
                         <form id="accountDetails" action="{{route("companies.update", session()->get("user")->id)}}" method="POST">
                     @endif
                         @csrf
                         @method('PATCH')
-                       @if(session('accountType') === 'company')
+                       @if(session()->get('user')->isCompany)
                         <div class="mb-3">
                             <label class="small mb-1" for="companyName">Company name</label>
                             <input class="form-control" name="companyName" id="companyName" type="text" disabled value="{{$company->name}}">
@@ -225,12 +225,12 @@
         </div>
     </div>
     <!-- Za usere "Applied jobs" , za kompanije "Posted jobs"-->
-    @if(session()->has("user") && session("accountType") == "company")
+    @if(session()->has("user") && session()->get('user')->isCompany)
         <h3 class="text-center pt-5 mt-5 mb-3">Posted jobs</h3>
     @else
         <h3 class="text-center pt-5 mt-5 mb-3">Applied jobs</h3>
     @endif
-    @if(session()->has("user") && session("accountType") == "company")
+    @if(session()->has("user") && session()->get('user')->isCompany)
         @if($company->jobs->count() == 0)
             <h4 class="text-center mt-5">You have not posted any jobs yet.</h4>
         @else

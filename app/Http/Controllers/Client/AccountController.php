@@ -32,7 +32,7 @@ class AccountController extends DefaultController
                 return redirect()->route('admin.index');
             }
             $userID = $request->session()->get('user')->id;
-            if ($request->session()->get("accountType") == "employee") {
+            if (!$request->session()->get("user")->isCompany) {
                 $user = User::with('applications')->find($userID);
                 return view('pages.client.account')->with('user', $user)->with('data', $this->data);
             }
@@ -91,19 +91,18 @@ class AccountController extends DefaultController
     {
         try {
             $userID = $request->session()->get('user')->id;
-            if ($request->session()->get("accountType") == "company") {
+            if ($request->session()->get("user")->isCompany) {
                 $result = $this->companyModel->updatePassword($userID, $request->currentPassword, $request->newPassword);
             }
             else{
                 $result = $this->userModel->updatePassword($userID, $request->currentPassword, $request->newPassword);
             }
             if ($result) {
-                if($request->session()->get("accountType") == "company")
+                if($request->session()->get("user")->isCompany)
                     $this->logUserAction('Company has updated the password.', $request);
                 else
                     $this->logUserAction('User has updated the password.', $request);
                 $request->session()->forget('user');
-                $request->session()->forget('accountType');
                 return redirect()->route('login')->with('success', 'Password updated successfully. Please login again.');
             }
             return redirect()->back()->with('currentPassword', 'Current password is incorrect.');
