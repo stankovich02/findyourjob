@@ -115,8 +115,8 @@ class AuthController extends DefaultController
             }
 
             $user->isAdmin = $user->role_id == 2;
+            $user->isCompany = $request->input('accountType') == 'company';
             $request->session()->put('user', $user);
-            $request->session()->put('accountType', $request->input('accountType'));
             if($request->input('accountType') == 'employee'){
                 $this->logUserAction('User logged in.', $request, $user->id);
             }
@@ -135,10 +135,9 @@ class AuthController extends DefaultController
     {
         try {
             $userID = $request->session()->get('user')->id;
-            $accountType = $request->session()->get('accountType');
+            $isCompany = $request->session()->get('user')->isCompany;
             $request->session()->forget('user');
-            $request->session()->forget('accountType');
-            if($accountType == 'employee')
+            if(!$isCompany)
                 $this->logUserAction('User logged out.', $request, $userID);
             else
                 $this->logUserAction('Company logged out.', $request, $userID);

@@ -11,7 +11,7 @@
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                        @if(session('accountType') === 'employee')
+                        @if(!session()->get('user')->isCompany)
                         <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/users/' . $user->avatar)}}" alt="">
                         @else
                         <img class="img-account-profile rounded-circle mb-2 img-fluid" src="{{asset('assets/img/companies/' . $company->logo)}}" alt="">
@@ -19,7 +19,7 @@
                             <!-- Profile picture help block-->
                         <br/>
                         <!-- Profile picture upload button-->
-                        <form action="{{session('accountType') == 'employee' ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
+                        <form action="{{!session()->get('user')->isCompany ? route('account.picture') : route('companies.logo', session()->get("user")->id)}}" method="POST" enctype="multipart/form-data" id="imageUpload" class="d-flex align-items-start flex-column">
                             @csrf
                             @method('PATCH')
                             <input id="fileInput" type="file" class="mt-3" name="picture">
@@ -35,7 +35,7 @@
                     <p class="text-danger">{{session('error')}}</p>
                 @endif
             </div>
-            @if(session('accountType') === 'employee')
+            @if(!session()->get('user')->isCompany)
             <div id="profileLinks" class="mt-4">
                 <h5 class="font-xl">Profile Links:</h5>
                 @if($user->github)

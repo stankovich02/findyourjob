@@ -33,7 +33,7 @@
         </p>
         <!-- Jobs End -->
     </div>
-    @if(session()->get('accountType') == 'employee' && session()->get('user')->id == $application->user_id)
+    @if(!session()->get('user')->isCompany && session()->get('user')->id == $application->user_id)
         <form action="{{route('application.destroy' , $application->id, $application->job->id)}}" method="post" class="d-flex justify-content-center">
             @csrf
             @method('DELETE')

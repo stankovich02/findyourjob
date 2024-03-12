@@ -23,7 +23,7 @@
             @if(session()->has("user"))
               <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    @if(session('accountType') === 'employee')
+                    @if(!session()->get('user')->isCompany)
                         <img src="{{asset('assets/img/users/' . session()->get('user')->avatar)}}" alt="User Avatar" class="rounded-circle me-1" style="width: 30px; height: 30px;">
                         Welcome, {{session()->get('user')->first_name}}
                     @else

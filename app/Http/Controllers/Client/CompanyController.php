@@ -81,7 +81,7 @@ class CompanyController extends DefaultController
     {
         parent::__construct();
         try {
-            if (session()->has('user') && session()->get('accountType') == 'company' && session()->get('user')->id == $id) {
+            if (session()->has('user') && session()->get('user')->isCompany && session()->get('user')->id == $id) {
                 return redirect()->route('account.index');
             }
             $company = $this->companyModel->getCompany($id);

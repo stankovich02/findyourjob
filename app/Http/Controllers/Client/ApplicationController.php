@@ -23,10 +23,7 @@ class ApplicationController extends DefaultController
             if ($application == null) {
                 return redirect()->route('home')->with('error', 'Application not found.');
             }
-            if (($application->user_id != session()->get('user')->id) && session()->get('accountType') == 'employee') {
-                return redirect()->route('home');
-            }
-            if (($application->job->company_id != session()->get('user')->id) && session()->get('accountType') == 'company') {
+            if ((($application->user_id != session()->get('user')->id) && !session()->get('user')->isCompany) || (($application->job->company_id != session()->get('user')->id) && session()->get('user')->isCompany)) {
                 return redirect()->route('home');
             }
             return view('pages.client.application')->with('application', $application)->with('data', $this->data);

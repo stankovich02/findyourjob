@@ -15,7 +15,7 @@ class IsCompany
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->session()->has('user') && $request->session()->get('accountType') === 'company') {
+        if ($request->session()->has('user') && $request->session()->get('user')->isCompany) {
             return $next($request);
         }
         return redirect()->route('home');
