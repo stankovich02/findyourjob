@@ -99,6 +99,10 @@ class WorkplaceController extends AdminController
     public function destroy(string $id)
     {
         try {
+            $workplace = $this->workplaceModel::find($id);
+            if($workplace->jobs()){
+                return redirect()->route('admin.workplaces.index')->with('error', 'Workplace cannot be deleted as it is associated with jobs.');
+            }
             $this->workplaceModel::destroy($id);
             return redirect()->route('admin.workplaces.index')->with('success', 'Workplace deleted successfully.');
         } catch (\Exception $e) {

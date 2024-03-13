@@ -101,6 +101,8 @@ class SeniorityController extends AdminController
     {
         try{
             $seniority = $this->seniorityModel::find($id);
+            if($seniority->jobs())
+                return redirect()->route('admin.seniorities.index')->with('error', 'Seniority not deleted. It is being used by a job.');
             $seniority->delete();
             return redirect()->route('admin.seniorities.index')->with('success', 'Seniority deleted successfully.');
         }

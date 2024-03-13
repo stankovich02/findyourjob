@@ -100,6 +100,10 @@ class TechnologyController extends AdminController
     public function destroy(string $id)
     {
         try{
+            $technology = $this->technologyModel::find($id);
+            if($technology->jobs()){
+                return redirect()->route('admin.technologies.index')->with('error', 'Technology has jobs.');
+            }
             $this->technologyModel::destroy($id);
             return redirect()->route('admin.technologies.index')->with('success', 'Technology deleted successfully.');
         }

@@ -92,6 +92,9 @@ class CategoryController extends AdminController
     public function destroy(string $id)
     {
         try {
+            $category = $this->categoryModel::find($id);
+            if($category->jobs())
+                return redirect()->route('admin.categories.index')->with('error', 'Category cannot be deleted as it has jobs associated with it.');
             $this->categoryModel->deleteCategory($id);
             return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
         }catch (\Exception $e) {
