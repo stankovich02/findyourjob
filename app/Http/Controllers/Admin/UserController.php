@@ -167,10 +167,10 @@ class UserController extends AdminController
             $user = $this->userModel::find($id);
             if($user->avatar != 'user.jpg')
                 unlink('assets/img/users/' . $user->avatar);
-            if($user->applications()){
+            if($user->applications->count() > 0){
                 return redirect()->route('admin.users.index')->with('error', 'User has applications. Cannot delete.');
             }
-            if($user->saved_jobs()){
+            if($user->saved_jobs->count() > 0){
                 return redirect()->route('admin.users.index')->with('error', 'User has jobs. Cannot delete.');
             }
             $user->delete();

@@ -98,7 +98,7 @@ class RoleController extends AdminController
     {
         try{
             $role = $this->roleModel::find($id);
-            if($role->user()){
+            if($role->user->count() > 0){
                 return redirect()->route('admin.roles.index')->with('error', 'Role has users assigned to it.');
             }
             $this->roleModel->deleteRole($id);

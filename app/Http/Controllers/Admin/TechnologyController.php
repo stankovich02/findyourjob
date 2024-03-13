@@ -101,7 +101,7 @@ class TechnologyController extends AdminController
     {
         try{
             $technology = $this->technologyModel::find($id);
-            if($technology->jobs()){
+            if($technology->jobs->count() > 0){
                 return redirect()->route('admin.technologies.index')->with('error', 'Technology has jobs.');
             }
             $this->technologyModel::destroy($id);

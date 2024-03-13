@@ -100,7 +100,7 @@ class WorkplaceController extends AdminController
     {
         try {
             $workplace = $this->workplaceModel::find($id);
-            if($workplace->jobs()){
+            if($workplace->jobs->count() > 0){
                 return redirect()->route('admin.workplaces.index')->with('error', 'Workplace cannot be deleted as it is associated with jobs.');
             }
             $this->workplaceModel::destroy($id);

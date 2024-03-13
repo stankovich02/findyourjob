@@ -99,10 +99,10 @@ class CityController extends AdminController
     {
         try{
             $city = $this->cityModel::find($id);
-            if($city->companies()){
+            if($city->companies->count() > 0){
                 return redirect()->route('admin.cities.index')->with('error', 'City cannot be deleted as it is associated with companies.');
             }
-            if($city->jobs()){
+            if($city->jobs->count() > 0){
                 return redirect()->route('admin.cities.index')->with('error', 'City cannot be deleted as it is associated with jobs.');
             }
             $this->cityModel->deleteCity($id);
