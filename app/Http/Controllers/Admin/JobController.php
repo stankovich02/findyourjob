@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Mail\CompanyJobStatusMail;
 use App\Models\BoostedJob;
 use App\Models\Job;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class JobController extends AdminController
 {

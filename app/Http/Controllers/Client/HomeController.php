@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
-use App\Models\Newsletter;
 use App\Models\Technology;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;

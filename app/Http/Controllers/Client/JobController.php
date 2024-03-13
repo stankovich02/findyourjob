@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\Seniority;
-use App\Models\Technology;
 use App\Models\Workplace;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,9 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Stripe\Stripe;
 use Stripe\Charge;
+use Stripe\Stripe;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class JobController extends DefaultController
 {

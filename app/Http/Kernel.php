@@ -3,11 +3,12 @@
 namespace App\Http;
 
 use App\Http\Middleware\AccessLog;
-use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsCompany;
 use App\Http\Middleware\IsLoggedIn;
 use App\Http\Middleware\IsNotLoggedIn;
-use App\Http\Middleware\IsCompany;
-use App\Http\Middleware\IsAdmin;
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
+
 class Kernel extends HttpKernel
 {
     /**

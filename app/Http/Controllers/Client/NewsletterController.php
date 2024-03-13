@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Models\Newsletter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Request as RequestFacade;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class NewsletterController extends DefaultController
 {

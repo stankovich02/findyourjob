@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
-use App\Models\Job;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Request as RequestFacade;
 use App\Traits\LogError;
+use Request as RequestFacade;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller

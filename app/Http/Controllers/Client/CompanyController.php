@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Requests\RegisterCompanyRequest;
-use App\Http\Requests\UpdateAccountPictureRequest;
 use App\Http\Requests\UpdateComapnyDetailsRequest;
 use App\Http\Requests\UpdateCompanyLogoRequest;
 use App\Models\Company;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 

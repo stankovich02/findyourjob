@@ -3,9 +3,9 @@
 namespace App\View\Components;
 
 use Closure;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\Component;
-use Illuminate\Contracts\View\View;
 
 class Job extends Component
 {

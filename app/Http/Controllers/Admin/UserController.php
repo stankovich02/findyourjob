@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserByAdminRequest;
 use App\Http\Requests\UpdateUserByAdminRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Traits\ImageUpload;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends AdminController
 {
