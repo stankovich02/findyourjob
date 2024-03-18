@@ -75,6 +75,7 @@ Route::middleware('IsNotLoggedIn')->group(function (){
         Route::get('/verification/{token}',  'verify')->name('verify');
     });
 });
+
 Route::middleware('IsAdmin')->prefix('/admin')->name('admin.')->group(function (){
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('index');
     Route::get('/applications/stats', [\App\Http\Controllers\Admin\AdminController::class, 'applicationStats'])->name('applications.stats');

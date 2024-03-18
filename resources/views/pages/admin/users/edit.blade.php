@@ -6,7 +6,7 @@
             <div class="card card-primary ">
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('admin.users.update', $user->id)}}" method="POST">
+                <form action="{{route('admin.users.update', $user->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-body">

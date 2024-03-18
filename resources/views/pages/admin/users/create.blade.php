@@ -7,7 +7,7 @@
             <div class="card card-primary ">
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('admin.users.store')}}" method="POST">
+                <form action="{{route('admin.users.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
