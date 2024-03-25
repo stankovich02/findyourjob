@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Nav;
 use App\Models\Seniority;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 
 class SeniorityController extends AdminController
 {
@@ -18,7 +17,7 @@ class SeniorityController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index() : \Illuminate\View\View|RedirectResponse
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -39,7 +38,7 @@ class SeniorityController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create() : \Illuminate\View\View
+    public function create() : View
     {
         $data = [
             'entityName' => 'Seniority',
@@ -78,11 +77,16 @@ class SeniorityController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $seniority = $this->seniorityModel::find($id);
-            return view('pages.admin.seniorities.edit')->with('seniority', $seniority)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'Seniority',
+                'resourceName' => 'seniorities',
+                'columns' => Schema::getColumnListing('seniorities'),
+                'entity' => $this->seniorityModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.seniorities.index')->with('error', 'An error occurred.');
@@ -92,7 +96,7 @@ class SeniorityController extends AdminController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255'

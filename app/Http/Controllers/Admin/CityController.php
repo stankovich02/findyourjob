@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
-use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -78,11 +77,16 @@ class CityController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $city = $this->cityModel::find($id);
-            return view('pages.admin.cities.edit')->with('city', $city)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'City',
+                'resourceName' => 'cities',
+                'columns' => Schema::getColumnListing('cities'),
+                'entity' => $this->cityModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         }
         catch(\Exception $e){
             $this->LogError($e->getMessage(), $e->getTraceAsString());
@@ -93,13 +97,13 @@ class CityController extends AdminController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id) : RedirectResponse
     {
         $request->validate([
-            'cityName' => 'required|string|max:255'
+            'name' => 'required|string|max:255'
         ]);
         try{
-            $this->cityModel->updateCity($id,$request->input('cityName'));
+            $this->cityModel->updateCity($id,$request->input('name'));
             return redirect()->route('admin.cities.index')->with('success', 'City updated successfully.');
         }
         catch(\Exception $e){
@@ -111,7 +115,7 @@ class CityController extends AdminController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(int $id) : RedirectResponse
     {
         try{
             $city = $this->cityModel::find($id);

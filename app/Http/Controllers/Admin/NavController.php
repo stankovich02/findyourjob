@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Nav;
-use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -79,11 +78,16 @@ class NavController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $nav = $this->navModel::find($id);
-            return view('pages.admin.navs.edit')->with('nav', $nav)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'Navigation',
+                'resourceName' => 'navs',
+                'columns' => Schema::getColumnListing('nav'),
+                'entity' => $this->navModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.navs.index')->with('error', 'An error occurred.');
@@ -96,11 +100,11 @@ class NavController extends AdminController
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'navName' => 'required|string|max:255',
-            'navRoute' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'route' => 'required|string|max:255'
         ]);
         try{
-            $this->navModel->updateNav($id,$request->input('navName'), $request->input('navRoute'));
+            $this->navModel->updateNav($id,$request->input('name'), $request->input('route'));
             return redirect()->route('admin.navs.index')->with('success', 'Navigation updated successfully.');
         }
         catch(\Exception $e){

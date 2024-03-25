@@ -102,11 +102,17 @@ class UserController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(int $id) : View|RedirectResponse
     {
         try {
-            $user = $this->userModel::find($id);
-            return view('pages.admin.users.edit')->with('user', $user)->with('roles', Role::all())->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'User',
+                'resourceName' => 'users',
+                'columns' => Schema::getColumnListing('users'),
+                'role' => Role::all(),
+                'entity' => $this->userModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.users.index')->with('error', 'An error occurred.');
@@ -116,14 +122,14 @@ class UserController extends AdminController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserByAdminRequest $request, int $id)
+    public function update(UpdateUserByAdminRequest $request, int $id) : RedirectResponse
     {
         try{
             $user = $this->userModel::find($id);
-            $user->first_name = $request->input('firstName');
-            $user->last_name = $request->input('lastName');
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
             $user->email = $request->input('email');
-            $user->role_id = $request->input('role');
+            $user->role_id = $request->input('role_id');
             $user->linkedin = $request->input('linkedin');
             $user->github = $request->input('github');
             if($request->hasFile('avatar')) {
@@ -143,7 +149,7 @@ class UserController extends AdminController
         }
     }
 
-    public function ban(int $id)
+    public function ban(int $id) : RedirectResponse
     {
         try{
             $user = $this->userModel::find($id);
@@ -159,7 +165,7 @@ class UserController extends AdminController
         }
     }
 
-    public function unban(int $id)
+    public function unban(int $id): RedirectResponse
     {
         try{
             $user = $this->userModel::find($id);
@@ -177,7 +183,7 @@ class UserController extends AdminController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(int $id) : RedirectResponse
     {
         try{
             $user = $this->userModel::find($id);

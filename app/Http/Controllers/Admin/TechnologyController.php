@@ -78,11 +78,16 @@ class TechnologyController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $technology = $this->technologyModel::find($id);
-            return view('pages.admin.technologies.edit')->with('technology', $technology)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'Technology',
+                'resourceName' => 'technologies',
+                'columns' => Schema::getColumnListing('technologies'),
+                'entity' => $this->technologyModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.technologies.index')->with('error', 'An error occurred.');
@@ -92,7 +97,7 @@ class TechnologyController extends AdminController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255'

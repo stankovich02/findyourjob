@@ -79,11 +79,16 @@ class WorkplaceController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View|RedirectResponse
     {
         try {
-            $workplace = $this->workplaceModel::find($id);
-            return view('pages.admin.workplaces.edit')->with('workplace', $workplace)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'Workplace',
+                'resourceName' => 'workplaces',
+                'columns' => Schema::getColumnListing('workplaces'),
+                'entity' => $this->workplaceModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             return redirect()->route('admin.workplaces.index')->with('error', 'An error occurred while editing workplace.');
         }

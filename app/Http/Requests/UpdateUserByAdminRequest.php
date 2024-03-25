@@ -22,10 +22,10 @@ class UpdateUserByAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "firstName" => "required|regex:/^[A-ZČĆĐŽŠ][a-zčćđžš]{2,}(\s[A-ZČĆĐŽŠ][a-zčćđžš]{2,})*$/",
-            "lastName" => "required|regex:/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/",
+            "first_name" => "required|regex:/^[A-ZČĆĐŽŠ][a-zčćđžš]{2,}(\s[A-ZČĆĐŽŠ][a-zčćđžš]{2,})*$/",
+            "last_name" => "required|regex:/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/",
             "email" => "required|email",
-            'role' => 'required|integer|exists:roles,id',
+            'role_id' => 'required|integer|exists:roles,id',
             'linkedin' => 'nullable|string|max:255',
             'github' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
@@ -34,10 +34,10 @@ class UpdateUserByAdminRequest extends FormRequest
     public function messages() : array
     {
         return [
-            'firstName.regex' => 'First name must contain only letters and spaces. Example: John',
-            'lastName.regex' => 'Last name must contain only letters and spaces. Example: Doe',
+            'first_name.regex' => 'First name must contain only letters and spaces. Example: John',
+            'last_name.regex' => 'Last name must contain only letters and spaces. Example: Doe',
             'email.email' => 'Email is not in valid format. Example: jhondoe@gmail.com',
-            'role.exists' => 'Role does not exist.'
+            'role_id.exists' => 'Role does not exist.'
         ];
     }
 }

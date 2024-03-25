@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\InsertUpdateCategoryRequest;
 use App\Models\Category;
-use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 
 class CategoryController extends AdminController
 {
@@ -18,7 +17,7 @@ class CategoryController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index() : \Illuminate\View\View|RedirectResponse
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -39,7 +38,7 @@ class CategoryController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create() : \Illuminate\View\View
+    public function create() : View
     {
         $data = [
             'entityName' => 'Category',
@@ -75,11 +74,16 @@ class CategoryController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $category = $this->categoryModel::find($id);
-            return view('pages.admin.categories.edit')->with('category', $category)->with('active', $this->currentRoute);
+            $data = [
+            'entityName' => 'Category',
+            'resourceName' => 'categories',
+            'columns' => Schema::getColumnListing('categories'),
+            'entity' => $this->categoryModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.categories.index')->with('error', 'An error occurred.');
@@ -89,10 +93,10 @@ class CategoryController extends AdminController
     /**
      * Update the specified resource in storage.
      */
-    public function update(InsertUpdateCategoryRequest $request, string $id)
+    public function update(InsertUpdateCategoryRequest $request, string $id) : RedirectResponse
     {
         try {
-            $this->categoryModel->updateCategory($request->input('categoryName'),$request->file('icon'), $id);
+            $this->categoryModel->updateCategory($request->input('name'),$request->file('icon'), $id);
             return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
         }catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
@@ -104,7 +108,7 @@ class CategoryController extends AdminController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id) : RedirectResponse
     {
         try {
             $category = $this->categoryModel::find($id);

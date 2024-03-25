@@ -77,11 +77,16 @@ class RoleController extends AdminController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id) : View|RedirectResponse
     {
         try {
-            $role = $this->roleModel::find($id);
-            return view('pages.admin.roles.edit')->with('role', $role)->with('active', $this->currentRoute);
+            $data = [
+                'entityName' => 'Role',
+                'resourceName' => 'roles',
+                'columns' => Schema::getColumnListing('roles'),
+                'entity' => $this->roleModel::find($id)
+            ];
+            return view('pages.admin.edit')->with('data', $data)->with('active', $this->currentRoute);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.roles.index')->with('error', 'An error occurred.');
