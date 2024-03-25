@@ -7,8 +7,10 @@ use App\Http\Requests\UpdateUserByAdminRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Traits\ImageUpload;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\View;
 
 class UserController extends AdminController
 {
@@ -21,7 +23,7 @@ class UserController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -42,23 +44,29 @@ class UserController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        return view('pages.admin.users.create')->with('roles', Role::all())->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'User',
+            'resourceName' => 'users',
+            'columns' => Schema::getColumnListing('users'),
+            'role' => Role::all()
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AddUserByAdminRequest $request)
+    public function store(AddUserByAdminRequest $request) : RedirectResponse
     {
         try{
             $array = [
-                'first_name' => $request->input('firstName'),
-                'last_name' => $request->input('lastName'),
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password') . env('CUSTOM_STRING_FOR_HASH')),
-                'role_id' => $request->input('role'),
+                'role_id' => $request->input('role_id'),
                 'linkedin' => $request->input('linkedin'),
                 'github' => $request->input('github'),
                 'is_active' => 1,

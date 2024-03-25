@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\InsertUpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Role;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 
 class CategoryController extends AdminController
 {
@@ -15,7 +18,7 @@ class CategoryController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : \Illuminate\View\View|RedirectResponse
     {
         try {
             $data = [
@@ -36,18 +39,23 @@ class CategoryController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : \Illuminate\View\View
     {
-        return view('pages.admin.categories.create')->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'Category',
+            'resourceName' => 'categories',
+            'columns' => Schema::getColumnListing('categories'),
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InsertUpdateCategoryRequest $request)
+    public function store(InsertUpdateCategoryRequest $request) : RedirectResponse
     {
         try {
-            $this->categoryModel->insert($request->input('categoryName'), $request->file('icon'));
+            $this->categoryModel->insert($request->input('name'), $request->file('icon'));
             return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
         }
         catch (\Exception $e) {

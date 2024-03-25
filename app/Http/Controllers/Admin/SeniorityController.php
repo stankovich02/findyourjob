@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Nav;
 use App\Models\Seniority;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 
 class SeniorityController extends AdminController
 {
@@ -16,7 +18,7 @@ class SeniorityController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : \Illuminate\View\View|RedirectResponse
     {
         try {
             $data = [
@@ -37,15 +39,20 @@ class SeniorityController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : \Illuminate\View\View
     {
-        return view('pages.admin.seniorities.create')->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'Seniority',
+            'resourceName' => 'seniorities',
+            'columns' => Schema::getColumnListing('seniorities'),
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255'

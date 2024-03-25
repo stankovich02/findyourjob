@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Role;
 use App\Models\Workplace;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\View;
 
 class WorkplaceController extends AdminController
 {
@@ -16,7 +18,7 @@ class WorkplaceController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -37,15 +39,20 @@ class WorkplaceController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        return view('pages.admin.workplaces.create')->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'Workplace',
+            'resourceName' => 'workplaces',
+            'columns' => Schema::getColumnListing('workplaces'),
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Nav;
 use App\Models\Role;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\View;
 
 class NavController extends AdminController
 {
@@ -16,7 +18,7 @@ class NavController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -37,22 +39,27 @@ class NavController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        return view('pages.admin.navs.create')->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'Navigation',
+            'resourceName' => 'navs',
+            'columns' => Schema::getColumnListing('nav'),
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'navName' => 'required|string|max:255',
-            'navRoute' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
+            'route' => 'required|string|max:255'
         ]);
         try{
-            $this->navModel->insert($request->input('navName'), $request->input('navRoute'));
+            $this->navModel->insert($request->input('name'), $request->input('route'));
             return redirect()->route('admin.navs.index')->with('success', 'Navigation created successfully.');
         }
         catch(\Exception $e){

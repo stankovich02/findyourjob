@@ -22,7 +22,7 @@ class InsertUpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categoryName' => 'required',
+            'name' => 'required',
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ];
     }

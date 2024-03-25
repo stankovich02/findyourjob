@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
+use App\Models\Role;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\View\View;
 
 class CityController extends AdminController
 {
@@ -15,7 +18,7 @@ class CityController extends AdminController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View|RedirectResponse
     {
         try {
             $data = [
@@ -36,21 +39,26 @@ class CityController extends AdminController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        return view('pages.admin.cities.create')->with('active', $this->currentRoute);
+        $data = [
+            'entityName' => 'City',
+            'resourceName' => 'cities',
+            'columns' => Schema::getColumnListing('cities'),
+        ];
+        return view('pages.admin.create')->with('data', $data)->with('active', $this->currentRoute);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $request->validate([
-            'cityName' => 'required|string|max:255'
+            'name' => 'required|string|max:255'
         ]);
         try{
-            $this->cityModel->insert($request->input('cityName'));
+            $this->cityModel->insert($request->input('name'));
             return redirect()->route('admin.cities.index')->with('success', 'City created successfully.');
         }
         catch(\Exception $e){
