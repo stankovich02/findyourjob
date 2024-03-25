@@ -13,12 +13,16 @@ class UserActionController extends AdminController
     public function index()
     {
         try {
-            $date = \request()->get('date');
-            if($date){
-                $userActions = UserActionLog::whereDate('created_at', $date)->paginate(10)->withQueryString();
-            }else{
-                $userActions = UserActionLog::paginate(10)->withQueryString();
+            $dateFrom = \request()->get('dateFrom');
+            $dateTo = \request()->get('dateTo');
+            $userActions = UserActionLog::query();
+            if($dateFrom){
+                $userActions->where('created_at', '>=', $dateFrom);
             }
+            if($dateTo){
+                $userActions->where('created_at', '<=', $dateTo);
+            }
+            $userActions = $userActions->paginate(10)->withQueryString();
             return view('pages.admin.user-actions.index')->with('userActions', $userActions)->with('active',
                 $this->currentRoute);
         } catch (\Exception $e) {

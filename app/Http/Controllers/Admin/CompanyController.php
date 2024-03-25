@@ -6,6 +6,7 @@ use App\Mail\CompanyStatusMail;
 use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class CompanyController extends AdminController
@@ -17,8 +18,15 @@ class CompanyController extends AdminController
     public function index() : View|RedirectResponse
     {
         try {
-            $companies = $this->companyModel::where('status', $this->companyModel::STATUS_ACTIVE)->paginate(5);
-            return view('pages.admin.companies.index')->with('companies', $companies)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Companies',
+                'entityName' => 'Company',
+                'route' => 'admin.companies',
+                'columns' => Schema::getColumnListing('companies'),
+                'values' => $this->companyModel::where('status', $this->companyModel::STATUS_ACTIVE)->paginate(5)
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
@@ -28,9 +36,15 @@ class CompanyController extends AdminController
     public function pending() : View|RedirectResponse
     {
         try {
-            $companies = $this->companyModel::where('status', $this->companyModel::STATUS_PENDING)->paginate(5);
-            return view('pages.admin.companies.pending')->with('companies', $companies)->with('active',
-                $this->currentRoute);
+            $data = [
+                'title' => 'Pending Companies',
+                'entityName' => 'Pending Company',
+                'route' => 'admin.companies',
+                'columns' => Schema::getColumnListing('companies'),
+                'values' => $this->companyModel::where('status', $this->companyModel::STATUS_PENDING)->paginate(5)
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

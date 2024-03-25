@@ -165,7 +165,7 @@ class Job extends Model
             ->paginate(5);
     }
 
-    public function getBoosted(): Collection|LengthAwarePaginator
+/*    public function getBoosted(): Collection|LengthAwarePaginator
     {
         //get all columns from boosted relation, expired boosted also
         return self::with('company', 'boosted')
@@ -175,7 +175,7 @@ class Job extends Model
             ->paginate(5);
 
 
-    }
+    }*/
     public function isBoosted() : bool
     {
         return $this->boosted()->where('boosted_until', '>', Carbon::now())->exists();

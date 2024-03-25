@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\InsertUpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Support\Facades\Schema;
 
 class CategoryController extends AdminController
 {
@@ -17,9 +18,15 @@ class CategoryController extends AdminController
     public function index()
     {
         try {
-            $categoryModel = new Category();
-            $categories = $categoryModel->getAll();
-            return view('pages.admin.categories.index')->with('categories', $categories)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Categories',
+                'entityName' => 'Category',
+                'route' => 'admin.categories',
+                'columns' => Schema::getColumnListing('categories'),
+                'values' => Category::all()
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
            $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

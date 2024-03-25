@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Newsletter;
+use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Request as RequestFacade;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -17,9 +19,16 @@ class NewsletterController extends DefaultController
     }
     public function index() : \Illuminate\View\View
     {
-        $newsletters = $this->newsletterModel::all();
+        $data = [
+            'title' => 'Newsletters',
+            'entityName' => 'Newsletter',
+            'route' => 'admin.newsletters',
+            'columns' => Schema::getColumnListing('newsletters'),
+            'values' => Newsletter::all()
+        ];
         $currentRoute = RequestFacade::route()->getName();
-        return view('pages.admin.newsletters.index')->with('newsletters', $newsletters)->with('active', $currentRoute);
+        return view('pages.admin.index')->with('active', $currentRoute)
+            ->with('data', $data);
     }
     public function store(Request $request) : \Illuminate\Http\JsonResponse
     {

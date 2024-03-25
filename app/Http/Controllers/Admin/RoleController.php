@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class RoleController extends AdminController
 {
@@ -17,8 +18,15 @@ class RoleController extends AdminController
     public function index()
     {
         try {
-            $roles = $this->roleModel->getAll();
-            return view('pages.admin.roles.index')->with('roles', $roles)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Roles',
+                'entityName' => 'Role',
+                'route' => 'admin.roles',
+                'columns' => Schema::getColumnListing('roles'),
+                'values' => Role::all()
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

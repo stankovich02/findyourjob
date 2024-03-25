@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Role;
 use App\Models\Workplace;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class WorkplaceController extends AdminController
 {
@@ -17,8 +19,15 @@ class WorkplaceController extends AdminController
     public function index()
     {
         try {
-            $workplaces = $this->workplaceModel::all();
-            return view('pages.admin.workplaces.index')->with('workplaces', $workplaces)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Workplaces',
+                'entityName' => 'Workplace',
+                'route' => 'admin.workplaces',
+                'columns' => Schema::getColumnListing('workplaces'),
+                'values' => Workplace::all()
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

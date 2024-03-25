@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Traits\ImageUpload;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class UserController extends AdminController
 {
@@ -23,8 +24,15 @@ class UserController extends AdminController
     public function index()
     {
         try {
-            $users = $this->userModel::paginate(5);
-            return view('pages.admin.users.index')->with('users', $users)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'User',
+                'entityName' => 'User',
+                'route' => 'admin.users',
+                'columns' => Schema::getColumnListing('users'),
+                'values' => $this->userModel::paginate(5)
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

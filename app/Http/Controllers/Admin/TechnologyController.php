@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Nav;
 use App\Models\Technology;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class TechnologyController extends AdminController
 {
@@ -17,8 +19,15 @@ class TechnologyController extends AdminController
     public function index()
     {
         try {
-            $technologies = $this->technologyModel::paginate(10);
-            return view('pages.admin.technologies.index')->with('technologies', $technologies)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Technologies',
+                'entityName' => 'Technology',
+                'route' => 'admin.technologies',
+                'columns' => Schema::getColumnListing('technologies'),
+                'values' => Technology::paginate(10)
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');

@@ -3,10 +3,16 @@
 @section('content')
     <div class="content-wrapper" style="min-height: 1302.12px;">
         <!-- Main content -->
-        <form action="{{route('admin.user-actions.index')}}" method="GET" class="px-3">
-            <label for="date">Filter by date</label>
-           <input type="date" name="date" id="date" class="form-control w-25" value="{{request()->get('date')}}"/>
-            <button type="submit" class="btn btn-primary mt-2">Filter</button>
+        <form action="{{route('admin.user-actions.index')}}" method="GET" class="px-3 pt-3 d-flex align-items-end">
+            <div class="form-group mx-2 my-0">
+                <label for="dateFrom">Date from</label>
+                <input type="date" name="dateFrom" id="dateFrom" class="form-control" value="{{request()->get('dateFrom')}}"/>
+            </div>
+            <div class="form-group mx-5 my-0">
+                <label for="dateTo">Date to</label>
+                <input type="date" name="dateTo" id="dateTo" class="form-control" value="{{request()->get('dateTo')}}"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
         </form>
         <section class="content pt-3">
             <table id="example2" class="table table-bordered table-hover">

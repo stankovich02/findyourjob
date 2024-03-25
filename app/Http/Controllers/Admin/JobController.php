@@ -7,6 +7,7 @@ use App\Models\BoostedJob;
 use App\Models\Job;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class JobController extends AdminController
@@ -18,8 +19,15 @@ class JobController extends AdminController
     public function index() : View|RedirectResponse
     {
         try{
-            $jobs = $this->jobModel->getAllAdmin();
-            return view('pages.admin.jobs.index')->with('jobs', $jobs)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Jobs',
+                'entityName' => 'Job',
+                'route' => 'admin.jobs',
+                'columns' => Schema::getColumnListing('jobs'),
+                'values' => $this->jobModel->getAllAdmin()
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
@@ -29,8 +37,15 @@ class JobController extends AdminController
     public function pending() : View|RedirectResponse
     {
         try{
-            $pendingJobs = $this->jobModel->getPendingJobs();
-            return view('pages.admin.jobs.pending')->with('pendingJobs', $pendingJobs)->with('active', $this->currentRoute);
+            $data = [
+                'title' => 'Pending Jobs',
+                'entityName' => 'Pending Job',
+                'route' => 'admin.jobs',
+                'columns' => Schema::getColumnListing('jobs'),
+                'values' => $this->jobModel->getPendingJobs()
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
@@ -39,8 +54,16 @@ class JobController extends AdminController
     public function boosted() : View|RedirectResponse
     {
         try {
-            $boostedJobs = $this->jobModel->getBoosted();
-            return view('pages.admin.jobs.boosted')->with('boostedJobs', $boostedJobs)->with('active', $this->currentRoute);
+            $boostedModel = new BoostedJob();
+            $data = [
+                'title' => 'Boosted Jobs',
+                'entityName' => 'BoostedJob',
+                'route' => 'admin.jobs',
+                'columns' => Schema::getColumnListing('boosted_jobs'),
+                'values' => $boostedModel::with('job')->paginate(5)
+            ];
+            return view('pages.admin.index')->with('active', $this->currentRoute)
+                ->with('data', $data);
         } catch (\Exception $e) {
             $this->LogError($e->getMessage(), $e->getTraceAsString());
             return redirect()->route('admin.dashboard')->with('error', 'An error occurred.');
